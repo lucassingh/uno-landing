@@ -1,0 +1,27 @@
+.box {
+  position: relative;
+  width: 100%;
+  border: var(--border-w) solid var(--border);
+  background:
+    repeating-linear-gradient(45deg, var(--color-crema) 0 10px, transparent 10px 20px),
+    var(--color-blanco);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+}
+.mark {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.35rem;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 1.1rem;
+  color: var(--color-tinta);
+}

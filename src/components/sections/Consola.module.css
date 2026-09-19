@@ -1,0 +1,69 @@
+/* Consola / terminal "quiénes somos" — versión clara (fondo blanco, sombra blanca, líneas navy)
+   con copy en lenguaje humano. Guardada como componente suelto para reutilizar donde haga falta. */
+
+.sec {
+  background: var(--color-tinta);
+  color: var(--color-crema);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(4rem, 10vh, 9rem);
+  overflow: hidden;
+}
+.wrap {
+  width: 100%;
+  max-width: var(--container-max-wide);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+.terminalOuter { max-width: 980px; margin-inline: auto; width: 100%; }
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-crema) 60%, transparent);
+  margin-bottom: var(--space-4);
+}
+
+.terminal {
+  border: 3px solid var(--color-tinta);
+  border-radius: 10px;
+  background: var(--color-blanco);
+  box-shadow: 12px 12px 0 var(--color-blanco);
+  overflow: hidden;
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: color-mix(in srgb, var(--color-tinta) 6%, var(--color-blanco));
+  border-bottom: 2px solid color-mix(in srgb, var(--color-tinta) 25%, transparent);
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot1 { background: #FF5F57; } .dot2 { background: var(--color-amarillo); } .dot3 { background: #28C840; }
+.title {
+  margin-left: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--color-tinta) 65%, transparent);
+}
+.body {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.5vw, 1.35rem);
+  line-height: 1.8;
+  padding: clamp(1.2rem, 3vw, 2.2rem);
+  white-space: pre-wrap;
+  color: var(--color-tinta);
+  margin: 0;
+}
+.caret {
+  display: inline-block;
+  width: 0.6em; height: 1.05em;
+  background: var(--color-tinta);
+  transform: translateY(0.18em);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }

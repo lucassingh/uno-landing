@@ -1,0 +1,16 @@
+/* =============================================================
+   Hero de /system — primer pase de alta fidelidad.
+   ============================================================= */
+
+.heroTitle { font-size: var(--fs-display-l); margin-top: var(--space-4); max-width: 18ch; }
+/* antes ".lead" vivía en System.module.css (compartida) y esta clase solo aportaba el
+   margin-top; con las 12 secciones ya en su propio módulo, System.module.css se retiró del
+   todo — la tipografía base del lead se mudó acá. */
+.heroLead { font-size: var(--fs-lead); color: var(--fg-muted); max-width: 60ch; margin-top: var(--space-4); }
+
+/* ídem ".ctaRow": también vivía en System.module.css, único otro consumidor además del ya
+   retirado de Precios. */
+.ctaRow { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+
+/* ---- showcase: browser mockup con el dashboard animado (BrowserShowcase.module.css) ---- */
+.showcaseWrap { margin-top: var(--space-16); }

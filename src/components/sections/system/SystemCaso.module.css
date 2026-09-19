@@ -1,0 +1,164 @@
+/* =============================================================
+   Sección "de punta a punta" de /system — pase de alta fidelidad, v6.
+   Los círculos de la tira de progreso pasaron de tener el ícono del paso
+   (redundante: el mismo ícono ya está en la card grande de abajo) a
+   mostrar el número del paso — más grandes en cada ronda de feedback,
+   ahora 7.5rem. El punto activo cambia de color en seco (fondo + número
+   invierten juntos, sin blur: eso no existe en el resto del sitio,
+   brutalismo = bordes/sombras duras). El titular gigante va en
+   minúscula/oración (no mayúscula) y los 5 títulos se acortaron para
+   entrar en un solo renglón (.nowrap, mismo criterio que SectionHeader).
+   Todo el bloque (titular + texto) vive en una card blanca que le da
+   peso real al centro del pin de 100vh.
+   ============================================================= */
+
+/* 170vh daba muy poco recorrido por paso (una rueda de mouse ya salteaba al paso 3, reportado
+   por Lucas) — con 5 pasos en 300vh quedan ~40vh de scroll real por paso, ritmo parecido al
+   que ya usa Metodo (~52vh/paso) en vez de 14vh/paso. */
+.track { position: relative; height: 300vh; }
+/* space-between (stepper pegado arriba, card pegada abajo) sacaba el espacio muerto pero
+   dejaba el stepper chocando contra el navbar — vuelta a centrar el conjunto como una sola
+   unidad, ahora que stepper+card pesan bastante más (puntos de 7.5rem, card grande) que en el
+   primer intento de centrado, así el margen que queda arriba/abajo ya no es excesivo. */
+.pin { position: sticky; top: 0; height: 100vh; display: grid; align-items: center; overflow: hidden; }
+
+.stage {
+  width: 100%;
+  max-width: var(--container-max-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* ---- tira de progreso: línea + círculos con número, bien grandes a propósito (Lucas: que
+   aprovechen el espacio) — el offset de .progressLine sigue siendo la mitad del alto de
+   .dot, así que si .dot cambia de tamaño ese "top" tiene que moverse junto. El número (no un
+   ícono: ya está en la card de abajo, sería redundante, feedback de Lucas) cambia de color
+   junto con el fondo del círculo. ---- */
+.stepper { position: relative; }
+.progressLine {
+  position: absolute;
+  left: 3.75rem;
+  right: 3.75rem;
+  top: 3.75rem;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-tinta) 14%, transparent);
+}
+.progressFill { position: absolute; inset: 0; transform-origin: 0 0; background: var(--color-violeta); }
+
+.dots { position: relative; display: flex; justify-content: space-between; }
+.dot {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dotNumber {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 2.75rem;
+  line-height: 1;
+}
+
+/* 5 círculos de 7.5rem no entran en una fila angosta de celular — vuelven al tamaño chico ahí,
+   la card grande de abajo sigue siendo la protagonista igual. */
+@media (max-width: 560px) {
+  .progressLine { left: 1.5rem; right: 1.5rem; top: 1.5rem; }
+  .dot { width: 3rem; height: 3rem; }
+  .dotNumber { font-size: 1.25rem; }
+}
+
+/* ---- UNA sola card persistente (antes cada una de las 5 captions era su propia card blanca
+   con borde/shadow/fondo apiladas en la misma celda — con 5 opacidades cruzándose a la vez,
+   la marca de agua quedaba adentro de ESA rifa de opacidades y Lucas la veía parpadear al
+   revés de lo esperado). Ahora el marco (borde, radio, shadow, fondo, el isotipo) se pinta UNA
+   vez y no se mueve nunca; adentro, .captionWrap solo cruza el contenido (ícono+texto) de cada
+   paso — sin fondo ni borde propios. Más simple y sin ambigüedad de a quién le toca el z-index. ---- */
+.captionCard {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  padding-inline: var(--space-12);
+  /* 30px menos de alto en total (15px arriba + 15px abajo), pedido puntual — el resto de la
+     card sigue en la escala de tokens, esto es la única excepción a mano. */
+  padding-block: calc(var(--space-12) - 15px);
+}
+@media (max-width: 720px) {
+  .captionCard { padding: var(--space-6); }
+}
+
+/* isotipo en opacity, esquina inf-derecha — el gradiente animado quedó horrible acá (Lucas),
+   se sacó: solo el logo. Versión "color" del isotipo (tinta, no blanco) porque la card es
+   blanca. Vive en el marco persistente, no en cada caption: se pinta una sola vez y no
+   depende de qué paso esté cruzando. */
+.captionWatermark {
+  position: absolute;
+  z-index: 0;
+  right: -4%;
+  bottom: -8%;
+  width: 30%;
+  opacity: 0.16;
+  pointer-events: none;
+}
+@media (max-width: 720px) {
+  .captionWatermark { width: 38%; }
+}
+
+.captionWrap { position: relative; z-index: 1; display: grid; }
+/* 56vh dejaba el stage (stepper+card) tan alto que, centrado, los puntos quedaban pegados
+   contra el navbar (Lucas). Menos alto = más margen arriba/abajo al centrar. */
+@media (min-width: 720px) {
+  .captionWrap { min-height: 44vh; }
+}
+.caption {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+@media (max-width: 720px) {
+  .caption { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+}
+
+.stageIcon {
+  flex: 0 0 auto;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  background: color-mix(in srgb, var(--color-violeta) 10%, var(--color-blanco) 90%);
+  color: var(--color-violeta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stageBody { min-width: 0; }
+.stageTitle {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-heading);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+}
+/* una sola línea desde tablet: los 5 títulos se acortaron a propósito para entrar así — igual
+   que .nowrap de SectionHeader, el tamaño se clampea conservador para no desbordar. */
+@media (min-width: 560px) {
+  .stageTitle { white-space: nowrap; }
+}
+.stageText {
+  margin-top: var(--space-3);
+  font-size: clamp(1.25rem, 2.1vw, 1.65rem);
+  color: var(--fg-muted);
+  max-width: 42ch;
+}
+@media (max-width: 720px) {
+  .stageTitle { font-size: clamp(1.9rem, 9vw, 3rem); }
+}

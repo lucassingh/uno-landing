@@ -1,0 +1,122 @@
+/* mismo lenguaje que las cards planas del bento (MagicBento .card): borde + radius + blanco +
+   sombra dura SIEMPRE visible, no solo al hover — la card en sí no es interactiva. */
+.stage {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  box-shadow: var(--shadow-hard);
+  min-height: clamp(360px, 38vw, 520px);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+/* título gigante: GradientText (ver ui/GradientText.tsx) hace el degradé navy → violeta a la
+   deriva — acá solo la tipografía. Sentence case, no mayúscula (pedido puntual: "camel case",
+   como el resto de los títulos de card del sitio). */
+/* max-width angosto a propósito (22ch, no un valor "natural" para el ancho de la card): con la
+   card wide sobraba aire abajo a 2 renglones — achicando el ancho de línea, el mismo texto más
+   grande cae en ~3 renglones y aprovecha el alto. */
+.text {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  line-height: 1.08;
+  letter-spacing: var(--ls-display);
+}
+
+/* ---- selector de slide: AFUERA de la card, centrado, 20px abajo ---- */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: 20px;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* pastilla-track: reposo es un puntito, activo se estira y adentro corre el fill */
+.dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-tinta) 25%, transparent);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.dotActive {
+  width: 40px;
+  background: color-mix(in srgb, var(--color-tinta) 15%, transparent);
+}
+
+@keyframes slideCarouselFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: var(--color-tinta);
+  border-radius: inherit;
+  animation-name: slideCarouselFill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* congela el fill donde está — no lo reinicia, ver handleAutoAdvance en SlideCarousel.tsx */
+.fillPaused {
+  animation-play-state: paused;
+}
+
+.fillStatic {
+  position: absolute;
+  inset: 0;
+  background: var(--color-tinta);
+  border-radius: inherit;
+}
+
+.playBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  background: transparent;
+  color: var(--color-tinta);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.playBtn:hover {
+  background: var(--color-tinta);
+  color: var(--color-crema);
+}

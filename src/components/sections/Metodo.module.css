@@ -1,0 +1,39 @@
+/* SIN padding-block acá (a diferencia del resto de las secciones): si la sección tuviera
+   padding, .glow (primer hijo, ver abajo) arrancaría empujado hacia adentro por ese padding,
+   dejando una franja de navy liso sin cubrir arriba antes de que el sticky "agarre" (bug
+   reportado por Lucas). El mismo aire que tenían las demás secciones (al 60%, "más
+   ajustado") se movió a .scroll como margin-block — mismo resultado visual para el
+   contenido, pero .glow queda pegado al borde real de la sección. */
+.metodo.metodo {
+  padding-block: 0;
+  background: var(--color-tinta);
+}
+
+/* Sticky, no absolute: la sección mide ~312vh (6 pasos × 52vh de carril), y el shader del
+   Grainient no está pensado para un lienzo tan alto — su banda de mezcla de color solo
+   "pasa" cerca de arriba; el resto caía en color3 (navy) liso, y como la card SÍ es sticky
+   pero el fondo no, el remolino se veía nada más al entrar a la sección (bug reportado por
+   Lucas). Con sticky + 100vh el fondo queda pegado en sync con la card durante TODO el
+   recorrido — mismo top:0/height que .slides en StickyScroll.module.css, a propósito.
+   overflow:hidden en sí mismo no rompe su propio sticky (solo lo rompería en un ANCESTRO). */
+.glow {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  /* cancela el espacio que .glow ocuparía en el flujo (es el primer hijo de la sección,
+     antes del Container): sin esto empujaría todo el contenido 100vh para abajo. Truco
+     estándar para un fondo sticky "full-bleed" dentro de un contenedor alto — el rango en
+     que se mantiene pegado lo sigue dando el alto real de <section> (~312vh), no este 0 neto. */
+  margin-bottom: -100vh;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* contenido (el carril de scroll) por encima del glow — el margin-block es el aire que antes
+   era padding de la sección (ver .metodo.metodo de arriba). */
+.scroll {
+  margin-block: calc(var(--section-y) * 0.6);
+  position: relative;
+  z-index: 1;
+}

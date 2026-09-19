@@ -1,0 +1,9 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  gap: var(--grid-gap);
+}
+.col { grid-column: span var(--col-span); min-width: 0; }
+@media (min-width: 768px) {
+  .col { grid-column: span var(--col-md); }
+}

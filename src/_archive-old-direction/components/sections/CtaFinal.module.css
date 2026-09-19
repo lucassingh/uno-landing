@@ -1,0 +1,4 @@
+.inner { max-width: 44rem; }
+.title { font-size: var(--fs-display-l); }
+.intro { font-size: var(--fs-lead); margin-top: var(--space-4); max-width: 40ch; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-8); }

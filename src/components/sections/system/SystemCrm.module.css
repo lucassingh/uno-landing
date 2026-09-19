@@ -1,0 +1,7 @@
+/* =============================================================
+   Sección "el panel que ordena" (CRM) de /system — pase de alta fidelidad.
+   Mismo molde que el Hero: header en el ancho estándar + el browser
+   mockup (BrowserShowcase, compartido) en el ancho wide, debajo.
+   ============================================================= */
+
+.showcaseWrap { margin-top: var(--space-12); }

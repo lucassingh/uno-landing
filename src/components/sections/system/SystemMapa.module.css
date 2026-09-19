@@ -1,0 +1,152 @@
+/* =============================================================
+   Sección "cómo funciona" de /system — segundo pase de alta fidelidad.
+   ============================================================= */
+
+.bentoGrid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
+@media (min-width: 1024px) {
+  .bentoGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bentoCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard);
+  cursor: pointer;
+}
+
+.bentoVisual {
+  display: flex;
+  align-items: center;
+  min-height: 17rem;
+  padding: var(--space-6);
+  background: var(--color-crema);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+}
+.bentoVisual > * { width: 100%; }
+
+.bentoBody { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); }
+.bentoBody h3 { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-h3); }
+.bentoBody p { color: var(--fg-muted); }
+
+/* ---- card 1: capas del sistema ---- */
+.layerStack { display: flex; flex-direction: column; gap: var(--space-2); transition: gap 260ms var(--ease); }
+.bentoCard:hover .layerStack { gap: var(--space-4); }
+
+.layerBar {
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius);
+  background: var(--color-blanco);
+  padding: var(--space-3) var(--space-4);
+}
+.layerBarTop { display: flex; align-items: baseline; gap: var(--space-2); }
+.layerIndex { font-family: var(--font-mono); font-size: var(--fs-label); font-weight: var(--fw-bold); color: var(--color-violeta); }
+.layerLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+.layerHint {
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  overflow: hidden;
+}
+/* el hint solo arranca oculto en dispositivos que SÍ tienen hover — en touch no hay hover que
+   lo revele nunca, así que se perdía contenido real (no es solo decoración, explica cada capa)
+   directo. (hover:none) lo deja siempre visible ahí, sin animación. */
+@media (hover: hover) {
+  .layerHint { max-height: 0; opacity: 0; transition: max-height 260ms var(--ease), opacity 200ms var(--ease), margin-top 260ms var(--ease); }
+  .bentoCard:hover .layerHint { max-height: 1.6em; opacity: 1; margin-top: 4px; }
+  .layerBar:nth-child(2) .layerHint { transition-delay: 60ms; }
+  .layerBar:nth-child(3) .layerHint { transition-delay: 120ms; }
+}
+@media (hover: none) {
+  .layerHint { margin-top: 4px; }
+}
+
+/* ---- card 2: clasificación por temperatura ---- */
+.filterMock { display: flex; flex-direction: column; gap: var(--space-3); }
+.filterTabs { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.filterTab {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  padding: 0.35em 0.8em;
+  border-radius: var(--radius-pill);
+  border: var(--border-w-card) solid var(--color-tinta);
+  color: var(--fg-muted);
+  background: transparent;
+  transition: background 220ms var(--ease), color 220ms var(--ease);
+}
+.filterTabActive { background: var(--color-tinta); color: var(--color-blanco); }
+.bentoCard:hover .filterTab { background: transparent; color: var(--fg-muted); }
+.bentoCard:hover .filterTab:nth-child(2) { background: var(--color-violeta); color: var(--color-blanco); border-color: var(--color-violeta); }
+
+.leadList { display: flex; flex-direction: column; }
+.leadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-tinta) 12%, transparent);
+  transition: opacity 260ms var(--ease);
+}
+.leadList .leadRow:last-child { border-bottom: none; }
+.leadInfo { display: flex; flex-direction: column; min-width: 0; }
+.leadName { font-size: var(--fs-small); font-weight: var(--fw-medium); }
+.leadChannel { font-size: 0.75rem; color: var(--fg-muted); }
+.tempBadge {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3em 0.7em;
+  border-radius: var(--radius-pill);
+}
+.tempCaliente { background: var(--color-violeta); color: var(--color-blanco); }
+.tempTibio { background: color-mix(in srgb, var(--color-violeta) 14%, var(--color-blanco) 86%); color: var(--color-violeta); }
+.tempFrio { background: transparent; color: var(--fg-muted); border: 1px solid color-mix(in srgb, var(--color-tinta) 25%, transparent); }
+
+.bentoCard:hover .leadRow:not([data-temp="caliente"]) { opacity: 0.35; }
+
+/* ---- card 3: la ganancia a la vista ---- */
+.revenueMock { display: flex; flex-direction: column; gap: var(--space-3); }
+.revenueTop { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.revenueLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.revenueBadge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  padding: 0.3em 0.7em;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-violeta) 14%, var(--color-blanco) 86%);
+  color: var(--color-violeta);
+}
+.revenueValue {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-variant-numeric: tabular-nums;
+}
+.revenueBars { display: flex; align-items: flex-end; gap: var(--space-2); height: 4.5rem; }
+.revenueBar {
+  flex: 1 1 0;
+  border-radius: 3px 3px 0 0;
+  background: color-mix(in srgb, var(--color-tinta) 16%, var(--color-crema) 84%);
+}
+.revenueBarLast { background: var(--color-violeta); }

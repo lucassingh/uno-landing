@@ -1,0 +1,117 @@
+.navbar {
+  position: fixed;
+  top: clamp(0.75rem, 2vw, 1.5rem);
+  left: 50%;
+  z-index: 100;
+  max-width: 96vw;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 10px;
+  overflow: visible;
+  /* Aísla el layout del navbar del resto del documento: la animación de width no puede
+     disparar reflow fuera de la barra. No usamos `paint` para no recortar el dropdown. */
+  contain: layout;
+}
+
+.navbarBg {
+  position: absolute;
+  inset: 0;
+  background: var(--color-blanco);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.navbarInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-inline: var(--space-4);
+  padding-block: 0.55rem;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+.logoLink img { height: 34px; width: auto; }
+
+.links {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  white-space: nowrap;
+}
+
+.item { position: relative; }
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-small);
+  color: var(--color-tinta);
+}
+.link:hover { opacity: 0.7; }
+
+.chevron { color: var(--color-tinta); transition: transform var(--dur) var(--ease); }
+.chevronOpen { transform: rotate(180deg); }
+
+.cta { flex: none; white-space: nowrap; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(90vw, 620px);
+  padding: var(--space-4);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 10px;
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  transform-origin: top center;
+}
+
+.dropdownGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--color-tinta);
+}
+.projectCard:hover .projectTitle { opacity: 0.7; }
+
+.projectImage { width: 100%; }
+
+.projectTitle {
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-small);
+}
+
+.projectText {
+  font-family: var(--font-body);
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .dropdownGrid { grid-template-columns: 1fr; }
+  .links { gap: var(--space-4); }
+}

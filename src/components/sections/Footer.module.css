@@ -1,0 +1,186 @@
+/* navy igual al resto de bloques invertidos del sitio. El padding-bottom (20px) es a
+   propósito el mismo valor que .divider más abajo: logo->línea, línea->copy y copy->final
+   tienen que sentirse iguales (pedido puntual de Lucas), así que es EL único gap de "copy al
+   final" — .legalBleed no suma padding propio ahí para no duplicarlo. */
+.footer {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  border-top: var(--border-w-card) solid color-mix(in srgb, var(--color-blanco) 20%, transparent);
+  padding-block: var(--space-16) 20px;
+}
+
+.top {
+  display: grid;
+  gap: var(--space-12);
+  padding-bottom: var(--space-12);
+}
+
+/* ---- columnas de navegación ---- */
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); }
+
+/* eyebrow simple, sin píldora (Lucas: sacar la pill) — mismo lenguaje que el componente
+   Eyebrow (mono, mayúscula, tracking), sin fondo ni padding de botón. */
+.colTitle {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-blanco) 70%, transparent);
+  margin-bottom: var(--space-4);
+}
+
+.links { display: flex; flex-direction: column; gap: var(--space-3); }
+.link {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: color-mix(in srgb, var(--color-blanco) 85%, transparent);
+  transition: color var(--dur) var(--ease);
+}
+.link:hover { color: var(--color-violeta); }
+
+/* ---- newsletter + seguinos ---- */
+.side { display: flex; flex-direction: column; gap: var(--space-6); }
+
+/* card "de siempre" (fondo blanco, borde navy, texto navy) — SOLO la sombra pasa a blanco:
+   la sombra navy default de una Card está pensada para page bg clara y desaparecería contra
+   el navy del footer (mismo criterio que .textCard en StickyScroll.module.css y .cardInvert
+   en Pricing.module.css). El borde se queda navy — así se distingue de la sombra en vez de
+   perderse contra el propio fondo blanco de la card. */
+.newsletter {
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0 var(--color-blanco);
+  padding: var(--space-6);
+}
+
+/* sin foto: trama de puntos + el "+" grande de la marca hacen de imagen — mismo criterio que
+   Proyectos/Testimonios (ver AsteriskIcon), con NUESTRO radius chico, no el pill de la
+   referencia. */
+.newsletterImage {
+  aspect-ratio: 2.4 / 1;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-6); /* imagen -> título: más aire */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-tinta) 14%, transparent) 1.6px, transparent 1.8px);
+  background-size: 22px 22px;
+  background-color: color-mix(in srgb, var(--color-tinta) 4%, transparent);
+}
+.newsletterMark { color: color-mix(in srgb, var(--color-tinta) 32%, transparent); }
+
+.newsletterTitle { font-family: var(--font-display); font-weight: var(--fw-black); font-size: var(--fs-h3); }
+.newsletterText {
+  margin-top: var(--space-4); /* título -> copy: más aire */
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  max-width: 34ch;
+}
+
+.newsletterForm { display: flex; gap: var(--space-2); margin-top: var(--space-6); flex-wrap: wrap; } /* copy -> input: más aire */
+.newsletterInput {
+  flex: 1;
+  min-width: 10rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--color-tinta);
+  background: var(--color-crema);
+  border: var(--border-w-card) solid transparent;
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color var(--dur) var(--ease);
+}
+.newsletterInput:focus-visible { border-color: var(--color-violeta); }
+.newsletterBtn { flex-shrink: 0; }
+
+.subscribed {
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--color-tinta);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  margin: -1px;
+  padding: 0;
+}
+
+/* mismo tratamiento que .newsletter: fondo blanco, borde navy, sombra blanca (ver el
+   comentario ahí arriba — la sombra navy default desaparecería contra el footer). */
+.follow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0 var(--color-blanco);
+  padding: var(--space-4) var(--space-6);
+}
+.followTitle { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+.followIcons { display: flex; gap: var(--space-3); }
+.followIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  border: var(--border-w-card) solid color-mix(in srgb, var(--color-tinta) 30%, transparent);
+  color: var(--color-tinta);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.followIcon:hover { border-color: var(--color-violeta); color: var(--color-violeta); }
+
+/* ---- logo gigante + línea + barra legal: A PROPÓSITO fuera del Container (son hermanos
+   suyos, no hijos, ver Footer.tsx) — no atado al max-width de 1240px, en TODOS los
+   breakpoints (a diferencia de la referencia, que esconde el logo en tablet/mobile). Inset
+   fijo en px (no un token de espaciado): pedido puntual de Lucas, 30px a los costados. ---- */
+.legalBleed {
+  padding-inline: 30px;
+  /* bottom en 0: el gap "copy -> final" ya lo da el padding-bottom del .footer (mismo 20px
+     que acá abajo) — sumar otro acá lo duplicaría. */
+  padding-block: var(--space-16) 0;
+}
+
+.bigLogo { display: block; }
+
+/* logo->línea y línea->copy: mismo valor (20px) entre sí Y con el padding-bottom del
+   .footer — las tres distancias tienen que sentirse iguales. */
+.divider {
+  margin-block: 20px;
+  border-top: var(--border-w-card) solid color-mix(in srgb, var(--color-blanco) 20%, transparent);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-blanco) 60%, transparent);
+}
+.email { transition: color var(--dur) var(--ease); }
+.email:hover { color: var(--color-violeta); }
+
+@media (min-width: 900px) {
+  .top { grid-template-columns: 1.3fr 1fr; }
+  .cols { grid-template-columns: repeat(2, minmax(0, 9rem)); }
+  .side { max-width: 26rem; margin-left: auto; }
+}

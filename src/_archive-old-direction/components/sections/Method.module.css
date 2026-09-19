@@ -1,0 +1,4 @@
+.step { border-top: var(--border-w) solid var(--border); padding-top: var(--space-4); height: 100%; }
+.num { font-family: var(--font-display); font-weight: var(--fw-black); font-size: 2.5rem; display: block; }
+.title { font-size: var(--fs-h3); margin-block: var(--space-2); }
+.text { color: var(--fg-muted); font-size: var(--fs-small); }

@@ -1,0 +1,227 @@
+.viewport {
+  /* "hidden" en un eje fuerza al otro a computarse "auto" aunque digas "visible" a propósito
+     (regla de la spec: no depende de cómo lo escribas, solo de que uno sea hidden/scroll/auto y
+     el otro no). Con overflow-x:hidden común, ese "auto" en Y se activaba de verdad -las cards
+     rotadas del abanico pintan un poco por fuera de su caja sin transformar- y aparecía una
+     segunda scrollbar vertical pegada a la del navegador. "clip" no entra en esa regla: recorta
+     el desborde horizontal sin convertir esto en un contenedor con scroll propio. */
+  overflow-x: clip;
+  overflow-y: visible;
+  /* más aire arriba que abajo: la rotación (MAX_ROTATE, pivotando desde abajo) levanta la punta
+     superior de las cards más giradas por encima de su propio borde sin rotar, y esa punta
+     quedaba tapada por el fondo opaco del header sticky (Proyectos.module.css) que está pegado
+     justo arriba. Abajo sobra espacio porque las cards no bajan tanto (MAX_DROP es chico). */
+  padding-block: var(--space-24) var(--space-8);
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  gap: calc(var(--space-12) * 1.5);
+  width: max-content;
+  padding-inline: var(--container-pad);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.track:active {
+  cursor: grabbing;
+}
+
+.card {
+  /* <a> es inline por default — sin esto el navegador ignora width/min-height/transform */
+  display: block;
+  position: relative;
+  flex: 0 0 auto;
+  width: 450px;
+  min-height: 600px;
+  /* pivotea desde abajo: las cards giran como si estuvieran apoyadas sobre un riel curvo, en vez
+     de rotar sobre su propio centro (que a MAX_ROTATE alto hacía que las esquinas invadieran a
+     la card vecina y se viera desprolijo). */
+  transform-origin: bottom center;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  /* tono alternado por índice (ver --card-tone en CircularGallery.tsx): sin fotos, esto + la
+     trama + el número grande son lo que distingue una card de la otra. */
+  background: var(--card-tone);
+  color: var(--color-tinta);
+  text-decoration: none;
+  overflow: hidden;
+  box-shadow: var(--shadow-hard);
+  will-change: transform;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.card:hover,
+.card:focus-visible {
+  box-shadow: 9px 9px 0 var(--color-tinta);
+}
+
+/* ---- contenido: siempre en el DOM, tapado por el mosaico hasta el hover. Fondo SIEMPRE blanco
+   (no var(--card-tone)) a propósito: el reposo alterna blanco/crema, pero el hover tiene que
+   verse igual en las 10 cards, sea cual sea el tono de reposo que le tocó. ---- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  background: var(--color-blanco);
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  color: var(--fg-muted);
+}
+
+.overlayTitle {
+  font-size: var(--fs-h3);
+}
+
+.description {
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  list-style: none;
+}
+
+/* ---- mosaico: tapa el overlay (descripción/tech) por default; al hover cada pieza encoge
+   con delay escalonado y lo revela. Antes reconstruía una foto en piezas; ahora cada pieza
+   es lisa (--card-tone) — mismo mecanismo, sin imagen que cargar. ---- */
+.pixelGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.pixel {
+  position: relative;
+  background-color: var(--card-tone);
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 0.5s var(--ease);
+}
+
+/* la trama (ver --card-pattern, PATTERNS en CircularGallery.tsx) va en un ::after en vez de
+   directo en .pixel: así .pixel puede quedar 100% opaco (tapa el overlay) y la trama es solo un
+   tinte navy encima. Es un repeating-linear-gradient con el paso de repetición en px (25px la
+   grilla, elegido porque divide exacto el tamaño de una pieza del mosaico — 75×150px, ver
+   PIXEL_COLS/ROWS — así no salta en la unión entre piezas). */
+.pixel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--card-pattern);
+  /* solo tiene efecto real en la trama de puntos (radial-gradient sin "repeating-" no se
+     repite solo — con background-size chico + el repeat default se arma la grilla de puntos).
+     Las otras dos son repeating-linear-gradient: repiten por su propia cuenta, este size no
+     les cambia nada. */
+  background-size: 25px 25px;
+  opacity: 0.22;
+}
+
+.card:hover .pixel::after,
+.card:focus-visible .pixel::after {
+  opacity: 0.4;
+}
+
+.card:hover .pixel,
+.card:focus-visible .pixel {
+  transform: scale(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel {
+    transition: none;
+  }
+}
+
+/* ---- nombre, flecha, número grande: la "cara" de reposo. Se ocultan las tres juntas al hover
+   (bloque de abajo) para que en ese estado solo quede el contenido real del overlay (título +
+   ficha técnica) — nada de lo que se ve antes del hover se mezcla con lo de después. ---- */
+.arrow {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-pill);
+  background: var(--color-crema);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: opacity 0.2s var(--ease);
+}
+
+/* nombre del proyecto: visible en reposo (pista de que la card es interactiva), decorativo
+   (aria-hidden — el h3 real es .overlayTitle, adentro del overlay). */
+.title {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  z-index: 3;
+  max-width: calc(100% - var(--space-8) - 2.25rem);
+  font-size: var(--fs-h3);
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease);
+}
+
+/* número grande: gigante, en violeta translúcido, centrado en alto y alineado a la derecha
+   (20px de padding, casi pegado al borde) — es el único número visible en reposo, ya no hay
+   badge chico. */
+.bigNumber {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  line-height: 0.8;
+  font-size: 18rem;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--color-violeta) 24%, transparent);
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.2s var(--ease);
+}
+
+.card:hover .arrow,
+.card:focus-visible .arrow,
+.card:hover .title,
+.card:focus-visible .title,
+.card:hover .bigNumber,
+.card:focus-visible .bigNumber {
+  opacity: 0;
+}
+
+/* el width de .card queda FIJO en todos los breakpoints a propósito: CircularGallery.tsx usa
+   ese mismo número (CARD_WIDTH) para calcular a qué distancia del centro está cada card durante
+   el drag — si acá se vuelve responsive sin actualizar la constante, el abanico se desalinea. */
+@media (max-width: 640px) {
+  .card {
+    min-height: 510px;
+  }
+}

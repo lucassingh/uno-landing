@@ -1,0 +1,97 @@
+.proyectos {
+}
+
+/* header + galería van juntos en .pinned (una sola unidad). Antes el header era sticky y la
+   galería fluía por debajo INDEPENDIENTE: al scrollear, las cards subían por detrás del header y
+   se recortaban las badges de arriba — peor cuanto más altas. Al agrupar, header y cards se mueven
+   como una pieza: las cards SIEMPRE quedan debajo del header (cero recorte) y, al ser más altas
+   que el viewport, sobresalen por ABAJO (Proyectos es la última sección, no tapan nada). El sticky
+   top:7rem da un pin corto al entrar (el título asoma bajo el navbar) y después el bloque scrollea
+   normal, título incluido. */
+.pinned {
+  position: sticky;
+  top: 7rem;
+  z-index: 5;
+}
+
+/* relative: ancla el swipe hint (absolute). Fondo opaco por prolijidad del bloque. */
+.stickyHeader {
+  position: relative;
+  z-index: 5;
+  background: var(--bg);
+  padding-bottom: var(--space-4);
+}
+
+/* ícono de "deslizá" debajo del subtítulo: pista visual de que la galería de abajo se arrastra.
+   El SectionHeader de arriba ya trae su propio margin-bottom — este solo se resta un poco para
+   que el ícono quede pegado al texto en vez de flotar a mitad de camino hacia la galería. */
+.swipeHint {
+  display: block;
+  /* posicionado absoluto para caer dentro del padding-top de la galeria (96px), pegado a las
+     cards y no al subtitulo — sin agrandar el header (que empujaria la galeria y no cerraria el
+     gap). Centrado con left+margin-left para dejar libre el transform para la animacion. */
+  position: absolute;
+  left: 50%;
+  margin-left: -16px;
+  bottom: 0;
+  color: var(--color-tinta);
+  transition: color var(--dur) var(--ease);
+  animation: swipeNudge 1.7s var(--ease) infinite;
+}
+
+.swipeHint:hover {
+  color: var(--color-violeta);
+}
+
+/* mismo lenguaje que el scroll hint: micro-movimiento en loop (aca horizontal, porque el carrusel
+   se arrastra de costado). */
+@keyframes swipeNudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swipeHint { animation: none; }
+}
+
+/* ---- mobile: lista simple en vez de la galería pineada+drag (ver Proyectos.tsx) ---- */
+.mobileListWrap { display: none; }
+.mobileList { display: none; }
+
+@media (max-width: 720px) {
+  .desktopGallery,
+  .swipeHint {
+    display: none;
+  }
+  .mobileListWrap { display: block; }
+  .mobileList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-block: var(--space-8);
+  }
+}
+
+.mobileCard {
+  display: block;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-6);
+}
+.mobileNumber {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  font-weight: var(--fw-bold);
+  color: var(--color-violeta);
+}
+.mobileTitle {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  margin-top: var(--space-2);
+}
+.mobileDescription { color: var(--fg-muted); margin-top: var(--space-2); }
+.mobileTech { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }

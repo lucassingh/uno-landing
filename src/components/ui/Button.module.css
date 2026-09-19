@@ -1,0 +1,35 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  border: var(--border-w) solid var(--border);
+  border-radius: 5px;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  white-space: nowrap;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--color-tinta); }
+.btn:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--color-tinta); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; line-height: 1.05; }
+.md { padding: 0.7rem 1.1rem; font-size: 0.95rem; }
+.lg { padding: 0.95rem 1.5rem; font-size: 1.05rem; }
+
+.primary { background: var(--color-tinta); color: var(--color-blanco); }
+.primary:hover { background: var(--color-violeta); border-color: var(--color-violeta); }
+
+.secondary { background: var(--color-violeta); color: var(--color-blanco); border-color: var(--color-violeta); }
+.secondary:hover { background: var(--color-tinta); border-color: var(--color-tinta); }
+
+.outline { background: transparent; color: var(--color-tinta); }
+
+/* para usar "primary" arriba de un fondo navy (CtaFinal, Footer): .primary da por sentado
+   fondo claro, acá se invierte — blanco en reposo, el mismo violeta de hover que el resto
+   del sitio, con la sombra dura también en blanco (si no, se pierde contra el navy). */
+.invert { background: var(--color-blanco); color: var(--color-tinta); border-color: var(--color-blanco); }
+.invert:hover { background: var(--color-violeta); color: var(--color-blanco); border-color: var(--color-violeta); box-shadow: 6px 6px 0 var(--color-blanco); }
+.invert:active { box-shadow: 2px 2px 0 var(--color-blanco); }

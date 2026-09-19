@@ -1,0 +1,102 @@
+"use client";
+
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import styles from "./Loader.module.css";
+
+const ReadyContext = createContext(true);
+
+/** true una vez que el loader terminó — para que las animaciones de entrada de otros componentes esperen y no se "gasten" tapadas por el loader. */
+export function useSiteReady() {
+  return useContext(ReadyContext);
+}
+
+const CELL = 41.3318;
+/** Las 8 celdas "plantilla" del isotipo (branding/03-logo/02-isotipo/isotipo.svg), sin rotar. */
+const STATIC_CELLS = [
+  { x: 0, y: 0 },
+  { x: 56.0151, y: 0 },
+  { x: 112.031, y: 0 },
+  { x: 0, y: 53.8398 },
+  { x: 56.0151, y: 53.8398 },
+  { x: 0, y: 107.681 },
+  { x: 56.0151, y: 107.681 },
+  { x: 112.031, y: 107.681 },
+];
+/** Posición + rotación reales de la celda +1 (mismo rect que en el SVG), como % del viewBox 160×150. */
+const SPECIAL = {
+  left: (105.99 / 160) * 100,
+  top: (62.6348 / 150) * 100,
+  width: (CELL / 160) * 100,
+  height: (CELL / 150) * 100,
+  rotate: -21.0334,
+};
+
+/** Grande a propósito: tiene que cubrir toda la pantalla incluso en monitores anchos (4K, ultrawide). */
+const EXPAND_SCALE = 100;
+const PULSE_MS = 2100;
+const EXPAND_MS = 950;
+
+type Phase = "pulse" | "expand" | "done";
+
+/**
+ * Loader de entrada del sitio: overlay navy con el isotipo en blanco (la celda
+ * +1 en crema, para que contraste). Pulsa un par de veces y después la celda
+ * +1 se escala hasta tapar toda la pantalla de crema, revelando el Hero real
+ * (mismo fondo) exactamente desde donde estaba esa celda.
+ */
+export function LoaderProvider({ children }: { children: ReactNode }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [phase, setPhase] = useState<Phase>("pulse");
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      const t = setTimeout(() => setPhase("done"), 350);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setPhase("expand"), PULSE_MS);
+    return () => clearTimeout(t);
+  }, [shouldReduceMotion]);
+
+  useEffect(() => {
+    if (phase !== "expand") return;
+    const t = setTimeout(() => setPhase("done"), EXPAND_MS);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  const ready = phase === "done";
+
+  return (
+    <ReadyContext.Provider value={ready}>
+      {!ready && (
+        <div className={styles.overlay} aria-hidden="true">
+          <motion.div
+            className={styles.stage}
+            animate={shouldReduceMotion ? { scale: 1 } : { scale: [1, 1.07, 1] }}
+            transition={{ duration: 0.85, repeat: 1, repeatDelay: 0.2, ease: "easeInOut" }}
+          >
+            <svg className={styles.icon} viewBox="0 0 160 150">
+              {STATIC_CELLS.map((c, i) => (
+                <rect key={i} x={c.x} y={c.y} width={CELL} height={CELL} rx={3} fill="var(--color-blanco)" />
+              ))}
+            </svg>
+            <motion.div
+              className={styles.special}
+              style={{
+                left: `${SPECIAL.left}%`,
+                top: `${SPECIAL.top}%`,
+                width: `${SPECIAL.width}%`,
+                height: `${SPECIAL.height}%`,
+                transformOrigin: "0 0",
+              }}
+              initial={{ rotate: SPECIAL.rotate, scale: 1 }}
+              animate={{ rotate: SPECIAL.rotate, scale: phase === "expand" ? EXPAND_SCALE : 1 }}
+              transition={{ duration: EXPAND_MS / 1000, ease: "easeOut" }}
+            />
+          </motion.div>
+        </div>
+      )}
+      {children}
+    </ReadyContext.Provider>
+  );
+}

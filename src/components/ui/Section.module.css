@@ -1,0 +1,9 @@
+/* scroll-margin-top: el Navbar es una píldora fixed (z-index:100, sin alto propio en el flujo),
+   así que al saltar por ancla (#servicios, #proyectos...) el navegador dejaba el borde superior
+   de la sección pegado al top del viewport, justo detrás de la píldora — el título quedaba
+   tapado. Con esto el salto por ancla frena un poco más abajo, con aire debajo del navbar. */
+.section { padding-block: var(--section-y); position: relative; scroll-margin-top: 7rem; }
+.default { background: var(--bg); color: var(--fg); }
+.alt { background: var(--bg-alt); color: var(--fg); }
+.invert { background: var(--bg-invert); color: var(--fg-invert); }
+.accent { background: var(--accent); color: var(--color-tinta); }

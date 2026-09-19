@@ -1,0 +1,215 @@
+/* pista (invisible) y slide visible ocupan la MISMA celda de grid (grid-area 1/1): la pista,
+   mas alta, define cuanto scroll tiene la seccion; el slide flota sticky adentro de esa celda
+   alta sin agregarle a su alto. */
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  position: relative;
+}
+
+.track {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Define cuanto scroll tiene la seccion. Con 6 pasos: total = 6 x este valor. El tramo real en
+   que el slide queda pegado es (total - 100vh); los 6 pasos se reparten parejo en ese tramo
+   (ver useScroll en StickyScroll.tsx). En vh para que escale con la pantalla. */
+.trackStep {
+  min-height: 52vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* El slide queda pegado ocupando el alto completo del viewport y centra su contenido con flex.
+   Con top:0 + alto 100vh se despega JUSTO cuando el carril termina: no queda cola de scroll
+   vacio antes de la seccion siguiente, y la entrada/salida quedan simetricas. */
+.slides {
+  grid-area: 1 / 1;
+  align-self: start;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slidesInner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-16);
+  align-items: center;
+}
+
+/* .textCard.textCard (clase duplicada): Card.module.css define .card{padding, height:100%}
+   en otro stylesheet — el orden de bundling entre modulos CSS no esta garantizado, asi que a
+   igual especificidad (0,1,0) cualquiera podria ganar. Duplicar la clase sube la especificidad
+   a (0,2,0) y asegura que este bloque gane siempre. */
+/* En la sección navy el shadow duro por defecto (navy) desaparece contra el fondo. Lo pasamos a
+   blanco solo acá para que se vea el offset brutalista de la card sobre el oscuro. */
+.textCard.textCard {
+  position: relative;
+  box-shadow: 6px 6px 0 var(--color-blanco);
+  height: min(66vh, 620px);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.textAnim {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* índice de paso ("01", "02"…) gigante en opacity, sangrando por la esquina inferior derecha
+   de la card — el elemento "industrial/utilitarian" de la marca (índices 01/02, mono) llevado
+   al extremo: llena el espacio vacío de la card en vez de dejarlo en blanco, sin competir con
+   el texto real porque va MUY tenue y detrás (z-index 0 contra el z-index 1 de .stepContent).
+   position:relative + z-index:1 en .stepContent para ganarle ese apilado — sin eso un elemento
+   position:static pinta ARRIBA de uno position:absolute con z-index:auto/0 en el mismo
+   contenedor, exactamente al revés de lo que queremos acá. */
+.stepIndex {
+  position: absolute;
+  right: -0.5rem;
+  bottom: -1.5rem;
+  z-index: 0;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: clamp(9rem, 18vw, 15rem);
+  line-height: 0.8;
+  color: var(--color-tinta);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+}
+
+.stepContent { position: relative; z-index: 1; }
+
+/* título gigante — acá el título ES la card, no una línea más arriba de un párrafo. */
+.stepTitle {
+  font-size: clamp(2.6rem, 4.5vw, 4rem);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  margin-bottom: var(--space-4);
+}
+.stepText { color: var(--fg-muted); font-size: var(--fs-lead); max-width: 46ch; }
+
+/* "fundamento": frase corta que refuerza el POR QUÉ del paso, separada de la descripción por
+   un filete — un tercer nivel de jerarquía (título > descripción > esto), a propósito chico y
+   en violeta/itálica para que se lea como un principio, no como más copy del mismo párrafo. */
+.stepPrinciple {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--border-w-card) solid color-mix(in srgb, var(--color-tinta) 15%, transparent);
+  font-weight: var(--fw-semibold);
+  font-style: italic;
+  font-size: var(--fs-small);
+  color: var(--color-violeta);
+  max-width: 46ch;
+}
+
+/* navy plano (no el Grainient de fondo, que va de violeta a navy en gradiente) detrás de la
+   ilustración — sin esto se perdía contra el fondo animado. Mismo alto y radio que .textCard
+   (var(--radius-lg), el que usa Card) pero SIN su sombra ni borde — pedido puntual: que sea
+   "el mismo tamaño, separado por gap" nomás, no otra card. El gap ya lo da .slidesInner. */
+.visual {
+  position: relative;
+  height: min(66vh, 620px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-tinta);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* absolute (no en el flujo, así el fade/slide de motion no tironea el layout del slide) +
+   width/height explícitos en vez de inset solo: un <img> reemplazado con top+bottom+left+right
+   pero sin width/height propios queda con la caja sobre-restringida, y ahí el navegador puede
+   resolver el conflicto corriendo el centrado de object-fit para arriba (pasó: quedaba
+   descentrado). Con width/height fijos (100% menos el padding de los 4 lados, mismo
+   var(--space-8) que .textCard) la caja es inequívoca y contain centra bien. */
+.illustration {
+  position: absolute;
+  top: var(--space-8);
+  left: var(--space-8);
+  width: calc(100% - var(--space-8) * 2);
+  height: calc(100% - var(--space-8) * 2);
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .trackStep {
+    min-height: 42vh;
+  }
+
+  /* en mobile el slide apila en una columna; dejamos que el alto se ajuste al contenido en vez
+     de forzar 100vh (dos cajas apiladas podrian pasarse de pantalla y recortarse). */
+  .slides {
+    height: auto;
+    min-height: 100vh;
+    padding: var(--space-10) 0;
+  }
+
+  .slidesInner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .textCard.textCard,
+  .visual {
+    height: auto;
+    min-height: 220px;
+  }
+}
+
+/* Indicador de scroll: mouse lineal (mismo lenguaje que el swipe de Proyectos) fijo abajo-centro
+   del area pegada, con la ruedita bajando en loop. Le avisa al user que tiene que scrollear.
+   Se desvanece apenas avanza del primer paso (active !== 0, controlado en el componente). */
+.scrollHint {
+  /* Siempre visible, pegado a la izquierda de la card (borde derecho del icono a 20px del borde
+     izquierdo de la card) y centrado verticalmente con ella. Absoluto: no mueve el centrado del
+     grid de la card. Referencia: .slides ocupa el mismo ancho que la card (col 1 del grid). */
+  position: absolute;
+  right: calc(100% + 20px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: max-content;
+  z-index: 2;
+  color: var(--color-amarillo);
+  pointer-events: none;
+}
+
+.scrollMouse {
+  display: block;
+}
+
+.scrollWheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: scrollWheel 1.7s var(--ease) infinite;
+}
+
+@keyframes scrollWheel {
+  0%   { transform: translateY(0);   opacity: 0; }
+  15%  { opacity: 1; }
+  55%  { transform: translateY(7px); opacity: 1; }
+  80%  { opacity: 0; }
+  100% { transform: translateY(0);   opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollWheel { animation: none; }
+}

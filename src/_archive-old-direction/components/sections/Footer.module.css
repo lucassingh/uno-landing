@@ -1,0 +1,12 @@
+.footer { background: var(--color-tinta); color: var(--color-blanco); padding-block: var(--space-16) var(--space-8); }
+.top { display: grid; gap: var(--space-12); grid-template-columns: 1fr; padding-bottom: var(--space-12); border-bottom: 2px solid color-mix(in srgb, var(--color-blanco) 25%, transparent); }
+.brand { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-start; }
+.tagline { font-family: var(--font-mono); text-transform: uppercase; font-size: var(--fs-small); letter-spacing: 0.05em; color: color-mix(in srgb, var(--color-blanco) 70%, transparent); max-width: 30ch; }
+.cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8); }
+.colTitle { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--color-verde); margin-bottom: var(--space-3); }
+.links { display: flex; flex-direction: column; gap: var(--space-2); }
+.link { font-size: var(--fs-small); color: color-mix(in srgb, var(--color-blanco) 80%, transparent); }
+.link:hover { color: var(--color-verde); }
+.bottom { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: space-between; padding-top: var(--space-6); font-family: var(--font-mono); font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.04em; color: color-mix(in srgb, var(--color-blanco) 60%, transparent); }
+.email:hover { color: var(--color-verde); }
+@media (min-width: 768px) { .top { grid-template-columns: 1.4fr 1fr; } }

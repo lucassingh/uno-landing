@@ -1,0 +1,22 @@
+.mark { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* dasharray = el largo real de ESE trazo (custom property por <path>, medida en JS). Dibuja
+   (0->35%), se sostiene completo (35-65%), y se borra de vuelta (65->100%) DENTRO del mismo
+   ciclo — antes el relleno blanco tapaba el reinicio brusco del dashoffset; sin esa capa (se
+   sacó, ver StrokeMark.tsx) el trazo tiene que volver solo a 0 antes de repetir el loop, si
+   no el salto de "completo" a "invisible" se nota. */
+@keyframes strokeDraw {
+  0% { stroke-dashoffset: var(--len); }
+  35%, 65% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: var(--len); }
+}
+.stroke {
+  stroke-dasharray: var(--len);
+  animation-name: strokeDraw;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stroke { animation: none; stroke-dashoffset: 0; }
+}

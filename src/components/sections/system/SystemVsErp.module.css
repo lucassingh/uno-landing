@@ -1,0 +1,114 @@
+/* =============================================================
+   Sección "por qué no es un ERP carísimo" de /system — pase de alta fidelidad.
+   Ni cards ni tabla (ya usadas en Stock/Equipo): acá el contraste se muestra
+   como una planilla de specs con barras — cada fila es una métrica, y el
+   tamaño de la barra es directamente "cuánto tiempo/gente/plata te cuesta".
+   Cierra con una franja invertida (navy) a modo de mini-CTA hacia #contacto,
+   separada del resto — no es el form completo (eso es CtaFinal, al pie).
+   ============================================================= */
+
+.header { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-12); }
+.title { font-size: var(--fs-h2); max-width: 34ch; text-wrap: balance; }
+.intro { font-size: var(--fs-lead); color: var(--fg-muted); max-width: 64ch; text-wrap: balance; }
+
+/* ---- planilla de specs, sobre una card (mismo lenguaje que el resto: borde + shadow-hard) ---- */
+.card {
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-8);
+}
+@media (max-width: 640px) {
+  .card { padding: var(--space-4); }
+}
+
+.rows { display: flex; flex-direction: column; border-bottom: var(--border-w-card) solid var(--color-tinta); }
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(9rem, 15rem) 1fr;
+  gap: var(--space-6);
+  align-items: center;
+  padding-block: var(--space-6);
+  border-top: var(--border-w-card) solid var(--color-tinta);
+}
+@media (max-width: 720px) {
+  .row { grid-template-columns: 1fr; gap: var(--space-3); }
+}
+
+.rowLabel { display: flex; flex-direction: column; gap: var(--space-1); }
+.rowIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  color: var(--color-violeta);
+  font-weight: var(--fw-bold);
+}
+.rowMetric { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-body); }
+
+.bars { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.barLine { display: grid; grid-template-columns: 7.5rem 1fr auto; gap: var(--space-3); align-items: center; }
+@media (max-width: 560px) {
+  .barLine { grid-template-columns: 6rem 1fr; }
+  .barValue { grid-column: 1 / -1; margin-top: var(--space-1); }
+}
+
+.barTag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  height: 0.6rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-tinta) 8%, transparent);
+  overflow: hidden;
+}
+.fillErp {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-tinta) 42%, transparent);
+}
+.fillUno {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: var(--radius);
+  background: var(--color-violeta);
+}
+
+.barValue { font-size: var(--fs-small); color: var(--fg); white-space: nowrap; }
+
+/* ---- mini-CTA invertida ---- */
+.ctaBand {
+  margin-top: var(--space-12);
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  border: var(--border-w-card) solid var(--color-blanco);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+@media (max-width: 640px) {
+  .ctaBand { flex-direction: column; align-items: flex-start; }
+}
+.ctaText {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-heading);
+  max-width: 36ch;
+}

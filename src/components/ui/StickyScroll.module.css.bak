@@ -1,0 +1,120 @@
+/* pista (invisible) y slide visible ocupan la MISMA celda de grid (grid-area 1/1): la pista,
+   más alta, define cuánto scroll tiene la sección; el slide flota sticky adentro de esa celda
+   alta sin agregarle a su alto (align-self:stretch en .slides, no en .slidesInner). */
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.track {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* en px fijos, no vh: así el total (6 × 220px = 1320px) es un número concreto que no depende de
+   la altura de pantalla de cada uno — antes eran 60vh (~3240px en una pantalla de 900px), un
+   scroll larguísimo solo para esta sección. El total tiene que seguir siendo más alto que la
+   card (ver .textCard.textCard) para que el sticky tenga margen real de "pegarse y despegarse"
+   sin quedar apretado — por eso también bajé la card, no solo esto. */
+.trackStep {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slides {
+  grid-area: 1 / 1;
+  align-self: stretch;
+}
+
+/* top:50vh + translateY(-50%) centra el slide en la pantalla mientras scrollea (no pegado
+   arriba): el offset sticky ancla el borde superior a la mitad del viewport y el transform lo
+   corre hacia arriba la mitad de su propio alto. */
+.slidesInner {
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-16);
+  align-items: center;
+}
+
+/* .textCard.textCard (clase duplicada): Card.module.css define .card{padding, height:100%}
+   en otro stylesheet — el orden de bundling entre módulos CSS no está garantizado, así que a
+   igual especificidad (0,1,0) cualquiera podría ganar. Duplicar la clase sube la especificidad
+   a (0,2,0) y asegura que este bloque gane siempre. */
+/* height fijo (no aspect-ratio): al estar centrada por .slidesInner (top:50vh + translateY(-50%)),
+   crecer en altura usa el aire de arriba y abajo, no solo los costados — y esto NO alarga el
+   scroll de la sección (eso lo controla .trackStep aparte, sin tocar). El techo real es el total
+   de .trackStep (6 × 220px = 1320px): mientras la card quede bastante por debajo de eso, el
+   sticky sigue teniendo margen de pegarse/despegarse sin verse apretado. */
+.textCard.textCard {
+  height: min(66vh, 620px);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stepTitle { font-size: var(--fs-h3); margin-bottom: var(--space-3); }
+.stepText { color: var(--fg-muted); font-size: var(--fs-body); max-width: 46ch; }
+
+.stepTextEmphasis {
+  font-weight: var(--fw-semibold);
+  color: var(--color-tinta);
+  max-width: 46ch;
+  margin-top: var(--space-3);
+}
+
+.stepTextMuted {
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  max-width: 46ch;
+  margin-top: var(--space-3);
+}
+
+.visual {
+  height: min(66vh, 620px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.visualIndex {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-tinta) 18%, var(--color-crema));
+}
+
+@media (max-width: 900px) {
+  /* esto es lo que define cuánto hay que scrollear por paso — con 6 pasos, 45vh sumaba 270vh de
+     scroll solo para esta sección en mobile: mucho más que el resto (Servicios, Proyectos), y por
+     eso se sentía como un pozo de scroll vacío antes de llegar a la siguiente sección. Bajarlo
+     acorta esa distancia total sin tocar el mecanismo. */
+  .trackStep {
+    min-height: 30vh;
+  }
+
+  .slidesInner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  /* en mobile .slidesInner apila en una columna — el height:min(78vh,760px) de arriba está
+     pensado para las dos cajas lado a lado; apiladas, sumarían ~156vh y reventarían la pantalla.
+     Vuelve a un alto chico que se ajusta al contenido. */
+  .textCard.textCard,
+  .visual {
+    height: auto;
+    min-height: 220px;
+  }
+}

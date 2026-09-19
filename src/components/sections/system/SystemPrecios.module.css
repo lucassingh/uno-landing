@@ -1,0 +1,115 @@
+/* =============================================================
+   Sección "cómo se cobra" de /system — adaptada a la card de precios que
+   ya usa la landing principal (Pricing.module.css: apodo, ficha "más
+   elegido" a caballo del borde, bloque de precio, features con
+   AsteriskIcon, tonos default/accent/invert) en vez del bulletList con
+   flecha que tenía antes. Solo 2 de los 6 planes de la landing (Sistema
+   +uno e Integral) — el resto del negocio de esta sección todavía no
+   está cerrado, se retoca después.
+   ============================================================= */
+
+/* el intro de esta sección es más largo que el resto (explica setup + abono en detalle) — el
+   cap de 52ch de SectionHeader lo partía en demasiadas líneas. Vía prop className en vez de
+   tocar SectionHeader.module.css (que es compartido por todo el sitio); apunta al <p>/<header>
+   por tag, no por clase, porque .intro/.header viven scopeados en OTRO módulo CSS y no se
+   pueden referenciar por nombre desde acá — el selector por tag gana por especificidad sin
+   necesitar saberlo.
+   El primer intento solo anchaba el <p> y no pasó nada visible: el <header> que lo contiene
+   seguía con max-width:56ch de SectionHeader.module.css, así que el hijo no tenía dónde
+   estirarse (ni el párrafo NI el título, que hereda el ancho del header, no tiene el suyo
+   propio) — por eso tampoco se veía el título en menos líneas. header.header (tag+clase, más
+   específico que el .header a secas del otro módulo) es lo que realmente lo destraba. */
+header.header { max-width: 82ch; }
+.header p { max-width: 74ch; }
+
+.plan.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: relative;
+  box-shadow: var(--shadow-hard);
+}
+.plan.plan:hover,
+.plan.plan:focus-within {
+  box-shadow: var(--shadow-hard);
+  transform: none;
+}
+
+.cardAccent.cardAccent { background: var(--color-amarillo); }
+
+.cardInvert.cardInvert {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  border-color: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+}
+.cardInvert.cardInvert:hover,
+.cardInvert.cardInvert:focus-within {
+  box-shadow: var(--shadow-hard);
+  transform: none;
+}
+.cardInvert .nick { color: var(--color-blanco); }
+.cardInvert .desc,
+.cardInvert .note,
+.cardInvert .priceLead {
+  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
+}
+
+.cardInvert .cta {
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  border-color: var(--color-blanco);
+}
+.cardInvert .cta:hover {
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  border-color: var(--color-violeta);
+  box-shadow: 6px 6px 0 var(--color-blanco);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: var(--space-6);
+  transform: translateY(-50%);
+  z-index: 1;
+  background: var(--color-tinta);
+  color: var(--color-crema);
+  border-color: var(--color-tinta);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+}
+.cardInvert .head { border-bottom-color: var(--color-blanco); }
+.name { font-size: var(--fs-h3); }
+.nick {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-violeta);
+}
+
+.priceRow { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15em; }
+.priceLead { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); }
+.priceMain {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.note { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); margin-top: var(--space-1); }
+
+.desc { color: var(--fg-muted); font-size: var(--fs-small); }
+
+.features { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; }
+.feature { display: flex; gap: var(--space-2); align-items: flex-start; font-size: var(--fs-small); }
+.feature svg { flex-shrink: 0; margin-top: 0.2em; }
+
+.cta { margin-top: var(--space-2); justify-content: center; }

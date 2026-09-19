@@ -1,0 +1,16 @@
+/* sección invertida (navy). El alto lo pone el reveal pineado (TextReveal), no esta sección. */
+.sec {
+  background: var(--bg-invert);
+  color: var(--color-crema);
+  scroll-margin-top: 7rem;
+}
+
+/* fuente grande, para que poco texto llene la pantalla e impacte (como el sitio de referencia). */
+.prose {
+  color: var(--color-crema);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2rem, 4.6vw, 4.4rem);
+  line-height: 1.14;
+  letter-spacing: var(--ls-display);
+}

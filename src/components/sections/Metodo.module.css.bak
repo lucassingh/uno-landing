@@ -1,0 +1,9 @@
+.metodo {
+}
+
+/* separación fija (no vh) entre el header y el carril de scroll: sin esto, el header — que ya se
+   desvanece casi enseguida (ver headerOpacity en Metodo.tsx) — daba la sensación de estar pegado
+   contra la grid de Servicios, porque desaparecía antes de que el usuario llegara a ver "Escuchar". */
+.scroll {
+  margin-top: var(--space-16);
+}

@@ -1,0 +1,73 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import styles from "./Metodo.module.css";
+import { Section, SectionHeader, StickyScroll } from "@/components/ui";
+import type { StickyScrollItem } from "@/components/ui";
+
+const STEPS: StickyScrollItem[] = [
+    {
+        index: "01",
+        title: "Escuchar",
+        description:
+            "Reunión 1-a-1. Entiendo qué hacés, qué vendés, a quién, y tu rubro. Ahí detecto si hace falta branding y cuál. Alguien que entiende tu negocio antes de vender nada.",
+    },
+    {
+        index: "02",
+        title: "Planear",
+        description:
+            "Propuesta con estrategia: cómo va a ser la web después de escucharte, alcance, pack, precio y tiempos. Un plan claro, no un presupuesto suelto.",
+    },
+    {
+        index: "03",
+        title: "Diseñar",
+        description:
+            "Mockups. Si hace falta marca, coordino con la diseñadora y también itero eso. Ves la web antes de que exista. Sin sorpresas.",
+    },
+    {
+        index: "04",
+        title: "Iterar",
+        description:
+            "Rondas acotadas de ajuste sobre los mockups (y el branding, si aplica). Una web a medida, no una plantilla.",
+    },
+    {
+        index: "05",
+        title: "Desarrollar y lanzar",
+        description:
+            "Desarrollo en Next.js, publico, mido, te capacito. Web online, rápida, autoadministrable — y sabés usarla.",
+    },
+    {
+        index: "06",
+        title: "Acompañar",
+        description:
+            "Mantenimiento y mejoras continuas. El lanzamiento no es el final: acá arranca un socio, no un proveedor que desaparece.",
+    },
+];
+
+export function Metodo() {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const shouldReduceMotion = useReducedMotion();
+    /* El slide de StickyScroll se traba centrado justo cuando el borde superior de este wrapper
+       ("start") cruza el centro vertical del viewport ("center") — es la misma condición que activa
+       top:50vh en .slidesInner (StickyScroll.module.css). Estas dos marcas ("start end" → "start
+       center") describen exactamente el tramo entre "el wrapper recién entra por abajo" y "se traba":
+       el header se desvanece a lo largo de ese tramo para llegar a opacity 0 justo a tiempo, sin
+       necesitar un margen muerto de ~50vh para que termine de salir de pantalla antes. */
+    const { scrollYProgress } = useScroll({ target: scrollRef, offset: ["start end", "start center"] });
+    const headerOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+
+    return (
+        <Section id="metodo" bg="default" className={styles.metodo}>
+            <motion.div style={shouldReduceMotion ? undefined : { opacity: headerOpacity }}>
+                <SectionHeader
+                    title="el método +1"
+                    intro="No empiezo por el diseño. Empiezo por entender tu negocio."
+                />
+            </motion.div>
+            <div ref={scrollRef} className={styles.scroll}>
+                <StickyScroll items={STEPS} />
+            </div>
+        </Section>
+    );
+}

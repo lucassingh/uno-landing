@@ -1,0 +1,97 @@
+/* =============================================================
+   Sección "tu equipo, tus datos" de /system — pase de alta fidelidad.
+   Una matriz de permisos real (tabla) en vez de otra grilla de cards —
+   ya usamos cards en Stock y el switch en Rubro, esto es un tercer
+   lenguaje visual: datos, no ilustración.
+   ============================================================= */
+
+.matrixCard {
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.matrix { width: 100%; border-collapse: collapse; min-width: 32rem; }
+
+.matrix th,
+.matrix td {
+  padding: var(--space-4) var(--space-3);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  text-align: center;
+}
+.matrix thead th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  font-weight: var(--fw-medium);
+  background: var(--color-blanco);
+}
+
+.matrix tbody th {
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-body);
+  border-right: var(--border-w-card) solid var(--color-tinta);
+  white-space: nowrap;
+}
+.matrix tbody tr:last-child th,
+.matrix tbody tr:last-child td { border-bottom: none; }
+.matrix tbody tr:hover { background: color-mix(in srgb, var(--color-violeta) 5%, transparent); }
+
+.cell { display: inline-flex; align-items: center; justify-content: center; }
+
+.dotFull {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dotView {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  color: var(--fg-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dotNone { color: color-mix(in srgb, var(--color-tinta) 30%, transparent); font-weight: var(--fw-bold); }
+
+.legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-4); margin-bottom: 15px; }
+.legendItem { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--fs-small); color: var(--fg-muted); }
+
+/* ---- menciones de apoyo: sin caja, solo ícono + texto ---- */
+.support {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+@media (min-width: 640px) {
+  .support { grid-template-columns: 1fr 1fr; }
+}
+.supportItem { display: flex; gap: var(--space-4); align-items: flex-start; }
+.supportIcon {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-violeta) 10%, var(--color-blanco) 90%);
+  color: var(--color-violeta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.supportBody h3 { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-body); margin-bottom: var(--space-1); }
+.supportBody p { color: var(--fg-muted); font-size: var(--fs-small); }

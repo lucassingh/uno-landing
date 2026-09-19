@@ -1,0 +1,172 @@
+/* =============================================================
+   Sección "multicanal" de /system — pase de alta fidelidad.
+   Bento de 2 cards grandes + una franja angosta debajo que las une.
+   ============================================================= */
+
+.bentoGrid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
+@media (min-width: 900px) {
+  .bentoGrid { grid-template-columns: 1fr 1fr; }
+}
+
+.bentoCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard);
+}
+
+.bentoVisual {
+  position: relative;
+  min-height: 22rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-crema);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  overflow: hidden;
+}
+
+/* ---- visuales de las 2 cards (ver SystemMulticanalVisuals.tsx). Planas a propósito, sin
+   shadow-hard/-sm del tema: con tres niveles anidados (bentoCard → panelCard/fila → ícono) la
+   sombra dura se pisaba entre sí y se veía "rota" contra el recorte de .bentoVisual. Se
+   mantiene el borde (la marca sigue leyéndose "brutalista" por el borde+radio) pero sin la
+   sombra ofset — más plano, y más grande porque no hay que dejarle aire a una sombra que
+   sobresale. ---- */
+.panelCard {
+  width: 100%;
+  max-width: 26rem;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  padding: var(--space-6);
+}
+
+/* canales: SIN wrapper propio (a diferencia de .panelCard) — cada fila es su propia card
+   suelta directo sobre el crema, como en el mockup de referencia (fanned cards), no todas
+   metidas adentro de otra caja. .channelsWrap solo le da ancho al conjunto. */
+.channelsWrap { width: 100%; max-width: 26rem; }
+.channelList { display: flex; flex-direction: column; gap: var(--space-3); }
+.channelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+}
+.channelIcon {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, currentColor 14%, var(--color-blanco) 86%);
+}
+.channelIcon svg { width: 1.4rem; height: 1.4rem; }
+.channelBody { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0.2em; }
+.channelName {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.channelMessage {
+  font-size: var(--fs-body);
+  color: var(--color-tinta);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.channelReplied {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35em 0.7em;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-violeta) 12%, var(--color-blanco) 88%);
+  color: var(--color-violeta);
+}
+.channelReplied svg { width: 0.6rem; height: 0.6rem; }
+
+/* fuentes: mismo idioma de timeline que .flowList de SystemAsistente (línea conectando puntos)
+   pero con ícono por fuente en vez de un punto liso, y con una flecha de una sola dirección en
+   vez de cualquier indicio de respuesta — a propósito, es la diferencia con .channelRow. Todas
+   en violeta (no colores reales por fuente): acá no importa la identidad, es solo un dato que
+   entra. */
+.feedList { position: relative; display: flex; flex-direction: column; gap: var(--space-5); }
+.feedList::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: color-mix(in srgb, var(--color-tinta) 16%, transparent);
+}
+.feedItem { position: relative; display: flex; align-items: center; gap: var(--space-4); }
+.feedIcon {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  /* anillo blanco solo para tapar la línea del timeline al pasar detrás del ícono — no es el
+     shadow-hard del tema, es una máscara funcional, se mantiene igual que antes. */
+  box-shadow: 0 0 0 4px var(--color-blanco);
+}
+.feedIcon svg { width: 1.2rem; height: 1.2rem; }
+.feedBody { flex: 1 1 auto; min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+.feedLabel { font-size: var(--fs-body); color: var(--color-tinta); }
+.feedSource {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+.feedArrow { flex: 0 0 auto; color: var(--fg-muted); }
+.feedArrow svg { width: 1.15rem; height: 1.15rem; }
+
+.bentoBody { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); }
+.bentoBody h3 { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-h3); }
+.bentoBody p { color: var(--fg-muted); }
+
+/* ---- franja angosta que cierra el bento, mismo ancho que las dos cards juntas ---- */
+.banner {
+  margin-top: var(--grid-gap);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-6) var(--space-8);
+  text-align: center;
+}
+.banner p {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  max-width: 52ch;
+  margin-inline: auto;
+}
+

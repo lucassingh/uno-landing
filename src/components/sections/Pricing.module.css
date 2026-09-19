@@ -1,0 +1,333 @@
+/* Sombra dura SIEMPRE visible (no solo al hover, a diferencia del Card base) — acá la card
+   no es interactiva como tal, es un bloque de precio que tiene que leerse "levantado" todo
+   el tiempo. .plan.plan:hover neutraliza el hover del Card base (que además de sombra mete
+   un transform) para que quede perfectamente estático. */
+.plan.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: relative;
+  box-shadow: var(--shadow-hard);
+}
+.plan.plan:hover,
+.plan.plan:focus-within {
+  box-shadow: var(--shadow-hard);
+  transform: none;
+}
+
+/* Tono 2 (accent): fondo amarillo accent, tipografía navy — es el bg default de la card
+   (blanco) el que ya cumple el tono 1, así que acá solo pisamos el color de fondo. */
+.cardAccent.cardAccent { background: var(--color-amarillo); }
+
+/* Tono 3 (invert): navy + texto blanco. El border pasa a blanco (uno navy se pierde
+   contra la propia card navy), pero la sombra se deja navy — igual que las otras cards,
+   para que compartan el mismo sombreado aunque acá casi no se note. */
+.cardInvert.cardInvert {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  border-color: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+}
+.cardInvert.cardInvert:hover,
+.cardInvert.cardInvert:focus-within {
+  box-shadow: var(--shadow-hard);
+  transform: none;
+}
+.cardInvert .nick { color: var(--color-blanco); }
+.cardInvert .desc,
+.cardInvert .note,
+.cardInvert .priceLead {
+  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
+}
+
+/* CTA sobre fondo navy: en reposo blanco (mismo acento que el border/shadow de la card);
+   al hover pasa al MISMO violeta que usa el hover del botón primary en el resto del sitio
+   ("el azul más claro"), con la sombra en blanco para que se siga viendo contra la card navy. */
+.cardInvert .cta {
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  border-color: var(--color-blanco);
+}
+.cardInvert .cta:hover {
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  border-color: var(--color-violeta);
+  box-shadow: 6px 6px 0 var(--color-blanco);
+}
+
+/* .name/.nick: tipografía reutilizada tanto en los bloques de cierre (Card) como en el
+   header de la tabla comparativa de planes (th) — a propósito sin layout propio (display,
+   flex, padding), así cada contexto los ubica a su manera. */
+.name { font-size: var(--fs-h3); }
+.nick {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-violeta);
+}
+
+/* La sección del precio es el foco de la card: calificador chico arriba, monto grande y
+   negro abajo, todo alineado a la izquierda — el tamaño y el peso hacen la jerarquía. */
+.priceRow { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15em; }
+.priceLead { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); }
+.priceMain {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.note { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); margin-top: var(--space-1); }
+
+.cta { margin-top: var(--space-2); justify-content: center; }
+
+/* ============================================================
+   v3 — extensiones: separación entre bloques, card de horas de
+   desarrollo, bloques de cierre (asesoría + sistema) y add-on.
+   ============================================================ */
+
+/* separación entre el grid de tiers, la card de horas y los bloques de cierre */
+.blockGap { margin-top: var(--space-12); }
+
+/* ── Card de horas de desarrollo: bloque ancho, layout horizontal (texto | precio+CTA) ── */
+.plan.devCard {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(var(--space-6), 4vw, var(--space-16));
+}
+.devText { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.devTitle { font-size: var(--fs-h2); }
+.devDesc {
+  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
+  font-size: var(--fs-body);
+  max-width: 60ch;
+}
+.devAside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+.devAside .cta { margin-top: 0; }
+
+@media (max-width: 760px) {
+  .plan.devCard { flex-direction: column; align-items: flex-start; }
+  .devAside { align-items: stretch; width: 100%; }
+}
+
+/* ── Bloques de cierre (asesoría + sistema): misma familia visual que las cards de precio,
+   con la descripción tomando el alto sobrante para que el CTA quede siempre abajo. ── */
+.closeTitle { font-size: var(--fs-h3); }
+.closeDesc { color: var(--fg-muted); font-size: var(--fs-small); flex: 1; }
+
+/* add-on branding: línea discreta y centrada al pie de la sección, en la letra técnica
+   (mono) — no en mayúscula/tracking como los eyebrows, es una oración con puntuación real,
+   no una etiqueta corta. */
+.addon {
+  text-align: center;
+  margin-top: var(--space-8);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+.addonLink { color: var(--color-violeta); text-decoration: underline; }
+
+/* ============================================================
+   v4 — tabla comparativa de los 3 planes web (reemplaza las tres
+   cards sueltas). Una sola tabla en vez de tres bloques: las
+   columnas comparten el alto por estructura, no hay que perseguir
+   la igualdad con CSS. Mismo lenguaje de "matriz de datos" que ya
+   usamos en /system (SystemEquipo), con precio + CTA arriba de
+   todo para que sean lo primero que se lee.
+   ============================================================ */
+
+.scrollHint {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-align: right;
+  margin-bottom: var(--space-2);
+}
+@media (max-width: 760px) {
+  .scrollHint { display: block; }
+}
+
+/* sin overflow:hidden acá a propósito: recortaba la ficha "más elegido" cuando asoma medio
+   afuera del borde superior de su columna. Las 4 esquinas de la tabla llevan su propio
+   border-radius (más abajo) para que sigan viéndose redondeadas sin necesitar el recorte. */
+.tableWrap {
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+}
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+
+.table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 46rem; }
+.labelCol { width: 11rem; }
+
+/* esquinas redondeadas de la tabla (reemplazan el overflow:hidden de .tableWrap) */
+.table thead tr:first-child > *:first-child { border-top-left-radius: var(--radius-lg); }
+.table thead tr:first-child > *:last-child { border-top-right-radius: var(--radius-lg); }
+.table tbody tr:last-child > *:first-child { border-bottom-left-radius: var(--radius-lg); }
+.table tbody tr:last-child > *:last-child { border-bottom-right-radius: var(--radius-lg); }
+
+/* padding parejo de 10px en las celdas de datos (label + valores) — pedido explícito, no la
+   escala de espaciado del sitio (que no tiene un paso de 10px). */
+.rowLabel {
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-small);
+  padding: 10px;
+  border-right: var(--border-w-card) solid var(--color-tinta);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  vertical-align: middle;
+}
+.table tbody tr:last-child .rowLabel { border-bottom: none; }
+.table tbody tr:hover .rowLabel,
+.table tbody tr:hover .cell:not(.featuredCol) {
+  background: color-mix(in srgb, var(--color-violeta) 5%, transparent);
+}
+
+/* header de cada plan: nombre, apodo, precio y CTA. Padding horizontal 10px (mismo pedido
+   explícito que en las celdas de datos); el bottom queda un toque más generoso porque acá
+   además tiene que despegar el CTA del borde inferior. */
+.planHead {
+  position: relative;
+  vertical-align: top;
+  text-align: center;
+  padding: 16px 10px 10px;
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  border-left: var(--border-w-card) solid var(--color-tinta);
+}
+/* wrapper interno del header (nick/nombre/precio, SIN el botón — ver .planCta): el intento
+   anterior (height:100% + margin-top:auto en el botón) dependía de que un % de altura se
+   resuelva bien adentro de una celda de tabla, y esto NO es confiable entre navegadores — el
+   div se quedaba con el alto de SU contenido nomás, no el de la fila ya emparejada por la
+   tabla, y el botón nunca tenía "de más" para empujarse. padding-bottom reserva el lugar del
+   botón (ver .planCta) para que este contenido no quede tapado por él. */
+.planHeadInner { display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
+.planPrice { display: flex; flex-direction: column; align-items: center; gap: 0.15em; margin: var(--space-4) 0; }
+/* precio de la tabla: mismo estilo que .priceMain (dev-hours) pero más chico — acá conviven
+   con 3 columnas angostas, no es la pieza única de una card ancha. */
+.planPrice .priceMain { font-size: clamp(1.7rem, 2.6vw, 2.15rem); }
+/* CTA de las 3 columnas: position:absolute anclado al borde inferior de SU celda (.planHead
+   tiene position:relative) — así queda EXACTO a 10px del borde en las tres, siempre, sea cual
+   sea el contenido de arriba. Esto sí es confiable (a diferencia de %height/margin-auto en una
+   celda de tabla): el offset de un elemento absolute se resuelve contra la caja real ya
+   calculada del ancestro posicionado, no contra un % que puede no heredarse. */
+.planCta {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  margin: 0;
+  white-space: normal;
+}
+
+/* columna destacada (Sitio Pro): bloque navy de punta a punta, header + cada celda de su
+   columna — mismo lenguaje que .cardInvert en el resto de la sección. Los separadores de
+   fila se mantienen (en blanco translúcido) en vez de sacarlos: sin ellos la columna se lee
+   como un bloque ciego y se pierde la lectura de tabla fila por fila. Selector compuesto
+   (.planHead.featuredCol / .cell.featuredCol, no ".featuredCol" solo) para pisar el color de
+   borde de .planHead/.cell pase lo que pase el orden en el archivo. */
+.featuredCol { background: var(--color-tinta); color: var(--color-blanco); }
+.planHead.featuredCol,
+.cell.featuredCol {
+  border-left-color: color-mix(in srgb, var(--color-blanco) 30%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-blanco) 30%, transparent);
+}
+/* espacio extra arriba SOLO en esta columna para que el apodo no choque con la ficha, que
+   asoma medio afuera del borde — es navy sobre navy adentro de la celda, no un hueco en
+   blanco visible como el del intento anterior. */
+.planHead.featuredCol { padding-top: 26px; }
+
+.featuredCol .nick,
+.featuredCol .priceLead,
+.featuredCol .note {
+  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
+}
+
+/* "más elegido": a caballo del borde superior de la tabla (mitad adentro, mitad afuera) —
+   ya no hace falta reservarle espacio en blanco arriba: .tableWrap dejó de recortar (ver
+   comentario ahí), así que puede asomar sin problema. */
+.badgeFeatured {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 1;
+  background: var(--color-amarillo);
+  color: var(--color-tinta);
+  border: none;
+}
+
+.cell {
+  text-align: center;
+  padding: 10px;
+  border-left: var(--border-w-card) solid var(--color-tinta);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+}
+.table tbody tr:last-child .cell { border-bottom: none; }
+
+.cellValue { font-weight: var(--fw-medium); font-size: var(--fs-small); }
+.featuredCol .cellValue { color: var(--color-blanco); }
+
+.dotYes {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.featuredCol .dotYes { background: var(--color-blanco); color: var(--color-tinta); }
+
+.dotNo { color: color-mix(in srgb, var(--color-tinta) 30%, transparent); font-weight: var(--fw-bold); }
+.featuredCol .dotNo { color: color-mix(in srgb, var(--color-blanco) 30%, transparent); }
+
+.cellPartial { display: inline-flex; flex-direction: column; align-items: center; gap: var(--space-1); }
+/* header pegajoso: mientras el usuario baja por las filas, el header (precio + CTA) se queda
+   fijo en pantalla en vez de desaparecer arriba — así puede clickear sin volver a subir.
+   position:sticky se ata al scroll-container MÁS CERCANO; si ese container tiene
+   overflow-x:auto (el de mobile, para el swipe) el sticky queda atado A ÉL, que nunca
+   scrollea verticalmente, y no se pega a nada real. Por eso el corte es por breakpoint: acá
+   arriba la tabla (min-width 46rem) ya entra sin necesitar scroll horizontal, así que le
+   sacamos el overflow-x a .tableScroll y ahí sí el sticky se ata a la página. */
+@media (min-width: 960px) {
+  .tableScroll { overflow-x: visible; }
+  .table thead th {
+    position: sticky;
+    /* despeja el navbar flotante (fixed, ~top 1.5rem + ~54px de alto) */
+    top: 90px;
+    z-index: 2;
+    background: var(--color-blanco);
+  }
+  .table thead th.featuredCol { background: var(--color-tinta); }
+}
+
+.dotPartial {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  border: var(--border-w-card) solid var(--fg-muted);
+}
+.featuredCol .dotPartial { border-color: color-mix(in srgb, var(--color-blanco) 60%, transparent); }
+.partialNote {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+.featuredCol .partialNote { color: color-mix(in srgb, var(--color-blanco) 70%, transparent); }

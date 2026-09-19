@@ -1,0 +1,40 @@
+/* contenedor alto: da la distancia de scroll para el reveal pineado (más corto = scroll más simple) */
+.pinOuter {
+  position: relative;
+  height: 180vh;
+}
+/* el texto queda FIJO y centrado en el viewport mientras se scrollea el pinOuter */
+.pinInner {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+/* fallback sin animación */
+.staticWrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+/* MISMO container que el resto de la landing: el texto arranca alineado al container, no pegado
+   al borde izquierdo. */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.text {
+  display: flex;
+  flex-wrap: wrap;
+}
+.wordWrap {
+  position: relative;
+  margin-right: 0.28em;
+  margin-top: 0.12em;
+}
+.word {
+  display: inline-block;
+}

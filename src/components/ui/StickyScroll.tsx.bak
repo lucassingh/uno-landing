@@ -1,0 +1,179 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import styles from "./StickyScroll.module.css";
+import { Card } from "./Card";
+
+export interface StickyScrollItem {
+  index: string;
+  title: string;
+  description: string;
+}
+
+export interface StickyScrollProps {
+  items: StickyScrollItem[];
+  className?: string;
+}
+
+interface TrackStepProps {
+  item: StickyScrollItem;
+  index: number;
+  registerTitleRef: (index: number, el: HTMLElement | null) => void;
+}
+
+/**
+ * Ancla invisible por paso (opacity:0, no visibility:hidden — así el texto real sigue en el
+ * árbol de accesibilidad/indexable, solo no se pinta). Le da a la sección su alto de scroll y
+ * le dice al hook de abajo cuándo cada paso "cruza" el centro de la pantalla. El contenido que
+ * se ve en verdad es el slide compacto de más abajo.
+ */
+function TrackStep({ item, index, registerTitleRef }: TrackStepProps) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    registerTitleRef(index, titleRef.current);
+    return () => registerTitleRef(index, null);
+  }, [index, registerTitleRef]);
+
+  return (
+    <div className={styles.trackStep}>
+      <h3 ref={titleRef}>{item.title}</h3>
+      <p>{item.description}</p>
+    </div>
+  );
+}
+
+/**
+ * Paso activo = el que tiene el título más cerca del centro vertical del viewport, recalculado
+ * en cada scroll (rAF-throttled) en vez de por umbrales de IntersectionObserver. Con umbrales
+ * angostos por paso, un scroll rápido puede saltarse el "enter" de un paso intermedio (se vio
+ * al bajar rápido desde el paso 6: pasaba directo al 4). Comparar distancias en cada frame no
+ * puede saltarse un índice porque siempre elige el más cercano entre TODOS, sin importar cuánto
+ * se movió el scroll entre frames.
+ */
+function useActiveStep() {
+  const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
+  const titleRefs = useRef<(HTMLElement | null)[]>([]);
+
+  const registerTitleRef = useCallback((index: number, el: HTMLElement | null) => {
+    titleRefs.current[index] = el;
+  }, []);
+
+  useEffect(() => {
+    let raf = 0;
+
+    const measure = () => {
+      raf = 0;
+      const center = window.innerHeight / 2;
+      let bestIndex = activeRef.current;
+      let bestDist = Infinity;
+      titleRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const dist = Math.abs(rect.top + rect.height / 2 - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIndex = i;
+        }
+      });
+      if (bestIndex !== activeRef.current) {
+        activeRef.current = bestIndex;
+        setActive(bestIndex);
+      }
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return { active, registerTitleRef };
+}
+
+/**
+ * Sticky scroll reveal compacto: en vez de una lista larga que se va atenuando a medida que se
+ * pasa de paso, muestra un único "slide" (texto + placeholder de ilustración) fijo en el centro
+ * de la pantalla que cambia de contenido al scrollear por una pista invisible — la tira visible
+ * no crece con la cantidad de pasos.
+ */
+export function StickyScroll({ items, className }: StickyScrollProps) {
+  const { active, registerTitleRef } = useActiveStep();
+  const shouldReduceMotion = useReducedMotion();
+  const current = items[active];
+  if (!current) return null;
+
+  return (
+    <div className={className}>
+      <div className={styles.wrap}>
+        <div className={styles.track}>
+          {items.map((item, i) => (
+            <TrackStep key={item.index} item={item} index={i} registerTitleRef={registerTitleRef} />
+          ))}
+        </div>
+        <div className={styles.slides}>
+          <div className={styles.slidesInner}>
+            <Card raised className={styles.textCard}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.index}
+                  aria-hidden="true"
+                  initial={shouldReduceMotion ? undefined : { opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={shouldReduceMotion ? undefined : { opacity: 0, y: -16 }}
+                  transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                >
+                  <h3 className={styles.stepTitle}>{current.title}</h3>
+                  <p className={styles.stepText}>{current.description}</p>
+                  {/* lorem de relleno: simula el bloque de texto más largo (con pesos distintos
+                      por párrafo) que va a reemplazar esto — para previsualizar la card más alta
+                      con contenido real de verdad, no solo con la descripción corta actual. */}
+                  <p className={styles.stepTextEmphasis}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim
+                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat.
+                  </p>
+                  <p className={styles.stepTextMuted}>
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+                    in culpa qui officia deserunt mollit anim id est laborum.
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </Card>
+            {/* placeholder del box de ilustraciones: por ahora solo el índice. Cuando entren
+                las ilustraciones por paso, van adentro de este mismo box. */}
+            <div className={styles.visual}>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={current.index}
+                  className={styles.visualIndex}
+                  aria-hidden="true"
+                  initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={shouldReduceMotion ? undefined : { opacity: 0, y: -12 }}
+                  transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                >
+                  {current.index}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default StickyScroll;

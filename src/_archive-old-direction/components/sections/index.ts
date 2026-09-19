@@ -1,0 +1,14 @@
+export { Navbar } from "./Navbar";
+export { Hero } from "./Hero";
+export { AboutScroll } from "./AboutScroll";
+export { Problem } from "./Problem";
+export { ValueProps } from "./ValueProps";
+export { Services } from "./Services";
+export { Method } from "./Method";
+export { Differentiators } from "./Differentiators";
+export { Work } from "./Work";
+export { Testimonials } from "./Testimonials";
+export { Pricing } from "./Pricing";
+export { Faq } from "./Faq";
+export { CtaFinal } from "./CtaFinal";
+export { Footer } from "./Footer";

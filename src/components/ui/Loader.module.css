@@ -1,0 +1,111 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--color-tinta);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* bloque de las 9 celdas: bastante más chico que la primera pasada (antes clamp(110–170px)) —
+   acá comparte protagonismo con el texto al lado, no es la única pieza en pantalla. */
+.stage {
+  position: relative;
+  width: clamp(58px, 7vw, 90px);
+  aspect-ratio: 160 / 150;
+  flex-shrink: 0;
+}
+
+.icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* celda resuelta/estable: fuera del chase (el centro, que nunca se anima) o después de la fase
+   "chase" (todas, una vez que el mazo ya "formó" la marca y se pasa a expand). Techo de opacity
+   más bajo que el de la celda +1 (ver .special) a propósito — las 8 celdas "iguales" quedan un
+   escalón atrás siempre, no solo durante el chase, para que la +1 sea la que se lea primero. */
+.cell {
+  opacity: var(--ll-peak-ring, 0.55);
+}
+
+/* "chase" (porteado de react-bits Lattice Loader, ver CHASE_ORDER en Loader.tsx): cada celda
+   arranca apagada (--ll-idle) y el keyframe la enciende/apaga en su momento del recorrido — el
+   animation-delay por celda (inline, calculado en el componente) es lo que arma el "pulso que
+   viaja" a partir de esta MISMA animación repetida en todas. Curva y timing calcados del
+   original (0%/100% apagada, 18%/42% al pico, 62% ya apagada de nuevo); el pico usa --ll-peak
+   para poder pisarlo distinto en .specialChase. */
+.cellChase {
+  --ll-peak: var(--ll-peak-ring, 0.55);
+  opacity: var(--ll-idle, 0.15);
+  animation-name: latticeChase;
+  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes latticeChase {
+  0%,
+  100% { opacity: var(--ll-idle, 0.15); }
+  18%,
+  42% { opacity: var(--ll-peak, 1); }
+  62% { opacity: var(--ll-idle, 0.15); }
+}
+
+/* la celda +1: sin escalón de opacity (siempre a pleno, ver .cell/.cellChase arriba) — el
+   border-radius le faltaba del todo antes (las otras 8 usan rx en el SVG, esta es un <div> HTML
+   aparte). 7.26% = RX/CELL (3/41.3318) de Loader.tsx, en % en vez de px porque su tamaño ya es
+   un % del stage (ver SPECIAL) — así el radio escala en la misma proporción sin importar el
+   viewport. */
+.special {
+  position: absolute;
+  z-index: 1;
+  background: var(--color-crema);
+  border-radius: 7.26%;
+}
+
+.specialChase {
+  --ll-peak: 1;
+  opacity: 1;
+  animation-name: latticeChase;
+  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  animation-iteration-count: infinite;
+}
+
+/* "Cargando NN%": mismo lenguaje mono/uppercase/tracked que .eyebrow en el resto del sitio.
+   Se apaga apenas termina el chase (deja de tener sentido durante el expand/reveal) — mismo
+   fade que .overlay, pero bien más corto. */
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--color-blanco);
+  transition: opacity 250ms ease;
+}
+
+.labelHidden {
+  opacity: 0;
+}
+
+.labelWord {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+}
+
+.labelPercent {
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--color-blanco) 55%, transparent);
+  /* ancho fijo (3 dígitos) para que "9%" y "100%" no hagan bailar el label al lado */
+  min-width: 2.6ch;
+}

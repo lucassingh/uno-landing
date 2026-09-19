@@ -1,0 +1,12 @@
+.list { border-top: var(--border-w) solid var(--border); max-width: 60rem; }
+.item { border-bottom: var(--border-w) solid var(--border); }
+.q {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding-block: var(--space-6);
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-h3);
+  cursor: pointer; list-style: none;
+}
+.q::-webkit-details-marker { display: none; }
+.icon { font-family: var(--font-mono); transition: transform var(--dur) var(--ease); }
+.item[open] .icon { transform: rotate(45deg); }
+.a { color: var(--fg-muted); padding-bottom: var(--space-6); max-width: 65ch; }

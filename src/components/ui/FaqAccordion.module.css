@@ -1,0 +1,70 @@
+/* mismo patrón full-bleed que About: la sección no se contiene (contained={false}), el fondo
+   se dibuja de punta a punta por detrás del Container y se recorta con overflow:hidden. */
+.faq { overflow: hidden; }
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* fundido de ~120px arriba y abajo — sin esto la grilla de puntos corta seco contra el borde */
+  mask-image: linear-gradient(to bottom, transparent 0, black 120px, black calc(100% - 120px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 120px, black calc(100% - 120px), transparent 100%);
+}
+
+.inner { position: relative; z-index: 1; }
+
+/* más ancha que la v1 de 1 columna (min(90%, 48rem)): con 2 columnas de preguntas necesita
+   más aire horizontal para no quedar apretada. */
+.listCard.listCard { max-width: min(94%, 74rem); }
+/* Card base trae un translate(-2px,-2px) en :hover pensado para cards que son UN solo elemento
+   clicable — acá el Card envuelve botones propios (las preguntas), así que ese shift se
+   neutraliza (mismo patrón que .listCard en Testimonials.module.css). */
+.listCard.listCard:hover,
+.listCard.listCard:focus-within {
+  transform: none;
+}
+
+.lists { display: grid; grid-template-columns: 1fr; margin-top: var(--space-2); }
+@media (min-width: 720px) {
+  .lists { grid-template-columns: 1fr 1fr; column-gap: var(--space-12); }
+  .lists > .list:last-child {
+    border-left: var(--border-w-card) solid color-mix(in srgb, var(--color-tinta) 20%, transparent);
+    padding-left: var(--space-12);
+  }
+}
+
+.list { display: flex; flex-direction: column; }
+
+.item { border-bottom: var(--border-w-card) solid color-mix(in srgb, var(--color-tinta) 20%, transparent); }
+.list .item:last-child { border-bottom: none; }
+
+.q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding-block: var(--space-6);
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  color: var(--color-tinta);
+  transition: color var(--dur) var(--ease);
+}
+.q:hover { color: var(--color-violeta); }
+
+.icon {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+  transition: transform var(--dur) var(--ease);
+}
+.iconOpen { transform: rotate(45deg); }
+
+/* overflow:hidden recorta el contenido mientras motion anima height 0 -> auto */
+.answerWrap { overflow: hidden; }
+.a { color: var(--fg-muted); padding-bottom: var(--space-6); max-width: 60ch; }

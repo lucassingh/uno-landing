@@ -1,0 +1,135 @@
+/* sección al 100% de la pantalla, contenido centrado verticalmente — mismo criterio que Hero
+   (min-height:100dvh + flex). contained={false} + .bg hermano del Container: mismo patrón que
+   el grainient de Metodo, para que cubra la sección de punta a punta y no solo el ancho del
+   container. */
+.cta {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.inner { position: relative; z-index: 1; width: 100%; }
+
+/* separación extra entre el copy y la card del form — mismo criterio que Testimonials/Faq:
+   el --grid-gap default es angosto a propósito para grillas de más columnas. */
+@media (min-width: 768px) {
+  .grid.grid { column-gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.title span { display: block; }
+
+/* ---- "Qué esperar de la charla" — reemplaza el bloque de avatars/reviewers de la
+   referencia, que no aplica acá (no tenemos ese tipo de social proof armado). ---- */
+.expect {
+  margin-top: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.expectList { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.expectItem { display: flex; align-items: flex-start; gap: var(--space-3); }
+.expectIcon { flex-shrink: 0; margin-top: 0.2em; }
+
+.formCard { max-width: 30rem; }
+
+.formTitle {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-2);
+}
+
+.form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.input,
+.select {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--color-tinta);
+  background: var(--color-crema);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color var(--dur) var(--ease);
+}
+/* :focus-visible (no :focus) para no pisar el anillo de foco global (ver globals.css) —
+   solo sumamos el cambio de color de borde, el outline navy de siempre se mantiene. */
+.input:focus-visible,
+.select:focus-visible { border-color: var(--color-violeta); }
+
+/* select nativo: appearance:none saca la flecha del navegador (inconsistente entre
+   Chrome/Firefox/Safari) para dibujar la nuestra (ChevronIcon) encima, coherente con el
+   resto de los inputs. */
+.selectWrap { position: relative; }
+.select { appearance: none; padding-right: var(--space-8); cursor: pointer; }
+.selectChevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  transform: translateY(-50%);
+  color: var(--color-tinta);
+  pointer-events: none;
+}
+
+.fineprint { font-size: var(--fs-small); color: var(--fg-muted); }
+
+.submit { margin-top: var(--space-2); justify-content: center; }
+
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding-block: var(--space-8);
+}
+
+.successIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  border: var(--border-w-card) solid var(--color-tinta);
+  color: var(--color-tinta);
+}
+
+.successText {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  max-width: 26ch;
+}

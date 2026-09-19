@@ -1,0 +1,104 @@
+.stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: clamp(420px, 50vw, 720px);
+  padding: clamp(1rem, 4vw, 3rem);
+  perspective: 1800px;
+  overflow: visible;
+}
+
+.entrance { display: block; }
+
+.grid {
+  --cube: clamp(140px, 14vw, 220px);
+  display: grid;
+  grid-template-columns: repeat(3, var(--cube));
+  grid-template-rows: repeat(3, var(--cube));
+  gap: clamp(2rem, 4.5vw, 4rem);
+  transform-style: preserve-3d;
+  transform: rotateX(18deg) rotateY(-24deg);
+}
+
+.cube {
+  position: relative;
+  width: var(--cube);
+  height: var(--cube);
+  transform-style: preserve-3d;
+}
+
+/**
+ * La celda +1 (SPECIAL_INDEX): en vez de tumbar el cubo en X/Y (lo que probamos
+ * antes), acá solo pulsa de tamaño con una inclinación fija en Z que calca la
+ * del isotipo real (-21.0334deg). Rotar en X/Y expone tarde o temprano un
+ * ángulo donde dos caras casi de canto generan una costura entre ellas — con
+ * scale + rotate en Z no hay caras que se muevan entre sí, así que no hay
+ * costura posible.
+ */
+.special {
+  transform: rotate(-21.0334deg);
+  animation: pulse 6s ease-in-out infinite;
+}
+
+.cubeStill { transform: rotateX(-18deg) rotateY(24deg); }
+.cubeStill.special { animation: none; transform: rotate(-21.0334deg); }
+
+.face {
+  /* inset negativo: cada cara queda un poco más grande que el cubo real (que sigue
+     midiendo --cube, ver translateZ abajo) para que las caras contiguas se superpongan
+     un par de px en vez de tocarse borde a borde — sin esto, a ciertos ángulos de
+     rotación aparece una costura/hairline gap entre dos caras por redondeo de subpíxel. */
+  position: absolute;
+  inset: -2px;
+  border: 3px dotted var(--color-tinta);
+  background: var(--color-blanco);
+  backface-visibility: hidden;
+}
+
+/** La celda +1: fondo navy, borde blanco — invierte el esquema de las otras 8 para diferenciarla. */
+.special .face {
+  background: var(--color-tinta);
+  border-color: var(--color-blanco);
+  overflow: hidden;
+}
+
+/* brillo sutil que BARRE la cara (un reflejo que pasa), en vez de flashear el cubo entero. Es
+   una banda diagonal semitransparente que se desliza; el cubo sigue navy todo el tiempo, no
+   desaparece. Como es un pseudo-elemento con background (no opacidad del cubo), no aplana el 3D. */
+.special .face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 43%, rgba(255, 255, 255, 0.38) 50%, transparent 57%);
+  background-size: 250% 100%;
+  background-position: 175% 0;
+  animation: sheen 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sheen {
+  0%, 66%, 100% { background-position: 175% 0; }
+  86%           { background-position: -75% 0; }
+}
+
+.front  { transform: translateZ(calc(var(--cube) / 2)); }
+.back   { transform: rotateY(180deg) translateZ(calc(var(--cube) / 2)); }
+.right  { transform: rotateY(90deg) translateZ(calc(var(--cube) / 2)); }
+.left   { transform: rotateY(-90deg) translateZ(calc(var(--cube) / 2)); }
+.top    { transform: rotateX(90deg) translateZ(calc(var(--cube) / 2)); }
+.bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube) / 2)); }
+
+@keyframes pulse {
+  0%, 74%, 100% { transform: rotate(-21.0334deg); }
+  87%          { transform: rotate(-17.5deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube { animation: none; transform: rotateX(-18deg) rotateY(24deg); }
+  .special .face::before { animation: none; opacity: 0; }
+}
+
+/* pausa del pulso cuando el Hero se scrollea fuera de vista: evita el repintado por frame del
+   borde punteado 3D durante la transición a la sección siguiente (causa de jank de scroll). */
+.paused .special,
+.paused .special .face::before { animation-play-state: paused; }

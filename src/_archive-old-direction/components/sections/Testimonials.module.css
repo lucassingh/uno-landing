@@ -1,0 +1,7 @@
+.card { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); }
+.quote { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-h3); line-height: 1.15; text-transform: none; }
+.quote::before { content: "“"; color: var(--color-rosa); }
+.quote::after { content: "”"; color: var(--color-rosa); }
+.who { display: flex; flex-direction: column; border-top: 2px solid var(--border); padding-top: var(--space-3); }
+.author { font-weight: var(--fw-bold); }
+.role { font-family: var(--font-mono); font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-muted); }

@@ -1,0 +1,29 @@
+.header { max-width: 56ch; margin-bottom: var(--space-12); display: flex; flex-direction: column; gap: var(--space-3); }
+.center { margin-inline: auto; text-align: center; align-items: center; }
+/* balance en título Y intro (no pretty: es Chromium-only, en Firefox/Safari no hacía nada)
+   reparte el texto parejo entre líneas — evita la palabra huérfana sola en el último renglón
+   sin depender del soporte de un solo motor. Para títulos cortos pensados para UN renglón,
+   además pasar la prop `nowrap` (ver .nowrap más abajo) — balance solo prorratea cuando el
+   título SÍ envuelve, no fuerza que entre en una línea. */
+.title { font-size: var(--fs-h2); text-wrap: balance; }
+.intro { font-size: var(--fs-lead); color: var(--fg-muted); max-width: 52ch; text-wrap: balance; }
+
+/* max-width:none: el cap de 56ch (pensado para títulos largos que envuelven a propósito)
+   angosta demasiado la columna para un título corto que tiene que entrar en un renglón.
+   white-space:nowrap solo desde 560px: por debajo, --fs-h2 ya no achica lo suficiente como
+   para garantizar que un título de ~30 caracteres no desborde el viewport. */
+.nowrap { max-width: none; }
+@media (min-width: 560px) {
+  .nowrap .title { white-space: nowrap; }
+}
+
+/* compacto: mismo componente, menor jerarquía — para un header que vive dentro de otro
+   contenedor (ej. una Card) en vez de encabezar la sección entera. */
+.sm { margin-bottom: var(--space-6); }
+.sm .title { font-size: var(--fs-h3); }
+.sm .intro { font-size: var(--fs-body); }
+
+/* título de impacto: cuando el título ES el elemento visual principal de la sección, no solo
+   una etiqueta arriba del contenido — más grande que --fs-h2, pero sin llegar a la escala de
+   --fs-display-l (esa queda demasiado grande en una columna angosta, ver Sistema+1). */
+.lg .title { font-size: clamp(2.2rem, 4.2vw, 4rem); }

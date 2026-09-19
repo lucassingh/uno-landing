@@ -1,0 +1,189 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap);
+}
+
+@media (min-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .featured,
+  .invert { grid-column: 1 / -1; }
+}
+
+/* 1 grande (alto completo, col 1) + 2 arriba (col 2-3) + 1 ancha abajo (col 2-3) — grid tipo expo.dev */
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, minmax(320px, 1fr)); }
+  .featured { grid-column: 1 / 2; grid-row: 1 / 3; }
+  .invert { grid-column: 2 / 4; grid-row: 2 / 3; }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 4 / 3;
+  min-height: 200px;
+  padding: var(--space-6);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  transition: box-shadow var(--dur) var(--ease);
+
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 220px;
+}
+
+.card:hover { box-shadow: 9px 9px 0 var(--color-tinta); }
+
+/* a partir de acá el grid tiene alto de fila explícito (grid-template-rows) — el aspect-ratio
+   solo estorba (compite con el stretch del grid y termina ganando por orden en cascada, no por
+   especificidad, si esta regla queda antes que la base ".card". Por eso vive DESPUÉS, no en el
+   media query de arriba). */
+@media (min-width: 1024px) {
+  .card { aspect-ratio: auto; }
+}
+
+.featured { aspect-ratio: auto; }
+.featured .title { font-size: var(--fs-h2); }
+.featured .text { font-size: var(--fs-body); }
+
+/* @property registra el ángulo como tipo <angle> — sin esto el navegador no sabe interpolar
+   entre los dos valores del keyframe (trataría el gradiente entero como un valor discreto,
+   sin transición) y el degradé saltaría en vez de moverse. */
+@property --grad-angle {
+  syntax: "<angle>";
+  initial-value: 135deg;
+  inherits: false;
+}
+
+@keyframes gradientDrift {
+  0%, 100% { --grad-angle: 120deg; }
+  50% { --grad-angle: 150deg; }
+}
+
+.invert {
+  aspect-ratio: auto;
+  min-height: 160px;
+  /* 70/30 navy al violeta (mismo tono que el hover del botón) — el ángulo oscila apenas
+     (120°↔150°) y muy despacio (18s): "que se mueva, nada más", no un degradé girando. */
+  background: linear-gradient(var(--grad-angle), var(--color-tinta) 70%, var(--color-violeta) 100%);
+  animation: gradientDrift 18s ease-in-out infinite;
+  color: var(--color-blanco);
+}
+.invert .text { color: rgba(255, 255, 255, 0.72); }
+
+/* el catch-all de reduced-motion en globals.css deja la animación en 0.001ms en vez de
+   sacarla — para un loop infinito eso es un parpadeo, no un estado quieto. Se apaga entera. */
+@media (prefers-reduced-motion: reduce) {
+  .invert { animation: none; }
+}
+
+/* fondo animado (react-bits Topography) solo en .featured, la card grande — vive detrás de
+   todo (glow de borde z-index:2, partículas 3, texto 4): el overflow:hidden de .card ya la
+   recorta al radio redondeado, no hace falta repetirlo acá.
+   .topography.topography (doble clase): Topography.module.css define .container con
+   position:relative en OTRO stylesheet — mismo problema de siempre (orden de bundling entre
+   módulos CSS no garantizado, ver .plan.plan en Pricing o .bigLogo.bigLogo en Footer). Si esa
+   regla ganaba, el fondo dejaba de estar absolute: quedaba METIDO en el flujo del flex de
+   .card, empujando el texto para abajo (por eso "se invertía") y heredando el padding de la
+   card (por eso no llegaba a los bordes). */
+.topography.topography {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* trama estática (mismas 3 de Proyectos, ver lib/cardPatterns) en las cards que no son ni
+   .featured ni .invert — background-image llega por inline style (cicla por índice), acá solo
+   el posicionamiento. Sin conflicto de especificidad como .topography: esta clase no la
+   define ningún otro módulo CSS.
+   background-size:25px 25px es LO QUE ARMA LA GRILLA — sin esto un radial-gradient (la trama
+   de puntos) no tiene con qué repetirse: se estira como un solo gradiente ocupando toda la
+   card entera (un punto solo, reportado por Lucas) en vez de mosaiquearse. Mismo valor que usa
+   Proyectos/CircularGallery.module.css para esta trama. */
+.patternBg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-size: 25px 25px;
+  pointer-events: none;
+}
+
+/* blanco sólido donde vive el texto, se apaga hacia abajo — sin esto las curvas de nivel
+   pasaban justo por arriba del título/copy y se leían mal encima del patrón. */
+.textShield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(to bottom, var(--color-blanco) 0%, var(--color-blanco) 38%, transparent 62%);
+  pointer-events: none;
+}
+
+/* ---- contenido ---- */
+.cardBody {
+  position: relative;
+  z-index: 4;
+}
+
+.title { font-size: var(--fs-h3); margin-bottom: var(--space-2); }
+.text { color: var(--fg-muted); font-size: var(--fs-small); max-width: 42ch; }
+
+.arrow {
+  position: absolute;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 4;
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: currentColor;
+}
+
+/* ---- glow de borde (sigue al cursor) ---- */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-w-card);
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-rgb), calc(var(--glow-intensity) * 0.9)) 0%,
+    rgba(var(--glow-rgb), calc(var(--glow-intensity) * 0.35)) 40%,
+    transparent 70%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ---- partículas + ripple de click ---- */
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  z-index: 3;
+  pointer-events: none;
+  clip-path: polygon(35% 0, 65% 0, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0 65%, 0 35%, 35% 35%);
+}
+
+.ripple {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .card { aspect-ratio: auto; min-height: 180px; }
+}

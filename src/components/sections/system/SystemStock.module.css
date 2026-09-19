@@ -1,0 +1,9 @@
+/* =============================================================
+   Sección "el stock" de /system — pase de alta fidelidad.
+   Header propio (título/intro forzados a 2 renglones, mismo truco que
+   SystemAsistente.module.css) + MagicBento compartido para los 6 items.
+   ============================================================= */
+
+.header { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-12); }
+.title { font-size: var(--fs-h2); max-width: 30ch; text-wrap: balance; }
+.intro { font-size: var(--fs-lead); color: var(--fg-muted); max-width: 68ch; text-wrap: balance; }

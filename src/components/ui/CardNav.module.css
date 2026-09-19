@@ -1,0 +1,216 @@
+/* CardNav — adaptado de reactbits.dev/components/card-nav a CSS Modules + marca +uno.
+   La animación de alto la maneja GSAP y solo corre al abrir/cerrar el menú (no en scroll). */
+
+.cardNavContainer {
+  position: fixed;
+  top: clamp(0.75rem, 2vw, 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.cardNav {
+  display: block;
+  height: 60px;
+  padding: 0;
+  background-color: var(--color-blanco);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 10px;
+  box-shadow: var(--shadow-hard-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.cardNavTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.55rem 0.5rem 1.1rem;
+  z-index: 2;
+}
+
+.hamburgerMenu {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 6px;
+  flex: none;
+}
+
+.hamburgerMenu:hover .hamburgerLine {
+  opacity: 0.7;
+}
+
+.hamburgerLine {
+  width: 28px;
+  height: 2px;
+  background-color: currentColor;
+  transition: transform 0.25s var(--ease), opacity 0.2s ease;
+  transform-origin: 50% 50%;
+}
+
+.hamburgerMenu.open .hamburgerLine:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.hamburgerMenu.open .hamburgerLine:last-child {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo {
+  height: 30px;
+  width: auto;
+}
+
+.cardNavCtaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-tinta);
+  color: var(--color-crema);
+  border: none;
+  border-radius: 6px;
+  padding: 0 1.1rem;
+  height: calc(100% - 4px);
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-small);
+  white-space: nowrap;
+  cursor: pointer;
+  flex: none;
+  transition: opacity 0.2s var(--ease);
+}
+
+.cardNavCtaButton:hover {
+  opacity: 0.85;
+}
+
+.cardNavContent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  padding: 0.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cardNav.open .cardNavContent {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.navCard {
+  height: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.9rem;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.navCardLabel {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: 1.2rem;
+  letter-spacing: var(--ls-display);
+  line-height: 1;
+}
+
+.navCardLinks {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navCardLink {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navCardLink:hover {
+  opacity: 0.7;
+}
+
+.navCardLinkIcon {
+  flex: none;
+}
+
+@media (max-width: 768px) {
+  .cardNavContainer {
+    width: 92%;
+    top: 0.9rem;
+  }
+
+  .cardNavTop {
+    padding: 0.5rem 1rem;
+  }
+
+  .hamburgerMenu {
+    order: 2;
+  }
+
+  .logoContainer {
+    position: static;
+    transform: none;
+    order: 1;
+  }
+
+  .cardNavCtaButton {
+    display: none;
+  }
+
+  .cardNavContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .navCard {
+    height: auto;
+    min-height: 60px;
+    flex: 1 1 auto;
+  }
+
+  .navCardLabel {
+    font-size: 1.05rem;
+  }
+}

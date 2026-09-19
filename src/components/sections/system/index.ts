@@ -1,0 +1,12 @@
+export { SystemHero } from "./SystemHero";
+export { SystemMapa } from "./SystemMapa";
+export { SystemAsistente } from "./SystemAsistente";
+export { SystemMulticanal } from "./SystemMulticanal";
+export { SystemCrm } from "./SystemCrm";
+export { SystemStock } from "./SystemStock";
+export { SystemRubro } from "./SystemRubro";
+export { SystemEquipo } from "./SystemEquipo";
+export { SystemVsErp } from "./SystemVsErp";
+export { SystemCaso } from "./SystemCaso";
+export { SystemPrecios } from "./SystemPrecios";
+export { SystemFaq } from "./SystemFaq";

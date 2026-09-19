@@ -1,0 +1,15 @@
+.card {
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  padding: var(--space-6);
+  height: 100%;
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.card:hover,
+.card:focus-within {
+  box-shadow: var(--shadow-hard);
+  transform: translate(-2px, -2px);
+}
+.raised { box-shadow: var(--shadow-hard); }

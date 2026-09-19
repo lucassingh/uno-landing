@@ -1,0 +1,85 @@
+/* =============================================================
+   +1 / más uno — DESIGN TOKENS (branding v3, brutalismo minimalista)
+   Fuente única de verdad del sistema visual. Cambiá acá, cambia todo.
+   ============================================================= */
+:root {
+  /* ---- Paleta base (3 colores, sin capa acid) ---- */
+  --color-tinta: #031844;
+  --color-crema: #FFFAE5;
+  --color-blanco: #FFFFFF;
+  /* ---- Acento (botón secondary, hover de primary, algunas cards) ---- */
+  --color-violeta: #3A10E5;
+  --color-amarillo: #FFD300; /* accent nuevo: hero sobre navy (sección metodología) */
+
+  /* ---- Roles semánticos ---- */
+  --bg: var(--color-crema);
+  --bg-alt: var(--color-blanco);
+  --bg-invert: var(--color-tinta);
+  --fg: var(--color-tinta);
+  --fg-invert: var(--color-blanco);
+  --fg-muted: color-mix(in srgb, var(--color-tinta) 65%, var(--color-crema) 35%);
+  --accent: var(--color-tinta);
+  --border: var(--color-tinta);
+
+  /* ---- Tipografías (variables las inyecta next/font) ---- */
+  --font-display: var(--font-montserrat), "Montserrat", sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", monospace;
+  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  /* ---- Pesos ---- */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* ---- Escala tipográfica fluida ---- */
+  --fs-display-xl: clamp(3rem, 9vw, 8rem);
+  --fs-display-l: clamp(2.4rem, 6vw, 5rem);
+  --fs-h2: clamp(1.8rem, 3.6vw, 3rem);
+  --fs-h3: clamp(1.3rem, 2.2vw, 1.75rem);
+  --fs-lead: clamp(1.05rem, 1.6vw, 1.35rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-label: 0.6875rem;
+
+  /* ---- Interlineado / tracking ---- */
+  --lh-display: 0.9;
+  --lh-heading: 1;
+  --lh-body: 1.62;
+  --ls-display: -0.03em;
+  --ls-label: 0.14em;
+
+  /* ---- Espaciado (escala 4px) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --section-y: clamp(3.5rem, 8vw, 7rem);
+
+  /* ---- Layout ---- */
+  --container-max: 1240px;
+  --container-max-wide: 1600px;
+  --container-pad: clamp(1.25rem, 4vw, 3rem);
+  --grid-cols: 12;
+  --grid-gap: clamp(1rem, 2.2vw, 1.75rem);
+
+  /* ---- Bordes / radios / sombras (brutalismo) ---- */
+  --border-w: 3px;
+  --border-w-card: 1px;
+  --radius: 4px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-hard: 6px 6px 0 var(--color-tinta);
+  --shadow-hard-sm: 4px 4px 0 var(--color-tinta);
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur: 180ms;
+}

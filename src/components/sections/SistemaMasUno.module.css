@@ -1,0 +1,126 @@
+/* mismo criterio que .hero en Hero.module.css: alto de viewport completo + flex-center, para
+   que el título y el mazo de cards queden centrados de verdad en la pantalla en vez de pegados
+   arriba, contra el navbar. */
+.sistema {
+  /* MAS ALTA que el viewport a proposito: en la primera pantalla (texto centrado) las cards se
+     ven CORTADAS abajo (el efecto impactante); el fondo redondeado de las cards vive en el tramo
+     extra de abajo y se revela al seguir scrolleando. overflow:hidden recorta el derrame a la
+     derecha y la caida al final de la seccion. */
+  min-height: 136dvh;
+  overflow: hidden;
+  /* sin padding vertical propio: el centrado del texto lo maneja .layout dentro de su banda de
+     100dvh, asi el texto queda centrado en la PRIMERA pantalla y no en el centro de la seccion alta. */
+  padding-block: 0;
+}
+
+.layout {
+  width: 100%;
+  /* la grilla ocupa exactamente la primera pantalla y centra su contenido ahi -> el texto queda
+     centrado en el primer viewport aunque la seccion sea mas alta. */
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.textCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* mismo criterio que .setup/.punch del Hero: letra de cuerpo (misma familia, mismo color muted
+   que antes), solo que más grande — sin título propio arriba, "captá/filtrá/ordená" ya está
+   dicho en el título de la sección, no hace falta repetirlo por paso. */
+.stepText {
+  margin-top: var(--space-6);
+  /* barra de acento violeta al costado + sangria: marca el paso activo y lo resalta como un
+     callout, en linea con el brutalismo del sitio. */
+  padding-left: var(--space-6);
+  border-left: var(--border-w) solid var(--color-violeta);
+  font-size: clamp(1.4rem, 2vw, 2.2rem);
+  line-height: 1.35;
+  /* de gris apagado (fg-muted) a navy full + peso medio: el texto que cambia ahora resalta. */
+  font-weight: var(--fw-medium);
+  color: var(--fg);
+  /* fade + subida sutil cada vez que cambia el paso (el key={active} en el <p> lo remonta). */
+  animation: stepIn 420ms var(--ease) both;
+}
+
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepText { animation: none; }
+}
+
+/* CTA a la landing dedicada del sistema (/system): cierra la columna de texto empujando al
+   detalle completo, sin competir con el mazo de cards. */
+.ctaRow { margin-top: var(--space-8); }
+
+/* columna del mazo: overflow visible a propósito — el mazo puede sangrar más allá de SU borde
+   derecho (hacia afuera del container) sin poder tocar nunca la columna de texto, que es un
+   track de grid separado. */
+.deckCol {
+  position: static;
+  width: 100%;
+  min-height: clamp(420px, 40vw, 680px);
+}
+
+.deckStage {
+  /* absolute contra la SECCION (deckCol es static). Anclado ARRIBA-derecha (no abajo): asi el
+     mazo se corta contra el borde derecho del viewport pero abajo queda ENTERO (fondo redondeado
+     visible) con aire debajo para que se vea la caida, en vez de partirse contra el fin de la
+     seccion. El translate en X lo empuja fuera del borde derecho para el corte. */
+  position: absolute;
+  right: 0;
+  top: clamp(150px, 24vh, 320px);
+  transform: translate(9%, 0);
+  transform-origin: top right;
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .deckCol {
+    order: 2;
+    margin-top: var(--space-12);
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .deckStage {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .textCol {
+    text-align: center;
+  }
+}
+
+/* capturas de dashboard dentro del mazo: las tres son mucho más anchas que altas, y la card
+   es casi cuadrada — object-fit:cover (definido en CardSwap.module.css) ya las recorta para
+   llenarla, pero centrado deja el aside (nav lateral) casi entero afuera del crop. Anclamos a
+   la izquierda para que el aside quede adentro, y un toque de zoom (con el mismo ancla como
+   transform-origin) para que la UI se lea más grande en una card chica.
+   translateZ(0) es el fix del blur: .card tiene transform-style:preserve-3d + skewY (GSAP), y
+   ese contexto 3D compositea la imagen junto con la card y la deja borrosa — separarla a su
+   propia capa evita que la re-samplee como parte de esa transformación. */
+.deckImg {
+  object-position: left center;
+  transform-origin: left center;
+  transform: translateZ(0) scale(1.12);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

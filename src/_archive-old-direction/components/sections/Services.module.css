@@ -1,0 +1,8 @@
+.card { display: flex; flex-direction: column; gap: var(--space-4); }
+.head { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
+.name { font-size: var(--fs-h2); }
+.tagline { font-family: var(--font-mono); text-transform: uppercase; font-size: var(--fs-small); letter-spacing: 0.06em; color: var(--fg-muted); }
+.desc { color: var(--fg-muted); }
+.features { display: flex; flex-direction: column; gap: var(--space-2); border-top: 2px solid var(--border); padding-top: var(--space-4); }
+.feature { display: flex; gap: var(--space-2); font-size: var(--fs-small); }
+.arrow { font-family: var(--font-display); font-weight: var(--fw-black); }

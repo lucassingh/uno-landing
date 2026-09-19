@@ -1,0 +1,106 @@
+/* =============================================================
+   Sección "se adapta a tu rubro" de /system — pase de alta fidelidad.
+   Un solo panel (no cards comparativas): el motor fijo a la izquierda
+   (navy, no cambia) + la configuración a la derecha, que se anima al
+   cambiar el switch de rubro. Evita repetir el patrón de grilla de cards
+   que ya usan Stock (arriba) y Equipo (abajo).
+   ============================================================= */
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.85fr) 1fr;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+}
+@media (max-width: 720px) {
+  .panel { grid-template-columns: 1fr; }
+}
+
+/* ---- lado izquierdo: el motor, fijo, no cambia con el rubro ----
+   Grainient de fondo (mismo componente que ya usa el login del bot app: navy→violeta→navy,
+   timeSpeed/grainScale más bajos que el default para que quede calmo, no protagonista) — le da
+   "vida" al panel fijo sin competir con el switch/config animados de la derecha. */
+.motor {
+  position: relative;
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  text-align: center;
+  border-right: var(--border-w-card) solid var(--color-tinta);
+  overflow: hidden;
+}
+@media (max-width: 720px) {
+  .motor { border-right: none; border-bottom: var(--border-w-card) solid var(--color-tinta); padding: var(--space-6); }
+}
+
+.motorBg { position: absolute; inset: 0; z-index: 0; }
+
+/* isotipo enorme sangrando por la esquina inferior izquierda, bien tenue — es textura/marca de
+   fondo, no un ícono funcional (por eso ya no hay un badge chico con el logo: esto lo reemplaza
+   y "impone" mucho más, como pidió Lucas). */
+.motorWatermark {
+  position: absolute;
+  z-index: 0;
+  bottom: -22%;
+  left: -20%;
+  width: 85%;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.motorContent { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+
+.motorLabel {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+}
+.motorCaption {
+  font-size: var(--fs-body);
+  color: color-mix(in srgb, var(--color-blanco) 78%, transparent);
+  max-width: 22ch;
+}
+
+/* ---- lado derecho: switch de rubro + la config que cambia ---- */
+.config { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+
+.tabs { display: flex; gap: var(--space-2); }
+.tab {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  padding: 0.5em 1.1em;
+  border-radius: var(--radius-pill);
+  border: var(--border-w-card) solid var(--color-tinta);
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+}
+.tabPill { position: absolute; inset: 0; z-index: 0; background: var(--color-tinta); }
+.tabLabel { position: relative; z-index: 1; color: var(--fg-muted); transition: color 200ms var(--ease); }
+.tabLabel[data-active="true"] { color: var(--color-blanco); }
+
+.fields { display: flex; flex-direction: column; }
+.field { padding-block: var(--space-4); border-bottom: 1px solid color-mix(in srgb, var(--color-tinta) 12%, transparent); }
+.fields .field:last-child { border-bottom: none; }
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-violeta);
+  font-weight: var(--fw-bold);
+}
+.fieldValue { margin-top: var(--space-1); font-size: var(--fs-body); }

@@ -1,0 +1,19 @@
+.wrap {
+  overflow: hidden;
+  white-space: nowrap;
+  border-block: var(--border-w) solid var(--border);
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+  padding-block: 0.6rem;
+}
+.track { display: inline-flex; animation: scroll 22s linear infinite; }
+.item {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  letter-spacing: -0.01em;
+  font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+}
+.sep { margin-inline: 1.2rem; color: var(--color-blanco); opacity: 0.5; }
+@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }

@@ -1,0 +1,132 @@
+import styles from "./Proyectos.module.css";
+import { Section, Container, SectionHeader, CircularGallery } from "@/components/ui";
+import type { GalleryItem } from "@/components/ui";
+
+const PLACEHOLDER_IMAGE =
+    "https://st.depositphotos.com/1004377/1889/i/450/depositphotos_18899853-stock-photo-vertical-landscape.jpg";
+
+const PROJECTS: GalleryItem[] = [
+    {
+        id: "almenar",
+        number: "01",
+        title: "Estudio Almenar",
+        description: "Landing para un estudio contable. Turnos online y calculadora de honorarios.",
+        tech: ["Next.js", "Stripe"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "trigo",
+        number: "02",
+        title: "Panadería Trigo",
+        description: "Catálogo autoadministrable con pedidos por WhatsApp.",
+        tech: ["Next.js", "Sanity"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "faro",
+        number: "03",
+        title: "Consultora Faro",
+        description: "Identidad de marca completa + web institucional para una consultora de RRHH.",
+        tech: ["Figma", "Next.js"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "cardal",
+        number: "04",
+        title: "Taller Cardal",
+        description: "Portfolio para un taller de diseño de muebles a medida.",
+        tech: ["Next.js", "Motion"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "clinica-uno",
+        number: "05",
+        title: "Clínica Dental Uno",
+        description: "Sistema de turnos propio con panel de administración para recepción.",
+        tech: ["Next.js", "PostgreSQL"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "nomade",
+        number: "06",
+        title: "Nómade Café",
+        description: "Landing y menú digital con QR para un café de especialidad.",
+        tech: ["Next.js", "Vercel"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "lumen",
+        number: "07",
+        title: "Estudio Lumen",
+        description: "Sitio y books online para una fotógrafa de retratos.",
+        tech: ["Next.js", "Cloudinary"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "suarez",
+        number: "08",
+        title: "Ferretería Suárez",
+        description: "Catálogo online con stock en tiempo real para un negocio de barrio.",
+        tech: ["Next.js", "Supabase"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "rocha",
+        number: "09",
+        title: "Estudio Rocha",
+        description: "Rebranding y landing para un estudio de arquitectura.",
+        tech: ["Figma", "Next.js"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+    {
+        id: "raiz",
+        number: "10",
+        title: "Vivero Raíz",
+        description: "Landing con guías de cuidado de plantas y tienda de accesorios.",
+        tech: ["Next.js", "Shopify"],
+        href: "https://www.google.com",
+        image: PLACEHOLDER_IMAGE,
+    },
+];
+
+export function Proyectos() {
+    return (
+        <Section id="proyectos" bg="default" contained={false} className={styles.proyectos}>
+            <div className={styles.stickyHeader}>
+                <Container>
+                    <SectionHeader
+                        title="trabajos reales"
+                        intro="Diez proyectos, cada uno con su propia lógica y su propia tecnología. Deslizá para conocerlos."
+                        align="center"
+                    />
+                    <svg
+                        className={styles.swipeHint}
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M2 7v10" />
+                        <path d="M6 5v14" />
+                        <rect width="12" height="18" x="10" y="3" rx="2" />
+                    </svg>
+                </Container>
+            </div>
+            <CircularGallery items={PROJECTS} />
+        </Section>
+    );
+}
