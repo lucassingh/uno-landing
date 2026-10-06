@@ -2,10 +2,29 @@ import styles from "./Proyectos.module.css";
 import { Section, Container, SectionHeader, CircularGallery, Tag } from "@/components/ui";
 import type { GalleryItem } from "@/components/ui";
 
+// campIA y Actus van primero: son productos propios de +uno (no trabajos para clientes) y el
+// texto lo dice, para que quien revise la marca (por ejemplo Meta, con el nombre de WhatsApp
+// de cada uno) vea la relación entre masuno.io y el sitio de cada producto.
 const PROJECTS: GalleryItem[] = [
     {
-        id: "jornadas-misioneras",
+        id: "campia",
         number: "01",
+        title: "campIA",
+        description: "Producto propio de +uno: asistente de IA por WhatsApp para el campo. Registra siembra, hacienda, gastos y facturas desde el chat y muestra el margen por lote en un dashboard.",
+        tech: ["Next.js", "Claude", "WhatsApp API"],
+        href: "https://campia.app/",
+    },
+    {
+        id: "actus",
+        number: "02",
+        title: "Actus",
+        description: "Producto propio de +uno: asistente de mantenimiento industrial por WhatsApp. Captura lo que saben los técnicos de planta y lo devuelve con los manuales y los casos anteriores.",
+        tech: ["Next.js", "Claude", "pgvector"],
+        href: "https://actusagent.io/",
+    },
+    {
+        id: "jornadas-misioneras",
+        number: "03",
         title: "Jornadas Misioneras",
         description: "Plataforma de gestión de eventos misioneros a nivel nacional: alta de jornadas por país, provincia y localidad, con roles y permisos por usuario.",
         tech: ["Next.js", "Prisma", "Clerk"],
@@ -13,7 +32,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "bgenai",
-        number: "02",
+        number: "04",
         title: "BGenAI",
         description: "Plataforma de agentes de IA para empresas: automatizan procesos y se conectan a tus sistemas sin escribir código. Builder visual de flujos y chat en tiempo real.",
         tech: ["React", "LiveKit", "React Flow"],
@@ -21,7 +40,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "red-misiones-mundiales",
-        number: "03",
+        number: "05",
         title: "Red Misiones Mundiales",
         description: "Landing + backoffice para una red nacional de cooperación misionera: noticias, directorio de entidades y foros, con panel de administración separado por roles.",
         tech: ["Next.js", "Drizzle", "Clerk"],
@@ -29,7 +48,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "bizideas",
-        number: "04",
+        number: "06",
         title: "bizIDeas",
         description: "Landing institucional para una empresa de soluciones tecnológicas — IT, desarrollo a medida e IA. Motion cuidado de punta a punta.",
         tech: ["Next.js", "GSAP", "Tailwind"],
@@ -37,7 +56,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "sembrando-valores",
-        number: "05",
+        number: "07",
         title: "Sembrando Valores",
         description: "Landing bilingüe (ES/EN) para una asociación civil: cuenta su obra social y canaliza donaciones y voluntariado, con scroll narrativo cuidado.",
         tech: ["Next.js", "GSAP", "i18next"],
@@ -45,7 +64,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "bizit-global",
-        number: "06",
+        number: "08",
         title: "Bizit Global",
         description: "Landing institucional de la software factory detrás de BGenAI y otros productos propios.",
         tech: ["React", "Vite", "MUI"],
@@ -53,7 +72,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "odis",
-        number: "07",
+        number: "09",
         title: "Odis",
         description: "Gestión y resolución de conflictos con Inteligencia Artificial: SPA a medida para un servicio de mediación asistida.",
         tech: ["React", "Vite"],
@@ -61,7 +80,7 @@ const PROJECTS: GalleryItem[] = [
     },
     {
         id: "lucas-singh",
-        number: "08",
+        number: "10",
         title: "Lucas Singh — Portfolio",
         description: "Portfolio personal del dev detrás de +uno, en Next.js.",
         tech: ["Next.js", "TypeScript"],
