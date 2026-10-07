@@ -1,3 +1,7 @@
 .carouselWrap {
   margin-top: var(--space-12);
 }
+
+@media (max-width: 640px) {
+  .carouselWrap { margin-top: var(--space-6); }
+}

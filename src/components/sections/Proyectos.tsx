@@ -1,6 +1,7 @@
 import styles from "./Proyectos.module.css";
-import { Section, Container, SectionHeader, CircularGallery, Tag } from "@/components/ui";
+import { Section, Container, SectionHeader, CircularGallery } from "@/components/ui";
 import type { GalleryItem } from "@/components/ui";
+import { ProyectosMobileList } from "./ProyectosMobileList";
 
 // campIA y Actus van primero: son productos propios de +uno (no trabajos para clientes) y el
 // texto lo dice, para que quien revise la marca (por ejemplo Meta, con el nombre de WhatsApp
@@ -127,24 +128,7 @@ export function Proyectos() {
             </div>
 
             <Container className={styles.mobileListWrap}>
-                <ul className={styles.mobileList}>
-                    {PROJECTS.map((p) => (
-                        <li key={p.id}>
-                            <a href={p.href} target="_blank" rel="noopener noreferrer" className={styles.mobileCard}>
-                                <span className={styles.mobileNumber} aria-hidden="true">{p.number}</span>
-                                <h3 className={styles.mobileTitle}>{p.title}</h3>
-                                <p className={styles.mobileDescription}>{p.description}</p>
-                                <ul className={styles.mobileTech}>
-                                    {p.tech.map((tech) => (
-                                        <li key={tech}>
-                                            <Tag>{tech}</Tag>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                <ProyectosMobileList projects={PROJECTS} />
             </Container>
             </div>
         </Section>

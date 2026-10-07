@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { MOBILE_QUERY, useMediaQuery } from "@/lib/useMediaQuery";
 import { AnimatePresence, animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import styles from "./SystemAsistente.module.css";
@@ -548,40 +549,74 @@ export function SystemAsistenteShowcase() {
   const containerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef, { margin: "200px" });
 
+  // MOBILE = acordeón: apilado, la lista de 6 (con sus 6 descripciones largas) quedaba ARRIBA
+  // y el stage abajo de todo — tocar una función cambiaba una demo que estaba a una pantalla y
+  // media de distancia. Acá cada ítem muestra solo su título; el activo se abre con su texto y
+  // su demo justo debajo. En desktop, igual que siempre (lista | stage).
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const userPicked = useRef(false);
+
+  // al abrir un ítem, el que estaba abierto ARRIBA se cierra y todo sube: sin esto el ítem
+  // tocado quedaba fuera de pantalla. Solo tras un toque del usuario (nunca en la carga).
+  useEffect(() => {
+    if (!isMobile || !userPicked.current) return;
+    itemRefs.current[active]?.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth", block: "start" });
+  }, [active, isMobile, shouldReduceMotion]);
+
+  const stage = (
+    <div className={styles.showcaseStage}>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={current.id}
+          className={styles.showcaseStagePanel}
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={shouldReduceMotion || isMobile ? undefined : { opacity: 0, y: -14 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        >
+          {inView ? <Current /> : null}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+
   return (
     <div className={styles.showcase} ref={containerRef}>
       <div className={styles.showcaseList} role="group" aria-label="Funciones del asistente">
-        {ITEMS.map((item, i) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-pressed={i === active}
-            className={cn(styles.showcaseItem, i === active && styles.showcaseItemActive)}
-            onClick={() => setActive(i)}
-          >
-            <span className={styles.showcaseItemIndex}>{String(i + 1).padStart(2, "0")}</span>
-            <span className={styles.showcaseItemBody}>
-              <span className={styles.showcaseItemTitle}>{item.title}</span>
-              <span className={styles.showcaseItemText}>{item.text}</span>
-            </span>
-          </button>
-        ))}
+        {ITEMS.map((item, i) => {
+          const isActive = i === active;
+          return (
+            <Fragment key={item.id}>
+              <button
+                ref={(el) => {
+                  itemRefs.current[i] = el;
+                }}
+                type="button"
+                aria-pressed={isActive}
+                aria-expanded={isMobile ? isActive : undefined}
+                className={cn(styles.showcaseItem, isActive && styles.showcaseItemActive)}
+                onClick={() => {
+                  userPicked.current = true;
+                  setActive(i);
+                }}
+              >
+                <span className={styles.showcaseItemIndex}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.showcaseItemBody}>
+                  <span className={styles.showcaseItemTitle}>{item.title}</span>
+                  <span className={styles.showcaseItemText}>{item.text}</span>
+                </span>
+                <span className={styles.showcaseItemToggle} aria-hidden="true">
+                  +
+                </span>
+              </button>
+              {isMobile && isActive ? stage : null}
+            </Fragment>
+          );
+        })}
       </div>
 
-      <div className={styles.showcaseStage}>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={current.id}
-            className={styles.showcaseStagePanel}
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -14 }}
-            transition={{ duration: 0.4, ease: EASE }}
-          >
-            {inView ? <Current /> : null}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {isMobile ? null : stage}
     </div>
   );
 }

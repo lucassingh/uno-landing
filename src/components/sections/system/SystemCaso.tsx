@@ -196,6 +196,28 @@ export function SystemCaso() {
           title="así se ve un pedido, de punta a punta."
           intro="Desde que llega el primer mensaje hasta que la venta queda registrada — así recorre el sistema cada consulta, sin que nadie toque una planilla."
         />
+
+        {/* mobile: el carril pineado de 300vh (scroll congelado para ver pasar 5 captions) no
+            funciona en un celular — acá los 5 pasos van como una línea de tiempo vertical
+            dentro de una card, todo a la vista. Toggle puro CSS; en desktop sigue el pin. */}
+        <ol className={styles.mobileSteps}>
+          {PASOS.map((p, i) => (
+            <li key={p.title} className={styles.mobileStep}>
+              <span className={styles.mobileDot} aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className={styles.mobileBody}>
+                <h3 className={styles.mobileTitle}>
+                  <span className={styles.mobileIcon} aria-hidden="true">
+                    <p.Icon />
+                  </span>
+                  {p.title}
+                </h3>
+                <p className={styles.mobileText}>{p.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </Container>
 
       <div className={styles.track} ref={trackRef}>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion } from "motion/react";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import styles from "./SystemMapa.module.css";
 
 const LAYERS = [
@@ -77,7 +78,13 @@ function FilterVisual() {
  * hover con motion.animate() sobre un MotionValue — más liviano que re-crear un spring a mano. */
 function RevenueVisual() {
   const shouldReduceMotion = useReducedMotion();
-  const [hovered, setHovered] = useState(false);
+  const [hover, setHover] = useState(false);
+  // en touch no existe el hover que dispara el conteo: la card quedaba en "$ · · ·" para
+  // siempre. Ahí se anima sola cuando entra en pantalla (una vez, sin loop).
+  const ref = useRef<HTMLDivElement>(null);
+  const isTouch = useMediaQuery("(hover: none)");
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const hovered = hover || (isTouch && inView);
   const [display, setDisplay] = useState("$ · · ·");
   const mv = useMotionValue(0);
 
@@ -99,10 +106,11 @@ function RevenueVisual() {
 
   return (
     <div
+      ref={ref}
       className={styles.revenueMock}
       aria-hidden="true"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <div className={styles.revenueTop}>
         <span className={styles.revenueLabel}>ingresos del mes</span>

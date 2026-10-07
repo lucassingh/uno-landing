@@ -107,7 +107,7 @@
    vez de cualquier indicio de respuesta — a propósito, es la diferencia con .channelRow. Todas
    en violeta (no colores reales por fuente): acá no importa la identidad, es solo un dato que
    entra. */
-.feedList { position: relative; display: flex; flex-direction: column; gap: var(--space-5); }
+.feedList { position: relative; display: flex; flex-direction: column; gap: var(--space-6); }
 .feedList::before {
   content: "";
   position: absolute;
@@ -170,3 +170,21 @@
   margin-inline: auto;
 }
 
+
+/* ---- mobile ---- */
+@media (max-width: 640px) {
+  .bentoVisual { min-height: 0; padding: var(--space-6) var(--space-4); }
+  .panelCard { padding: var(--space-4); }
+  .channelRow { gap: var(--space-3); padding: var(--space-3); }
+  .channelIcon { width: 2.25rem; height: 2.25rem; }
+  .channelIcon svg { width: 1.15rem; height: 1.15rem; }
+  /* el "respondido" con texto se comía el ancho del mensaje (quedaba "¿Tiene...") — en
+     celular queda solo el check, que ya dice lo mismo */
+  .channelRepliedLabel { display: none; }
+  .channelReplied { padding: 0.45em; }
+  /* "nuevo lead" + la fuente en la misma línea no entraban y "nuevo lead" se partía en dos */
+  .feedBody { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .feedLabel { white-space: nowrap; }
+  .banner { padding: var(--space-6) var(--space-4); }
+  .banner p { font-size: 1.15rem; line-height: 1.3; }
+}

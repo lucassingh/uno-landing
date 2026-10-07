@@ -14,3 +14,7 @@
   line-height: 1.14;
   letter-spacing: var(--ls-display);
 }
+
+@media (max-width: 760px) {
+  .prose { font-size: clamp(1.6rem, 7.4vw, 2rem); line-height: 1.18; }
+}

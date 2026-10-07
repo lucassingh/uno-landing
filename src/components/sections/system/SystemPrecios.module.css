@@ -113,3 +113,11 @@ header.header { max-width: 82ch; }
 .feature svg { flex-shrink: 0; margin-top: 0.2em; }
 
 .cta { margin-top: var(--space-2); justify-content: center; }
+
+/* mobile: "USD 1.500–3.000" a 2.1rem no entraba en la card y se partía en "USD 1.500–" /
+   "3.000" — un precio cortado se lee mal justo donde más importa. A esta escala entra en un
+   renglón hasta en 320px. */
+@media (max-width: 640px) {
+  .priceMain { font-size: clamp(1.45rem, 7.2vw, 2.1rem); white-space: nowrap; }
+  .plan.plan { padding: var(--space-6) var(--space-4); }
+}

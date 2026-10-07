@@ -103,11 +103,108 @@
   }
 }
 
-@media (max-width: 640px) {
-  .textCol {
-    text-align: center;
+/* ---- versión mobile (ver MobileSteps en SistemaMasUno.tsx) — oculta en desktop ---- */
+.mobileSteps { display: none; }
+
+@media (max-width: 900px) {
+  /* la sección deja de ser "más alta que el viewport a propósito" (136dvh + 100dvh de grilla
+     para el corte del mazo): en mobile eso eran ~2 pantallas de crema vacío. Alto natural y el
+     mismo padding que el resto de las secciones. */
+  .sistema.sistema {
+    min-height: 0;
+    padding-block: var(--section-y);
+  }
+  .layout { min-height: 0; gap: 0; }
+
+  /* fuera: el mazo 3D y el texto/CTA que lo acompañan en desktop */
+  .deckCol,
+  .stepText,
+  .ctaRow { display: none; }
+
+  .mobileSteps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
   }
 }
+
+/* pestañas captá · filtrá · ordená: control segmentado, mismo lenguaje de bloque con borde que
+   el resto (nada de pills flotantes). La activa se invierte a navy. */
+.stepTabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 10px;
+  background: var(--color-blanco);
+}
+
+.stepTab {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 3.5rem;
+  padding: var(--space-2) var(--space-1);
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-tinta);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.stepTabActive { background: var(--color-tinta); color: var(--color-blanco); }
+
+.stepTabIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  color: var(--color-violeta);
+}
+.stepTabActive .stepTabIndex { color: color-mix(in srgb, var(--color-blanco) 70%, transparent); }
+
+.stepTabLabel {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 1.05rem;
+  letter-spacing: var(--ls-display);
+}
+
+/* barrita de tiempo del autoplay, al pie de la pestaña activa — cuando termina avanza al
+   paso siguiente (onAnimationEnd), mismo truco que .fill en SlideCarousel.module.css. */
+.stepTabFill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-amarillo);
+  transform-origin: left center;
+  animation-name: stepFill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.stepTabFillPaused { animation-play-state: paused; }
+
+@keyframes stepFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.mobileStepText {
+  margin-top: var(--space-6);
+  padding-left: var(--space-4);
+  border-left: var(--border-w) solid var(--color-violeta);
+  font-size: var(--fs-lead);
+  line-height: 1.45;
+  font-weight: var(--fw-medium);
+  color: var(--fg);
+  animation: stepIn 420ms var(--ease) both;
+}
+
+.mobileCta { align-self: stretch; justify-content: center; }
 
 /* capturas de dashboard dentro del mazo: las tres son mucho más anchas que altas, y la card
    es casi cuadrada — object-fit:cover (definido en CardSwap.module.css) ya las recorta para

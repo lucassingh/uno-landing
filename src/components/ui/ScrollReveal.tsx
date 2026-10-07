@@ -55,7 +55,11 @@ export function ScrollReveal({
       className={className}
       initial={{ opacity: 0, ...initialOffset }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount: 0.3, margin: "0px 0px -10% 0px" }}
+      // amount:0 + margen inferior, NO amount:0.3: con un % del bloque, un bloque más alto que
+      // ~3 pantallas (ej. el showcase del asistente apilado en mobile) nunca llegaba a mostrar
+      // ese 30% a la vez y quedaba invisible — pantallas enteras en blanco. Así se dispara apenas
+      // el borde superior del bloque pasa el 88% del viewport, sea cual sea su alto.
+      viewport={{ once: true, amount: 0, margin: "0px 0px -12% 0px" }}
       transition={{ duration, ease: EASE, delay }}
     >
       {children}

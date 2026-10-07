@@ -68,3 +68,12 @@
 /* overflow:hidden recorta el contenido mientras motion anima height 0 -> auto */
 .answerWrap { overflow: hidden; }
 .a { color: var(--fg-muted); padding-bottom: var(--space-6); max-width: 60ch; }
+
+/* mobile: el 94% de ancho dejaba la card corrida a la izquierda (con aire desparejo a cada
+   lado); acá ocupa el container entero. Preguntas a --fs-body+ en vez de --fs-h3: a 20px y
+   con 24px de aire arriba/abajo, cada pregunta era casi un bloque de pantalla. */
+@media (max-width: 640px) {
+  .listCard.listCard { max-width: none; padding: var(--space-6) var(--space-4); }
+  .q { font-size: 1.05rem; line-height: 1.3; padding-block: var(--space-4); }
+  .a { padding-bottom: var(--space-4); font-size: var(--fs-small); }
+}

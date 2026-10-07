@@ -27,3 +27,10 @@
    una etiqueta arriba del contenido — más grande que --fs-h2, pero sin llegar a la escala de
    --fs-display-l (esa queda demasiado grande en una columna angosta, ver Sistema+1). */
 .lg .title { font-size: clamp(2.2rem, 4.2vw, 4rem); }
+
+/* mobile: 48px de aire entre el header y el contenido es una pantalla de desktop — en un
+   celular separaba demasiado el título de lo que presenta. */
+@media (max-width: 640px) {
+  .header { margin-bottom: var(--space-8); }
+  .sm { margin-bottom: var(--space-4); }
+}

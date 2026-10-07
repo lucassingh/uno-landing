@@ -42,13 +42,25 @@ export function TextReveal({ text, className, accentWords = [] }: TextRevealProp
     }
 
     const WINDOW = Math.min(0.14, 4 / NUM);
+    // mismo breakpoint que TextReveal.module.css: ahí el bloque deja de estar pineado (alto
+    // automático) y el progreso se mide distinto, ver abajo.
+    const unpinnedQuery = window.matchMedia("(max-width: 760px)");
     let raf = 0;
 
     const update = () => {
       raf = 0;
       const rect = outer.getBoundingClientRect();
-      const denom = outer.offsetHeight - window.innerHeight;
-      let p = denom > 0 ? -rect.top / denom : rect.top < 0 ? 1 : 0;
+      const vh = window.innerHeight;
+      let p: number;
+      if (unpinnedQuery.matches) {
+        // sin pin (mobile): el bloque scrollea normal y se pinta MIENTRAS cruza la pantalla —
+        // 0 cuando su borde superior entra al 85% del viewport, 1 cuando su borde inferior
+        // llega a la mitad. Así el texto termina de leerse encendido sin frenar el scroll.
+        p = (vh * 0.85 - rect.top) / (vh * 0.35 + rect.height);
+      } else {
+        const denom = outer.offsetHeight - vh;
+        p = denom > 0 ? -rect.top / denom : rect.top < 0 ? 1 : 0;
+      }
       p = p < 0 ? 0 : p > 1 ? 1 : p;
 
       for (let i = 0; i < NUM; i++) {

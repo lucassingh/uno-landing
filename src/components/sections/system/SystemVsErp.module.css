@@ -49,9 +49,11 @@
 
 .bars { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
 .barLine { display: grid; grid-template-columns: 7.5rem 1fr auto; gap: var(--space-3); align-items: center; }
+/* mobile: "ERP TRADICIONAL" (mono + tracking, ~125px) no entraba en la columna de 6rem y se
+   montaba sobre la barra. Apilado: etiqueta, barra, valor — y el valor puede partirse en dos
+   renglones (con nowrap, "por módulo y por usuario, sin techo" rozaba el borde de la card). */
 @media (max-width: 560px) {
-  .barLine { grid-template-columns: 6rem 1fr; }
-  .barValue { grid-column: 1 / -1; margin-top: var(--space-1); }
+  .barLine { grid-template-columns: minmax(0, 1fr); gap: 6px; }
 }
 
 .barTag {
@@ -111,4 +113,13 @@
   font-size: var(--fs-h3);
   line-height: var(--lh-heading);
   max-width: 36ch;
+}
+
+/* después de las bases a propósito (mismo orden-gana de siempre) */
+@media (max-width: 560px) {
+  .barValue { white-space: normal; }
+  .header { margin-bottom: var(--space-8); }
+  .row { padding-block: var(--space-4); }
+  .ctaBand { padding: var(--space-6) var(--space-4); }
+  .ctaBand > * { align-self: stretch; justify-content: center; }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./Metodo.module.css";
-import { Section, Container, StickyScroll, Grainient } from "@/components/ui";
+import { Section, Container, StickyScroll, Grainient, Eyebrow } from "@/components/ui";
 import type { StickyScrollItem } from "@/components/ui";
 
 const STEPS: StickyScrollItem[] = [
@@ -80,6 +80,30 @@ export function Metodo() {
             <Container>
                 <div className={styles.scroll}>
                     <StickyScroll items={STEPS} />
+                </div>
+
+                {/* mobile: el carril pineado (~312vh de scroll congelado para pasar 6 cards) +
+                    ilustraciones no funciona en un celular — acá van los 6 pasos como una línea
+                    de tiempo vertical, todo a la vista, sin scroll secuestrado ni imágenes.
+                    Toggle puro CSS (las dos versiones viven en el DOM), mismo criterio que
+                    Proyectos: el StickyScroll oculto no escucha scroll (su observer nunca lo ve). */}
+                <div className={styles.mobile}>
+                    <header className={styles.mobileHeader}>
+                        <Eyebrow>el método +uno</Eyebrow>
+                        <h2 className={styles.mobileTitle}>cómo lo hacemos</h2>
+                    </header>
+                    <ol className={styles.timeline}>
+                        {STEPS.map((step) => (
+                            <li key={step.index} className={styles.step}>
+                                <span className={styles.stepDot} aria-hidden="true">{step.index}</span>
+                                <div className={styles.stepBody}>
+                                    <h3 className={styles.stepTitle}>{step.title}</h3>
+                                    <p className={styles.stepText}>{step.description}</p>
+                                    <p className={styles.stepPrinciple}>{step.principle}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </div>
             </Container>
         </Section>

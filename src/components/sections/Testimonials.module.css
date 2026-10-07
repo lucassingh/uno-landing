@@ -125,6 +125,47 @@
   letter-spacing: var(--ls-display);
 }
 
+/* ---- mobile: fila de avatares + autor al pie de la cita (ver Testimonials.tsx) ---- */
+.mobilePicker,
+.mobileWho { display: none; }
+
+@media (max-width: 767px) {
+  .listCol { display: none; }
+
+  .mobilePicker {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 44px));
+    gap: var(--space-2);
+  }
+  .mobileAvatar {
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    border: var(--border-w-card) solid var(--color-tinta);
+    background: var(--color-blanco);
+    color: var(--color-tinta);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .mobileAvatarActive { background: var(--color-tinta); color: var(--color-crema); }
+
+  /* alto reservado para la cita más larga: sin esto la sección "crece" letra por letra
+     mientras tipea y empuja todo lo de abajo */
+  .quoteBody { min-height: 14rem; padding-top: var(--space-12); }
+  .quote { font-size: 1.3rem; }
+
+  .mobileWho {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-tinta);
+  }
+  .mobileWho .name { color: var(--color-tinta); }
+}
+
 .srOnly {
   position: absolute;
   width: 1px;

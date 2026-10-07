@@ -184,3 +184,11 @@
   .cols { grid-template-columns: repeat(2, minmax(0, 9rem)); }
   .side { max-width: 26rem; margin-left: auto; }
 }
+
+/* mobile: input a 16px — con 14px Safari iOS hace zoom automático al enfocarlo y desarma la
+   página. Y el trazo del logo gigante: 0.5 unidades del viewBox, a ~330px de ancho, quedaban en
+   ~0.3px reales (casi invisible, se veía "roto"); acá se engrosa para que el dibujo se lea. */
+@media (max-width: 640px) {
+  .newsletterInput { font-size: 1rem; }
+  .bigLogo path { stroke-width: 1.4; }
+}

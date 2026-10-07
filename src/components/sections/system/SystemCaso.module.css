@@ -150,7 +150,9 @@
 }
 /* una sola línea desde tablet: los 5 títulos se acortaron a propósito para entrar así — igual
    que .nowrap de SectionHeader, el tamaño se clampea conservador para no desbordar. */
-@media (min-width: 560px) {
+/* nowrap recién desde 1200px: entre 560 y ~1100 el título a 7vw + el ícono al costado no
+   entraban en un renglón y desbordaban la card ("se cierra la venta" medía más que el hueco). */
+@media (min-width: 1200px) {
   .stageTitle { white-space: nowrap; }
 }
 .stageText {
@@ -162,3 +164,67 @@
 @media (max-width: 720px) {
   .stageTitle { font-size: clamp(1.9rem, 9vw, 3rem); }
 }
+
+/* ============================================================
+   MOBILE — línea de tiempo en vez del pin (ver SystemCaso.tsx)
+   ============================================================ */
+.mobileSteps { display: none; }
+
+@media (max-width: 900px) {
+  .track { display: none; }
+
+  .mobileSteps {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-4);
+    border: var(--border-w-card) solid var(--color-tinta);
+    border-radius: var(--radius-lg);
+    background: var(--color-blanco);
+    box-shadow: var(--shadow-hard);
+  }
+  /* riel que une los 5 pasos, por detrás de los números */
+  .mobileSteps::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--space-4) + 1.25rem);
+    top: calc(var(--space-6) + 1.25rem);
+    bottom: calc(var(--space-6) + 1.25rem);
+    width: 2px;
+    background: color-mix(in srgb, var(--color-violeta) 30%, transparent);
+  }
+}
+
+.mobileStep { position: relative; display: flex; gap: var(--space-4); align-items: flex-start; }
+
+.mobileDot {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-small);
+}
+
+.mobileBody { min-width: 0; padding-top: 0.35rem; }
+.mobileTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-heading);
+}
+.mobileIcon { display: inline-flex; color: var(--color-violeta); }
+.mobileIcon svg { width: 1.25rem; height: 1.25rem; }
+.mobileText { margin-top: var(--space-2); color: var(--fg-muted); font-size: var(--fs-small); }

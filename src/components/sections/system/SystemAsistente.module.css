@@ -65,6 +65,41 @@
 .showcaseItemTitle { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-body); }
 .showcaseItemText { font-size: var(--fs-small); color: var(--fg-muted); }
 
+/* "+" del acordeón mobile — en desktop la lista no se abre/cierra, no aplica */
+.showcaseItemToggle {
+  display: none;
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--fg-muted);
+  transition: transform var(--dur) var(--ease);
+}
+
+/* ---- MOBILE: acordeón (ver SystemAsistenteShowcase.tsx) — el stage se renderiza DENTRO de
+   la lista, justo debajo del ítem activo, en vez de en una columna aparte ---- */
+@media (max-width: 860px) {
+  .showcaseList { border-bottom: none; }
+  .showcaseItem {
+    align-items: center;
+    padding: var(--space-4);
+    scroll-margin-top: 6rem;
+  }
+  .showcaseItemActive { align-items: flex-start; }
+  .showcaseItemText { display: none; }
+  .showcaseItemActive .showcaseItemText { display: block; }
+  .showcaseItemToggle { display: block; }
+  .showcaseItemActive .showcaseItemToggle { transform: rotate(45deg); color: var(--color-violeta); }
+
+  .showcaseStage.showcaseStage {
+    min-height: 0;
+    padding: var(--space-6) var(--space-4);
+    border-block: var(--border-w-card) solid color-mix(in srgb, var(--color-tinta) 14%, transparent);
+  }
+  .showcaseList > .showcaseStage:last-child { border-bottom: none; }
+}
+
 /* ---- columna derecha: stage donde vive la visualización activa, en loop continuo ---- */
 .showcaseStage {
   position: relative;
@@ -420,3 +455,15 @@
   background: color-mix(in srgb, var(--color-tinta) 16%, var(--color-crema) 84%);
 }
 .usageBarLast { background: var(--color-violeta); }
+
+/* mobile, pero AL FINAL del archivo a propósito: estas tres clases tienen su base más arriba
+   y, a igual especificidad, gana la que viene después. */
+@media (max-width: 860px) {
+  .panelCard { padding: var(--space-4); }
+  .promptField { padding: var(--space-3); gap: var(--space-3); }
+  .promptCodeBody { padding: var(--space-4); }
+}
+
+@media (max-width: 640px) {
+  .header { margin-bottom: var(--space-8); }
+}
