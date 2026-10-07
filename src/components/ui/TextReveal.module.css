@@ -30,6 +30,19 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+/* MOBILE: sin pin. Un bloque de 180vh con el texto congelado al centro, en un celular, se
+   siente como scroll trabado (y con la barra de URL apareciendo/desapareciendo, los 100vh
+   saltan). Acá el bloque ocupa lo que mide su texto y se pinta mientras cruza la pantalla
+   (el progreso para este caso se calcula aparte en TextReveal.tsx, mismo breakpoint). */
+@media (max-width: 760px) {
+  .pinOuter { height: auto; }
+  .pinInner {
+    position: static;
+    height: auto;
+    padding-block: calc(var(--section-y) * 1.4);
+  }
+}
 .wordWrap {
   position: relative;
   margin-right: 0.28em;

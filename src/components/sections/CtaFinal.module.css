@@ -19,6 +19,12 @@
 
 .inner { position: relative; z-index: 1; width: 100%; }
 
+/* mobile: copy + form apilados ya miden más de una pantalla — el min-height 100dvh solo
+   sumaba aire, y dvh cambiaba de alto al esconderse la barra del navegador. */
+@media (max-width: 767px) {
+  .cta { min-height: 0; }
+}
+
 /* separación extra entre el copy y la card del form — mismo criterio que Testimonials/Faq:
    el --grid-gap default es angosto a propósito para grillas de más columnas. */
 @media (min-width: 768px) {
@@ -60,6 +66,9 @@
 .form { display: flex; flex-direction: column; gap: var(--space-4); }
 
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+@media (max-width: 360px) {
+  .row { grid-template-columns: 1fr; }
+}
 
 .field { display: flex; flex-direction: column; gap: var(--space-2); }
 
@@ -132,4 +141,9 @@
   font-weight: var(--fw-bold);
   font-size: var(--fs-h3);
   max-width: 26ch;
+}
+
+/* después de la base de .formCard (max-width:30rem) a propósito: si va antes, la base gana por orden */
+@media (max-width: 767px) {
+  .formCard { max-width: none; }
 }

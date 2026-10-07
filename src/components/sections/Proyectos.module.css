@@ -63,14 +63,20 @@
   .swipeHint {
     display: none;
   }
+  /* sin pin en mobile: el bloque (header + lista) es varias pantallas de alto, el sticky solo
+     sumaba un "enganche" raro al entrar a la sección. */
+  .pinned { position: static; }
+  .stickyHeader { padding-bottom: 0; }
   .mobileListWrap { display: block; }
   .mobileList {
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-    padding-block: var(--space-8);
   }
 }
+
+.mobileMore { display: flex; justify-content: center; margin-top: var(--space-8); }
+.mobileMoreBtn { width: 100%; justify-content: center; }
 
 .mobileCard {
   display: block;

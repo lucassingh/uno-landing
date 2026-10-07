@@ -120,7 +120,7 @@ function ChannelRow({ row, index }: { row: (typeof CHANNEL_ROWS)[number]; index:
         transition={{ ...POP, delay: 0.5 + index * 0.15 }}
       >
         <CheckIcon />
-        respondido
+        <span className={styles.channelRepliedLabel}>respondido</span>
       </motion.span>
     </motion.div>
   );

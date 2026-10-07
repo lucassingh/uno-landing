@@ -144,19 +144,110 @@
    todo para que sean lo primero que se lee.
    ============================================================ */
 
-.scrollHint {
-  display: none;
+/* ============================================================
+   MOBILE — cards apiladas en vez de la tabla (ver MobilePlanCards en Pricing.tsx). Corte en
+   860px: arriba de eso la tabla (min-width 46rem) entra entera en el container sin scroll
+   lateral, así que el "deslizá para comparar" que había antes ya no hace falta en ningún ancho.
+   ============================================================ */
+.mPlans { display: none; }
+
+@media (max-width: 860px) {
+  .tableWrap { display: none; }
+  .mPlans {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+}
+
+.mPlan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  box-shadow: var(--shadow-hard);
+}
+/* Sitio Pro: navy, mismo lenguaje que la columna destacada de la tabla */
+.mPlanFeatured {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+}
+.mPlanFeatured .nick,
+.mPlanFeatured .priceLead,
+.mPlanFeatured .note {
+  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
+}
+
+.mPlanName { font-size: var(--fs-h3); margin-top: var(--space-2); }
+
+.mPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  margin-top: var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+}
+.mPlanFeatured .mPrice { border-bottom-color: color-mix(in srgb, var(--color-blanco) 30%, transparent); }
+
+/* specs con valor propio (entrega, revisiones): etiqueta chica a la izquierda, dato fuerte a
+   la derecha — se leen como ficha técnica, no como un ítem más de la lista */
+.mSpecs { display: flex; flex-direction: column; margin-top: var(--space-2); }
+.mSpec {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: var(--border-w-card) solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.mSpec dt { font-size: var(--fs-small); color: var(--fg-muted); }
+.mPlanFeatured .mSpec dt { color: color-mix(in srgb, var(--color-blanco) 72%, transparent); }
+.mSpec dd { margin: 0; font-weight: var(--fw-semibold); font-size: var(--fs-small); text-align: right; }
+
+.mFeatures { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-6); }
+.mFeature { display: flex; align-items: flex-start; gap: var(--space-3); font-size: var(--fs-small); line-height: 1.45; }
+.mFeatureNote {
   font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: var(--ls-label);
+  font-size: 0.7rem;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--fg-muted);
-  text-align: right;
-  margin-bottom: var(--space-2);
 }
-@media (max-width: 760px) {
-  .scrollHint { display: block; }
+.mPlanFeatured .mFeatureNote { color: color-mix(in srgb, var(--color-blanco) 70%, transparent); }
+
+.mCheck {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.05em;
+  border-radius: 50%;
+  background: var(--color-violeta);
+  color: var(--color-blanco);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.mCheck svg { width: 10px; height: 10px; }
+.mPlanFeatured .mCheck { background: var(--color-blanco); color: var(--color-tinta); }
+
+.mPartial {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.05em;
+  border-radius: 50%;
+  border: 2px dotted currentColor;
+  opacity: 0.6;
+}
+
+.mCta.mCta { margin-top: var(--space-8); width: 100%; white-space: normal; text-align: center; }
 
 /* sin overflow:hidden acá a propósito: recortaba la ficha "más elegido" cuando asoma medio
    afuera del borde superior de su columna. Las 4 esquinas de la tabla llevan su propio

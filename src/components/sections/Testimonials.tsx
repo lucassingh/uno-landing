@@ -82,7 +82,7 @@ export function Testimonials() {
         />
       </ScrollReveal>
       <Grid className={styles.gridGap}>
-        <Col span={12} md={6}>
+        <Col span={12} md={6} className={styles.listCol}>
           <ScrollReveal direction="left">
           <Card raised className={styles.listCard}>
             <ul className={styles.list}>
@@ -113,6 +113,26 @@ export function Testimonials() {
         </Col>
         <Col span={12} md={6}>
           <ScrollReveal direction="right">
+          {/* mobile: la lista de la izquierda (oculta ahí) se apila ARRIBA de la cita y tocar un
+              nombre cambiaba un texto que quedaba fuera de pantalla. En su lugar, una fila de
+              avatares pegada a la cita — selector y resultado en la misma pantalla. */}
+          <div className={styles.mobilePicker} role="group" aria-label="Elegí un testimonio">
+            {TESTIMONIOS.map((t) => {
+              const isActive = t.id === activeId;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={cn(styles.mobileAvatar, isActive && styles.mobileAvatarActive)}
+                  aria-label={`${t.name}, ${t.role}`}
+                  aria-pressed={isActive}
+                  onClick={() => setActiveId(t.id)}
+                >
+                  {initials(t.name)}
+                </button>
+              );
+            })}
+          </div>
           <div className={styles.quotePanel}>
             <span className={styles.quoteMark} aria-hidden="true">
               &ldquo;
@@ -132,6 +152,10 @@ export function Testimonials() {
                 {active.quote}
               </span>
             </div>
+            <p className={styles.mobileWho}>
+              <span className={styles.name}>{active.name}</span>
+              <span className={styles.role}>{active.role}</span>
+            </p>
           </div>
           </ScrollReveal>
         </Col>

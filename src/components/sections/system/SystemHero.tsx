@@ -34,7 +34,7 @@ export function SystemHero() {
   const ready = useSiteReady();
 
   return (
-    <Section id="top" bg="default" contained={false}>
+    <Section id="top" bg="default" contained={false} className={styles.hero}>
       <motion.div
         variants={shouldReduceMotion ? undefined : container}
         initial={shouldReduceMotion ? undefined : "hidden"}

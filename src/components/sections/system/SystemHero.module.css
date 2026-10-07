@@ -14,3 +14,18 @@
 
 /* ---- showcase: browser mockup con el dashboard animado (BrowserShowcase.module.css) ---- */
 .showcaseWrap { margin-top: var(--space-16); }
+
+/* ---- mobile ---- */
+@media (max-width: 860px) {
+  /* el padding de sección (--section-y ≈ 56px en un celular) es menos que lo que ocupa el
+     navbar flotante (~74px): el eyebrow quedaba tapado detrás de la píldora. */
+  /* .hero.hero: Section.module.css pone padding-block en otro stylesheet, el orden de bundling
+     entre módulos no está garantizado — la clase doble asegura que esto gane. */
+  .hero.hero { padding-top: 7rem; }
+  .showcaseWrap { margin-top: var(--space-12); }
+}
+@media (max-width: 640px) {
+  /* dos botones de ancho distinto uno abajo del otro se veían desprolijos — mismo ancho,
+     ocupando la columna entera. */
+  .ctaRow > * { flex: 1 1 100%; justify-content: center; }
+}

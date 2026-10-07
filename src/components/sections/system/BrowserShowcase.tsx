@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import styles from "./BrowserShowcase.module.css";
+import { cn } from "@/lib/utils";
 
 export interface BrowserShot {
   id: string;
@@ -14,6 +15,10 @@ export interface BrowserShowcaseProps {
   ariaLabel: string;
   addressLabel?: string;
   intervalMs?: number;
+  /** modo controlado: si viene, se muestra esa captura y el ciclo automático no corre — lo
+   * maneja el padre (ej. las pestañas captá/filtrá/ordená de SistemaMasUno en mobile). */
+  activeIndex?: number;
+  className?: string;
 }
 
 function LockIcon() {
@@ -41,22 +46,30 @@ function ReloadIcon() {
  * arranca y queda fija la primera captura. Compartido entre SystemHero y cualquier otra sección
  * que necesite el mismo mockup con otras capturas — no lo dupliques, agregá acá si hace falta
  * una variante. */
-export function BrowserShowcase({ shots, ariaLabel, addressLabel = "app.masuno.com", intervalMs = 4000 }: BrowserShowcaseProps) {
+export function BrowserShowcase({
+  shots,
+  ariaLabel,
+  addressLabel = "app.masuno.com",
+  intervalMs = 4000,
+  activeIndex,
+  className,
+}: BrowserShowcaseProps) {
   const shouldReduceMotion = useReducedMotion();
   const [active, setActive] = useState(0);
+  const controlled = activeIndex !== undefined;
 
   useEffect(() => {
-    if (shouldReduceMotion || shots.length < 2) return;
+    if (controlled || shouldReduceMotion || shots.length < 2) return;
     const id = setInterval(() => {
       setActive((prev) => (prev + 1) % shots.length);
     }, intervalMs);
     return () => clearInterval(id);
-  }, [shouldReduceMotion, shots.length, intervalMs]);
+  }, [controlled, shouldReduceMotion, shots.length, intervalMs]);
 
-  const current = shots[active]!;
+  const current = shots[controlled ? activeIndex : active] ?? shots[0]!;
 
   return (
-    <div className={styles.browser} role="img" aria-label={ariaLabel}>
+    <div className={cn(styles.browser, className)} role="img" aria-label={ariaLabel}>
       <div className={styles.browserBar}>
         <div className={styles.browserDots} aria-hidden="true">
           <span />

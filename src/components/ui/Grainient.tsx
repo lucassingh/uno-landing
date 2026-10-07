@@ -206,7 +206,12 @@ export function Grainient({
     };
   }, [color1, color2, color3, timeSpeed, warpFrequency, warpAmplitude, warpStrength, blendSoftness, centerX, centerY, grainScale]);
 
-  return <div ref={ref} className={className} aria-hidden="true" />;
+  // width/height 100% inline: sin esto el div no tenía alto propio, el canvas caía a su
+  // proporción por defecto (2:1, alto = ancho/2) y el ResizeObserver lo dejaba clavado ahí —
+  // en un celular, 180px de fondo en una sección de ~1200px (CtaFinal: "quedó fijo el bg").
+  // Inline y no en una clase para no pelear con la posición que le dé `className` (ej.
+  // .motorBg en SystemRubro, absolute + inset:0) — el orden entre módulos CSS no está garantizado.
+  return <div ref={ref} className={className} style={{ width: "100%", height: "100%" }} aria-hidden="true" />;
 }
 
 export default Grainient;

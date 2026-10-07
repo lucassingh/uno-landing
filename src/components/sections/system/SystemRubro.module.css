@@ -104,3 +104,7 @@
   font-weight: var(--fw-bold);
 }
 .fieldValue { margin-top: var(--space-1); font-size: var(--fs-body); }
+
+@media (max-width: 640px) {
+  .config { padding: var(--space-6) var(--space-4); gap: var(--space-4); }
+}

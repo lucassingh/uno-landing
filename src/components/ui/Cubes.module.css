@@ -20,6 +20,23 @@
   transform: rotateX(18deg) rotateY(-24deg);
 }
 
+/* MOBILE — este era EL culpable del scroll lateral de todo el sitio: con los pisos de desktop
+   (cubo 140px + gap 2rem) la grilla medía 3×140 + 2×32 = 484px mínimo, más el padding del
+   stage ~520px, en un celular de 360. El documento entero quedaba de 520px de ancho y el
+   navegador hacía zoom-out a toda la página. Acá la grilla escala con el viewport (3×17vw +
+   2×5vw ≈ 61vw) y el stage deja de reservar 420px de alto vacío. */
+@media (max-width: 900px) {
+  .stage {
+    min-height: 0;
+    padding: var(--space-8) 0 var(--space-4);
+    perspective: 1200px;
+  }
+  .grid {
+    --cube: min(17vw, 120px);
+    gap: min(5vw, 2rem);
+  }
+}
+
 .cube {
   position: relative;
   width: var(--cube);

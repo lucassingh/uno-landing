@@ -127,6 +127,82 @@ function PlanCell({ value }: { value: CellValue }) {
     );
 }
 
+/**
+ * Versión MOBILE de la tabla: una card por plan, apiladas. Una matriz de 4 columnas no entra en
+ * un celular (ni con scroll lateral: se perdía la columna de etiquetas y no se podía comparar
+ * nada). Cada card lista SOLO lo que el plan trae — las specs con valor propio (entrega,
+ * revisiones) arriba, después lo incluido y lo parcial con su nota; lo que no incluye se omite
+ * (en una card suelta, una lista de "—" es ruido, no información). Mismos datos que la tabla
+ * (FEATURE_ROWS), así nunca se desincronizan.
+ */
+function MobilePlanCards() {
+    return (
+        <ul className={styles.mPlans}>
+            {WEB_PLANS.map((plan, pi) => {
+                const specs = FEATURE_ROWS.flatMap((row) => {
+                    const v = row.values[pi]!;
+                    return "text" in v ? [{ label: row.label, text: v.text }] : [];
+                });
+                const features = FEATURE_ROWS.flatMap((row) => {
+                    const v = row.values[pi]!;
+                    if ("text" in v || v.state === "no") return [];
+                    return [{ label: row.label, note: v.state === "partial" ? v.note : undefined }];
+                });
+
+                return (
+                    <li key={plan.id} className={cn(styles.mPlan, plan.highlighted && styles.mPlanFeatured)}>
+                        {plan.highlighted ? <Tag className={styles.badgeFeatured}>más elegido</Tag> : null}
+
+                        <span className={styles.nick}>&ldquo;{plan.nickname}&rdquo;</span>
+                        <h3 className={styles.mPlanName}>{plan.name}</h3>
+
+                        <div className={styles.mPrice}>
+                            {plan.priceLead ? <span className={styles.priceLead}>{plan.priceLead}</span> : null}
+                            <span className={styles.priceMain}>{plan.priceMain}</span>
+                            <span className={styles.note}>{plan.note}</span>
+                        </div>
+
+                        <dl className={styles.mSpecs}>
+                            {specs.map((s) => (
+                                <div key={s.label} className={styles.mSpec}>
+                                    <dt>{s.label}</dt>
+                                    <dd>{s.text}</dd>
+                                </div>
+                            ))}
+                        </dl>
+
+                        <ul className={styles.mFeatures} aria-label={`Qué incluye ${plan.name}`}>
+                            {features.map((f) => (
+                                <li key={f.label} className={styles.mFeature}>
+                                    {f.note ? (
+                                        <span className={styles.mPartial} aria-hidden="true" />
+                                    ) : (
+                                        <span className={styles.mCheck} aria-hidden="true">
+                                            <CheckIcon />
+                                        </span>
+                                    )}
+                                    <span>
+                                        {f.label}
+                                        {f.note ? <span className={styles.mFeatureNote}> · {f.note}</span> : null}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <Button
+                            href={plan.cta.href}
+                            variant={plan.highlighted ? "invert" : "primary"}
+                            className={cn(styles.cta, styles.mCta)}
+                        >
+                            {plan.cta.label}
+                        </Button>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+}
+
 export function Pricing() {
     return (
         <Section id="precios" bg="alt">
@@ -140,7 +216,6 @@ export function Pricing() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.1}>
-                <p className={styles.scrollHint} aria-hidden="true">deslizá para comparar →</p>
                 <div className={styles.tableWrap}>
                     <div className={styles.tableScroll}>
                         <table className={styles.table}>
@@ -208,6 +283,7 @@ export function Pricing() {
                         </table>
                     </div>
                 </div>
+                <MobilePlanCards />
             </ScrollReveal>
 
             {/* ── Card diferenciada: horas de desarrollo (otro modelo de compra, por horas) ── */}

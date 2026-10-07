@@ -5,6 +5,8 @@ type Access = "full" | "view" | "none";
 
 const AREAS = ["Leads", "Stock", "Facturación", "Configuración"];
 
+const ACCESS_LABEL: Record<Access, string> = { full: "acceso completo", view: "solo lectura", none: "sin acceso" };
+
 const ROLES: { name: string; access: Access[] }[] = [
   { name: "Dueño", access: ["full", "full", "full", "full"] },
   { name: "Vendedor", access: ["full", "view", "none", "none"] },
@@ -143,6 +145,32 @@ export function SystemEquipo() {
             </tbody>
           </table>
         </div>
+
+        {/* mobile: la matriz (min-width 32rem) no entra en un celular — se cortaba en
+            "FACTUR…" y había que adivinar que scrolleaba de costado. Acá, un bloque por rol con
+            sus 4 áreas en grilla 2×2: el mismo dato, leído de arriba a abajo. */}
+        <ul className={styles.roleList}>
+          {ROLES.map((role) => (
+            <li key={role.name} className={styles.role}>
+              <h3 className={styles.roleName}>{role.name}</h3>
+              <ul className={styles.roleAreas}>
+                {role.access.map((level, i) => (
+                  <li
+                    key={AREAS[i]}
+                    className={styles.roleArea}
+                    data-access={level}
+                  >
+                    <AccessDot level={level} />
+                    <span>
+                      {AREAS[i]}
+                      <span className={styles.srOnly}>: {ACCESS_LABEL[level]}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </ScrollReveal>
 
       <ScrollReveal delay={0.15}>

@@ -53,7 +53,15 @@
 .visual { width: 100%; }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: minmax(0, 1fr); }
+  /* svh: el alto con la barra de URL del navegador VISIBLE — con dvh el hero cambiaba de alto
+     al scrollear (la barra se esconde) y empujaba todo lo de abajo. overflow-x:clip recorta la
+     entrada de los cubos (arrancan corridos 26vw a la derecha) sin crear scroll-container. */
+  .hero {
+    min-height: 100svh;
+    padding-block: 6.5rem var(--space-12);
+    overflow-x: clip;
+  }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
   .copy { align-items: center; text-align: center; }
   .wordmarkWrap { width: clamp(185px, 45vw, 290px); }
 }
