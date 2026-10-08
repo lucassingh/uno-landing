@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { usePathname } from "next/navigation";
 import styles from "./Loader.module.css";
 import { cn } from "@/lib/utils";
 
@@ -91,7 +92,10 @@ type Phase = "chase" | "expand" | "reveal" | "done";
  */
 export function LoaderProvider({ children }: { children: ReactNode }) {
   const shouldReduceMotion = useReducedMotion();
-  const [phase, setPhase] = useState<Phase>("chase");
+  // Rutas "peladas" tipo link-in-bio (/links): sin animacion de entrada -> carga instantanea en mobile.
+  const pathname = usePathname();
+  const bareRoute = pathname === "/links";
+  const [phase, setPhase] = useState<Phase>(bareRoute ? "done" : "chase");
   const [percent, setPercent] = useState(0);
 
   // "Cargando NN%": cuenta de 0 a 100 en sincro con la fase "chase" (llega a 100 justo cuando
@@ -111,15 +115,17 @@ export function LoaderProvider({ children }: { children: ReactNode }) {
   }, [phase, shouldReduceMotion]);
 
   useEffect(() => {
+    if (bareRoute) return;
     if (shouldReduceMotion) {
       const t = setTimeout(() => setPhase("done"), 350);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setPhase("expand"), CHASE_MS);
     return () => clearTimeout(t);
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, bareRoute]);
 
   useEffect(() => {
+    if (bareRoute) return;
     if (phase === "expand") {
       const t = setTimeout(() => setPhase("reveal"), EXPAND_MS);
       return () => clearTimeout(t);
@@ -128,7 +134,7 @@ export function LoaderProvider({ children }: { children: ReactNode }) {
       const t = setTimeout(() => setPhase("done"), REVEAL_MS);
       return () => clearTimeout(t);
     }
-  }, [phase]);
+  }, [phase, bareRoute]);
 
   // El Hero puede empezar a entrar apenas arranca el fade (reveal), así aparece mientras el crema
   // se difumina, no después de un corte.

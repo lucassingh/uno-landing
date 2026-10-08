@@ -1,0 +1,210 @@
+/* =============================================================
+   /links — link-in-bio de Instagram. Fondo navy, mobile-first.
+   Usa los tokens del sistema (tokens.css). Accent: --color-amarillo.
+   ============================================================= */
+
+.page {
+  min-height: 100dvh;
+  background: var(--color-tinta);
+  color: var(--color-crema);
+  display: flex;
+  justify-content: center;
+  padding: clamp(1.5rem, 6vw, 2.5rem) 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* grilla técnica muy sutil de fondo */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 250, 229, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 250, 229, 0.14) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - clamp(3rem, 12vw, 5rem));
+}
+
+/* ---- topline ---- */
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid rgba(255, 250, 229, 0.16);
+}
+
+.mark {
+  display: block;
+  width: 40px;
+  flex: none;
+}
+.mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.markCell {
+  fill: var(--color-amarillo);
+}
+
+.toplineLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-crema) 58%, transparent);
+}
+
+/* ---- hero ---- */
+.hero {
+  padding: clamp(2.5rem, 9vw, 3.5rem) 0 clamp(2rem, 7vw, 2.75rem);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-crema) 58%, transparent);
+  margin-bottom: var(--space-4);
+}
+.h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: lowercase;
+  font-size: clamp(2rem, 9vw, 2.75rem);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  color: var(--color-blanco);
+}
+.soft {
+  color: color-mix(in srgb, var(--color-crema) 52%, transparent);
+}
+.sub {
+  margin-top: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-crema) 70%, transparent);
+  max-width: 32ch;
+}
+
+/* ---- links ---- */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.lk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  border: 1px solid rgba(255, 250, 229, 0.18);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  min-height: 64px;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.lk:focus-visible {
+  outline: 3px solid var(--color-amarillo);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .lk:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-crema);
+  }
+  .lk:hover .arrow {
+    transform: translateX(3px);
+    color: var(--color-amarillo);
+  }
+  .lkPrimary:hover {
+    border-color: var(--color-amarillo);
+  }
+}
+
+.idx {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  color: var(--color-amarillo);
+  min-width: 22px;
+  flex: none;
+}
+.lkBody {
+  flex: 1;
+  min-width: 0;
+}
+.lkTitle {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: lowercase;
+  font-size: 1.0625rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-blanco);
+}
+.lkDesc {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--color-crema) 64%, transparent);
+}
+.arrow {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  flex: none;
+  color: color-mix(in srgb, var(--color-crema) 58%, transparent);
+  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+/* primario: relleno crema, texto navy (la acción principal) */
+.lkPrimary {
+  background: var(--color-crema);
+  border-color: var(--color-crema);
+}
+.lkPrimary .lkTitle {
+  color: var(--color-tinta);
+}
+.lkPrimary .lkDesc {
+  color: color-mix(in srgb, var(--color-tinta) 62%, transparent);
+}
+.lkPrimary .idx {
+  color: color-mix(in srgb, var(--color-tinta) 55%, transparent);
+}
+.lkPrimary .arrow {
+  color: var(--color-tinta);
+}
+
+/* ---- footer ---- */
+.foot {
+  margin-top: auto;
+  padding-top: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-crema) 55%, transparent);
+}
