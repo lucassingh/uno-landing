@@ -61,7 +61,7 @@ function MailIcon() {
 const SOCIALS = [
     { label: "Instagram", href: "#", Icon: InstagramIcon },
     { label: "WhatsApp", href: "#", Icon: WhatsAppIcon },
-    { label: "Email", href: "mailto:hola@masuno.com", Icon: MailIcon },
+    { label: "Email", href: "mailto:hola@masuno.io", Icon: MailIcon },
 ];
 
 export function Footer() {
@@ -153,9 +153,14 @@ export function Footer() {
                 <StrokeMark className={styles.bigLogo} />
                 <div className={styles.divider} aria-hidden="true" />
                 <div className={styles.bottom}>
-                    <span>© 2026 más uno · diseño web + automatización, a medida.</span>
-                    <a href="mailto:hola@masuno.com" className={styles.email}>
-                        hola@masuno.com
+                    {/* la segunda línea es la identidad legal: Meta la lee al verificar el negocio
+                        (nombre legal del monotributo → más uno → Actus). */}
+                    <p className={styles.legal}>
+                        <span>© 2026 más uno · diseño web + automatización, a medida.</span>
+                        <span>más uno es el nombre comercial de Lucas Miguel Singh · CUIT 20-31223903-6</span>
+                    </p>
+                    <a href="mailto:hola@masuno.io" className={styles.email}>
+                        hola@masuno.io
                     </a>
                 </div>
             </div>

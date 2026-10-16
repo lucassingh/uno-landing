@@ -176,6 +176,12 @@
   letter-spacing: 0.04em;
   color: color-mix(in srgb, var(--color-blanco) 60%, transparent);
 }
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
 .email { transition: color var(--dur) var(--ease); }
 .email:hover { color: var(--color-violeta); }
 
