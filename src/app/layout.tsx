@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     description: "Landing en reconstrucción bajo la nueva dirección visual de +uno.",
     type: "website",
   },
+  // verificación del dominio en Meta Business (la pide la verificación del negocio para WhatsApp)
+  verification: {
+    other: { "facebook-domain-verification": "9r5bzye9cvxwr4c5fbrf7g1u1jdxqt" },
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
