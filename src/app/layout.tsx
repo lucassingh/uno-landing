@@ -4,16 +4,25 @@ import "./globals.css";
 import { fontVariables } from "@/lib/fonts";
 import { LoaderProvider } from "@/components/ui/Loader";
 
+const title = "más uno — diseño web + automatización, a medida";
+const description =
+  "Sitios a medida, IA que atiende tu WhatsApp las 24 horas y un mini-CRM para tus leads. Diseño web + automatización, sin plantillas ni relleno.";
+
 export const metadata: Metadata = {
-  title: "más uno — diseño web + automatización, a medida",
-  description: "Landing en reconstrucción bajo la nueva dirección visual de +uno.",
+  title,
+  description,
   icons: { icon: "/logo/favicon.svg" },
-  metadataBase: new URL("https://masuno.example"),
+  // base para las URLs absolutas de og:image (WhatsApp/redes ignoran las relativas)
+  metadataBase: new URL("https://masuno.io"),
   openGraph: {
-    title: "más uno — diseño web + automatización, a medida",
-    description: "Landing en reconstrucción bajo la nueva dirección visual de +uno.",
+    title,
+    description,
+    url: "/",
+    siteName: "más uno",
+    locale: "es_AR",
     type: "website",
   },
+  twitter: { card: "summary_large_image", title, description },
   // verificación del dominio en Meta Business (la pide la verificación del negocio para WhatsApp)
   verification: {
     other: { "facebook-domain-verification": "9r5bzye9cvxwr4c5fbrf7g1u1jdxqt" },
