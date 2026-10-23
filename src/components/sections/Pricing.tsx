@@ -336,7 +336,7 @@ export function Pricing() {
                             <h3 className={styles.closeTitle}>que no se te escape ni una venta</h3>
                             <p className={styles.closeDesc}>
                                 Automatizá la atención con IA y ordená tus leads en un panel simple.
-                                Setup + abono, con su propio detalle y planes.
+                                Setup a tu medida + soporte mensual, con todo el detalle.
                             </p>
                             <Button href="/system" variant="primary" className={styles.cta}>
                                 Ver el sistema

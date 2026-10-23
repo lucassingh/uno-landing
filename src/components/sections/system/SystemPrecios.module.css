@@ -1,14 +1,13 @@
 /* =============================================================
-   Sección "cómo se cobra" de /system — adaptada a la card de precios que
-   ya usa la landing principal (Pricing.module.css: apodo, ficha "más
-   elegido" a caballo del borde, bloque de precio, features con
-   AsteriskIcon, tonos default/accent/invert) en vez del bulletList con
-   flecha que tenía antes. Solo 2 de los 6 planes de la landing (Sistema
-   +uno e Integral) — el resto del negocio de esta sección todavía no
-   está cerrado, se retoca después.
+   Sección "cómo se cobra" de /system — una sola card (Sistema +uno) a 12
+   columnas, en tono invertido (navy). Hereda el vocabulario de la card de
+   precios de la landing principal (apodo, bloque de precio, features con
+   AsteriskIcon), pero en layout horizontal: a la izquierda el resumen
+   (nombre, precio, soporte, CTA) y a la derecha TODAS las características,
+   agrupadas por capa con índice 01–04 como en el mapa del sistema.
    ============================================================= */
 
-/* el intro de esta sección es más largo que el resto (explica setup + abono en detalle) — el
+/* el intro de esta sección es más largo que el resto (explica setup + soporte en detalle) — el
    cap de 52ch de SectionHeader lo partía en demasiadas líneas. Vía prop className en vez de
    tocar SectionHeader.module.css (que es compartido por todo el sitio); apunta al <p>/<header>
    por tag, no por clase, porque .intro/.header viven scopeados en OTRO módulo CSS y no se
@@ -23,10 +22,10 @@ header.header { max-width: 82ch; }
 .header p { max-width: 74ch; }
 
 .plan.plan {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--space-12);
+  padding: var(--space-12);
   box-shadow: var(--shadow-hard);
 }
 .plan.plan:hover,
@@ -35,23 +34,16 @@ header.header { max-width: 82ch; }
   transform: none;
 }
 
-.cardAccent.cardAccent { background: var(--color-amarillo); }
-
 .cardInvert.cardInvert {
   background: var(--color-tinta);
   color: var(--color-blanco);
   border-color: var(--color-blanco);
-  box-shadow: var(--shadow-hard);
-}
-.cardInvert.cardInvert:hover,
-.cardInvert.cardInvert:focus-within {
-  box-shadow: var(--shadow-hard);
-  transform: none;
 }
 .cardInvert .nick { color: var(--color-blanco); }
 .cardInvert .desc,
 .cardInvert .note,
-.cardInvert .priceLead {
+.cardInvert .priceLead,
+.cardInvert .groupIndex {
   color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
 }
 
@@ -67,15 +59,11 @@ header.header { max-width: 82ch; }
   box-shadow: 6px 6px 0 var(--color-blanco);
 }
 
-.badge {
-  position: absolute;
-  top: 0;
-  right: var(--space-6);
-  transform: translateY(-50%);
-  z-index: 1;
-  background: var(--color-tinta);
-  color: var(--color-crema);
-  border-color: var(--color-tinta);
+/* ── Columna izquierda: resumen ── */
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .head {
@@ -83,20 +71,18 @@ header.header { max-width: 82ch; }
   flex-direction: column;
   gap: var(--space-3);
   padding-bottom: var(--space-4);
-  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  border-bottom: var(--border-w-card) solid var(--color-blanco);
 }
-.cardInvert .head { border-bottom-color: var(--color-blanco); }
 .name { font-size: var(--fs-h3); }
 .nick {
   font-family: var(--font-mono);
   font-size: var(--fs-small);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-violeta);
 }
 
 .priceRow { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15em; }
-.priceLead { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); }
+.priceLead { font-family: var(--font-mono); font-size: var(--fs-small); }
 .priceMain {
   font-family: var(--font-display);
   font-weight: var(--fw-black);
@@ -104,20 +90,55 @@ header.header { max-width: 82ch; }
   line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
 }
-.note { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg-muted); margin-top: var(--space-1); }
+.note { font-family: var(--font-mono); font-size: var(--fs-small); margin-top: var(--space-1); }
 
-.desc { color: var(--fg-muted); font-size: var(--fs-small); }
+.desc { font-size: var(--fs-small); }
+/* la puerta a negociar va en blanco pleno (el resto del texto chico está al 72%): es lo que
+   convierte el "desde" en una invitación a charlar y no en letra chica. */
+.negotiation { font-size: var(--fs-small); font-weight: 600; }
 
-.features { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; }
+/* el CTA baja al pie de la columna para alinear con el final de las características */
+.cta { margin-top: auto; justify-content: center; }
+
+/* ── Columna derecha: todas las características, agrupadas por capa ── */
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8);
+  padding-left: var(--space-12);
+  border-left: var(--border-w-card) solid var(--color-blanco);
+}
+
+.group { display: flex; flex-direction: column; gap: var(--space-3); }
+.groupLabel {
+  display: flex;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.features { display: flex; flex-direction: column; gap: var(--space-2); }
 .feature { display: flex; gap: var(--space-2); align-items: flex-start; font-size: var(--fs-small); }
 .feature svg { flex-shrink: 0; margin-top: 0.2em; }
 
-.cta { margin-top: var(--space-2); justify-content: center; }
+/* tablet: el resumen arriba y las características abajo, separadas por una regla horizontal en
+   vez de la vertical. El CTA ya no tiene columna vecina con la cual alinear. */
+@media (max-width: 860px) {
+  .plan.plan { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); padding: var(--space-8); }
+  .groups {
+    padding-left: 0;
+    padding-top: var(--space-8);
+    border-left: none;
+    border-top: var(--border-w-card) solid var(--color-blanco);
+  }
+  .cta { margin-top: var(--space-2); }
+}
 
-/* mobile: "USD 1.500–3.000" a 2.1rem no entraba en la card y se partía en "USD 1.500–" /
-   "3.000" — un precio cortado se lee mal justo donde más importa. A esta escala entra en un
-   renglón hasta en 320px. */
 @media (max-width: 640px) {
-  .priceMain { font-size: clamp(1.45rem, 7.2vw, 2.1rem); white-space: nowrap; }
   .plan.plan { padding: var(--space-6) var(--space-4); }
+  .groups { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .priceMain { font-size: clamp(1.45rem, 7.2vw, 2.1rem); white-space: nowrap; }
 }

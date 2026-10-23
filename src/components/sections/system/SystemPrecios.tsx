@@ -1,68 +1,66 @@
 import styles from "./SystemPrecios.module.css";
-import { Section, SectionHeader, Grid, Col, Card, Button, Tag, AsteriskIcon, ScrollReveal } from "@/components/ui";
+import { Section, SectionHeader, Grid, Col, Card, Button, AsteriskIcon, ScrollReveal } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-type Tone = "accent" | "invert";
+// Un solo plan: el Sistema +uno. Antes convivían "Sistema +uno" e "Integral" (sistema + web);
+// ahora el precio es SOLO del sistema — la web se cotiza aparte en la landing principal. El
+// "desde" deja la puerta abierta a negociar el setup según la operación de cada negocio; el
+// soporte mensual es fijo. El CTA lleva a contacto, no a /#precios.
+const PLAN = {
+  name: "Sistema +uno",
+  nickname: "que no se escape una venta",
+  priceLead: "setup desde",
+  priceMain: "USD 3.000",
+  note: "+ soporte USD 250/mes",
+  description:
+    "El asistente con IA que atiende y califica en tus canales, el mini-CRM que ordena cada lead y el módulo de stock que ordena tu inventario. Todo el sistema, un solo criterio.",
+  negotiation: "El número final del setup se arma con vos, según tus canales, tu catálogo y tu equipo.",
+  cta: { label: "Armar mi sistema", href: "#contacto" },
+};
 
-interface Plan {
-  id: string;
-  name: string;
-  nickname: string;
-  priceLead?: string;
-  priceMain: string;
-  note: string;
-  description: string;
-  features: string[];
-  tone: Tone;
-  highlighted?: boolean;
-  cta: { label: string; href: string };
-}
-
-// Planes del Sistema +uno (Pilar 2). Viven acá, en /system: el pricing de la landing
-// principal ya no lista planes de sistema (solo web + horas), así que el CTA del pie
-// lleva a contacto, no a /#precios.
-const PLANS: Plan[] = [
+// Todas las características del sistema, agrupadas por capa (mismo orden que la página).
+const FEATURE_GROUPS: { index: string; label: string; features: string[] }[] = [
   {
-    id: "sistema",
-    name: "Sistema +uno",
-    nickname: "que no se escape una venta",
-    priceLead: "setup",
-    priceMain: "USD 600–1.200",
-    note: "+ abono USD 250/mes",
-    description: "El asistente con IA en WhatsApp que filtra y califica, más el mini-CRM que ordena cada lead solo.",
+    index: "01",
+    label: "asistente",
     features: [
-      "Asistente IA en WhatsApp",
-      "Filtro y calificación automática",
-      "Mini-CRM visual (tablero)",
-      "Integración multicanal",
+      "Asistente IA en WhatsApp, Instagram Direct y Messenger",
+      "Entiende lenguaje natural y responde con tu catálogo y tus precios",
+      "Filtro y calificación automática: frío, tibio o caliente",
+      "Reglas de calificación configuradas para tu rubro",
     ],
-    tone: "invert",
-    cta: { label: "Quiero automatizar", href: "#contacto" },
   },
   {
-    id: "integral",
-    name: "Sistema Integral",
-    nickname: "el combo completo",
-    priceLead: "desde",
-    priceMain: "USD 1.500–3.000",
-    note: "+ abono USD 350/mes",
-    description: "La web que capta + el asistente que filtra + el panel que ordena. Todo el sistema, un solo criterio.",
+    index: "02",
+    label: "panel · crm",
     features: [
-      "Landing o sitio a medida",
-      "Asistente IA en WhatsApp",
-      "Mini-CRM visual + módulo de stock",
-      "Acompañamiento continuo",
+      "Mini-CRM visual: tablero con etapas a tu medida",
+      "La charla completa de cada lead, en su ficha",
+      "Métricas y actividad del día, de un vistazo",
+      "Leads de formularios, Meta Ads, TikTok y Tienda Nube",
     ],
-    tone: "accent",
-    highlighted: true,
-    cta: { label: "Armar mi sistema", href: "#contacto" },
+  },
+  {
+    index: "03",
+    label: "stock",
+    features: [
+      "Productos y variantes (SKU), con categorías y subcategorías",
+      "Atributos configurables por rubro",
+      "Movimientos con historial e importaciones masivas",
+      "Alertas de stock bajo",
+    ],
+  },
+  {
+    index: "04",
+    label: "equipo y soporte",
+    features: [
+      "Roles por persona: dueño, encargado, vendedor",
+      "Datos separados por negocio y login seguro",
+      "Panel web, sin instalar nada — compu o celular",
+      "Acompañamiento continuo y mejoras",
+    ],
   },
 ];
-
-const TONE_CLASS: Record<Tone, string | undefined> = {
-  accent: styles.cardAccent,
-  invert: styles.cardInvert,
-};
 
 export function SystemPrecios() {
   return (
@@ -70,47 +68,56 @@ export function SystemPrecios() {
       <ScrollReveal>
         <SectionHeader
           eyebrow="cómo se cobra"
-          title="un setup, y después un abono. sin sorpresas."
-          intro="El setup arma tu motor: conecta tus canales, carga tu catálogo y deja todo funcionando. El abono cubre el hosting, el uso de IA y que el sistema siga andando y mejorando. El primer mes de abono va por nuestra cuenta."
+          title="un setup a tu medida. un soporte fijo. sin sorpresas."
+          intro="El setup arma tu motor: conecta tus canales, carga tu catálogo y deja todo funcionando. El soporte cubre el hosting, el uso de IA y que el sistema siga andando y mejorando. El primer mes de soporte va por nuestra cuenta."
           className={styles.header}
         />
       </ScrollReveal>
       <Grid>
-        {PLANS.map((plan, i) => (
-          <Col key={plan.id} span={12} md={6}>
-            <ScrollReveal direction={i === 0 ? "left" : "right"}>
-            <Card className={cn(styles.plan, TONE_CLASS[plan.tone])}>
-              {plan.highlighted ? <Tag className={styles.badge}>más elegido</Tag> : null}
+        <Col span={12}>
+          <ScrollReveal>
+            <Card className={cn(styles.plan, styles.cardInvert)}>
+              <div className={styles.summary}>
+                <div className={styles.head}>
+                  <h3 className={styles.name}>{PLAN.name}</h3>
+                  <span className={styles.nick}>&ldquo;{PLAN.nickname}&rdquo;</span>
+                </div>
 
-              <div className={styles.head}>
-                <h3 className={styles.name}>{plan.name}</h3>
-                <span className={styles.nick}>&ldquo;{plan.nickname}&rdquo;</span>
+                <div className={styles.priceRow}>
+                  <span className={styles.priceLead}>{PLAN.priceLead}</span>
+                  <span className={styles.priceMain}>{PLAN.priceMain}</span>
+                  <span className={styles.note}>{PLAN.note}</span>
+                </div>
+
+                <p className={styles.desc}>{PLAN.description}</p>
+                <p className={styles.negotiation}>{PLAN.negotiation}</p>
+
+                <Button href={PLAN.cta.href} variant="primary" className={styles.cta}>
+                  {PLAN.cta.label}
+                </Button>
               </div>
 
-              <div className={styles.priceRow}>
-                {plan.priceLead ? <span className={styles.priceLead}>{plan.priceLead}</span> : null}
-                <span className={styles.priceMain}>{plan.priceMain}</span>
-                <span className={styles.note}>{plan.note}</span>
-              </div>
-
-              <p className={styles.desc}>{plan.description}</p>
-
-              <ul className={styles.features}>
-                {plan.features.map((feature) => (
-                  <li key={feature} className={styles.feature}>
-                    <AsteriskIcon size={16} />
-                    {feature}
-                  </li>
+              <div className={styles.groups}>
+                {FEATURE_GROUPS.map((group) => (
+                  <div key={group.index} className={styles.group}>
+                    <h4 className={styles.groupLabel}>
+                      <span className={styles.groupIndex}>{group.index}</span>
+                      {group.label}
+                    </h4>
+                    <ul className={styles.features}>
+                      {group.features.map((feature) => (
+                        <li key={feature} className={styles.feature}>
+                          <AsteriskIcon size={16} />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
-
-              <Button href={plan.cta.href} variant="primary" className={styles.cta}>
-                {plan.cta.label}
-              </Button>
+              </div>
             </Card>
-            </ScrollReveal>
-          </Col>
-        ))}
+          </ScrollReveal>
+        </Col>
       </Grid>
     </Section>
   );
