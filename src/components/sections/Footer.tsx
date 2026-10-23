@@ -154,10 +154,13 @@ export function Footer() {
                 <div className={styles.divider} aria-hidden="true" />
                 <div className={styles.bottom}>
                     {/* la segunda línea es la identidad legal: Meta la lee al verificar el negocio
-                        (nombre legal del monotributo → más uno → Actus). */}
+                        (nombre legal del monotributo → más uno → Actus). El nombre va LITERAL como
+                        figura en la constancia de ARCA ("SINGH LUCAS MIGUEL", apellido primero):
+                        Meta compara el texto del HTML, no lo que pinta el CSS, y con
+                        "Lucas Miguel Singh" rechazó la verificación (2026-10). */}
                     <p className={styles.legal}>
                         <span>© 2026 más uno · diseño web + automatización, a medida.</span>
-                        <span>más uno es el nombre comercial de Lucas Miguel Singh · CUIT 20-31223903-6</span>
+                        <span>más uno es el nombre comercial de SINGH LUCAS MIGUEL · CUIT 20-31223903-6</span>
                     </p>
                     <a href="mailto:hola@masuno.io" className={styles.email}>
                         hola@masuno.io
