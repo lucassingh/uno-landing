@@ -1,12 +1,11 @@
 import styles from "./Proyectos.module.css";
-import { Section, Container, SectionHeader, CircularGallery } from "@/components/ui";
-import type { GalleryItem } from "@/components/ui";
-import { ProyectosMobileList } from "./ProyectosMobileList";
+import { Section, SectionHeader, ScrollReveal } from "@/components/ui";
+import { ProyectosFeed, type Project } from "./ProyectosFeed";
 
 // campIA y Actus van primero: son productos propios de +uno (no trabajos para clientes) y el
 // texto lo dice, para que quien revise la marca (por ejemplo Meta, con el nombre de WhatsApp
 // de cada uno) vea la relación entre masuno.io y el sitio de cada producto.
-const PROJECTS: GalleryItem[] = [
+const PROJECTS: Project[] = [
     {
         id: "campia",
         number: "01",
@@ -91,46 +90,17 @@ const PROJECTS: GalleryItem[] = [
 
 export function Proyectos() {
     return (
-        <Section id="proyectos" bg="default" contained={false} className={styles.proyectos}>
-            <div className={styles.pinned}>
-            <div className={styles.stickyHeader}>
-                <Container>
-                    <SectionHeader
-                        title="trabajos reales"
-                        intro="Cada proyecto, con su propia lógica y su propia tecnología."
-                        align="center"
-                    />
-                    <svg
-                        className={styles.swipeHint}
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
-                    >
-                        <path d="M2 7v10" />
-                        <path d="M6 5v14" />
-                        <rect width="12" height="18" x="10" y="3" rx="2" />
-                    </svg>
-                </Container>
-            </div>
-
-            {/* desktop: galería pineada con drag — "asombro y espectáculo" (Lucas). En touch,
-                mezclar scroll-lock de la sección con drag horizontal es un gesto confuso, así que
-                mobile usa una lista vertical simple en su lugar (mismo contenido, cero JS de
-                drag/pin) — toggle puramente CSS, las dos existen en el DOM siempre. */}
-            <div className={styles.desktopGallery}>
-                <CircularGallery items={PROJECTS} />
-            </div>
-
-            <Container className={styles.mobileListWrap}>
-                <ProyectosMobileList projects={PROJECTS} />
-            </Container>
-            </div>
+        <Section id="proyectos" bg="default" className={styles.proyectos}>
+            <ScrollReveal>
+                <SectionHeader
+                    title="trabajos reales"
+                    intro="Cada proyecto, con su propia lógica y su propia tecnología."
+                    align="center"
+                />
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+                <ProyectosFeed projects={PROJECTS} />
+            </ScrollReveal>
         </Section>
     );
 }

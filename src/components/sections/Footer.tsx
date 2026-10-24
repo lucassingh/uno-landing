@@ -14,8 +14,9 @@ const COLUMNS: FooterColumn[] = [
         title: "Navegación",
         links: [
             { label: "Servicios", href: "#servicios" },
-            { label: "Sistema +uno", href: "#sistema" },
+            { label: "Apps a medida", href: "#apps" },
             { label: "Método", href: "#metodo" },
+            { label: "Casos de éxito", href: "#casos" },
             { label: "Proyectos", href: "#proyectos" },
             { label: "Precios", href: "#precios" },
         ],
@@ -159,7 +160,7 @@ export function Footer() {
                         Meta compara el texto del HTML, no lo que pinta el CSS, y con
                         "Lucas Miguel Singh" rechazó la verificación (2026-10). */}
                     <p className={styles.legal}>
-                        <span>© 2026 más uno · diseño web + automatización, a medida.</span>
+                        <span>© 2026 más uno · diseño web + apps, a medida.</span>
                         <span>más uno es el nombre comercial de SINGH LUCAS MIGUEL · CUIT 20-31223903-6</span>
                     </p>
                     <a href="mailto:hola@masuno.io" className={styles.email}>

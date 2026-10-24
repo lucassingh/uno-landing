@@ -4,11 +4,11 @@ import styles from "./links.module.css";
 export const metadata: Metadata = {
   title: "+uno — links",
   description:
-    "MÁS UNO · webs a medida que venden y automatización de leads. Agendá tu reunión gratis o conocé la web.",
+    "MÁS UNO · webs que venden y apps a medida. Agendá tu reunión gratis o conocé la web.",
   openGraph: {
     title: "+uno — links",
     description:
-      "Webs a medida que venden y automatización de leads. Agendá tu reunión gratis.",
+      "Webs que venden y apps a medida. Agendá tu reunión gratis.",
     type: "website",
   },
 };
@@ -59,14 +59,14 @@ export default function LinksPage() {
         </div>
 
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>web + automatización</p>
+          <p className={styles.eyebrow}>web + apps</p>
           <h1 className={styles.h1}>
             no sos uno más.
             <br />
             <span className={styles.soft}>tu web tampoco.</span>
           </h1>
           <p className={styles.sub}>
-            webs a medida que venden y automatización de leads. elegí por dónde seguir.
+            webs que venden y apps a medida. elegí por dónde seguir.
           </p>
         </header>
 

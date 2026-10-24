@@ -1,103 +1,228 @@
 .proyectos {
 }
 
-/* header + galería van juntos en .pinned (una sola unidad). Antes el header era sticky y la
-   galería fluía por debajo INDEPENDIENTE: al scrollear, las cards subían por detrás del header y
-   se recortaban las badges de arriba — peor cuanto más altas. Al agrupar, header y cards se mueven
-   como una pieza: las cards SIEMPRE quedan debajo del header (cero recorte) y, al ser más altas
-   que el viewport, sobresalen por ABAJO (Proyectos es la última sección, no tapan nada). El sticky
-   top:7rem da un pin corto al entrar (el título asoma bajo el navbar) y después el bloque scrollea
-   normal, título incluido. */
-.pinned {
-  position: sticky;
-  top: 7rem;
-  z-index: 5;
+/* ============================================================
+   Feed de proyectos (ver ProyectosFeed.tsx): grilla tipo perfil de
+   Instagram — tiles parejos, 3 / 2 / 1 columnas — con paginado abajo.
+   Las columnas TIENEN que coincidir con usePageSize() del componente
+   (6 / 4 / 3 por página) para que cada página llene filas completas.
+   ============================================================ */
+
+/* ancla del scroll al cambiar de página: frena debajo del navbar flotante, mismo criterio que
+   el scroll-margin-top de Section. */
+.feed { scroll-margin-top: 7rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gap);
 }
 
-/* relative: ancla el swipe hint (absolute). Fondo opaco por prolijidad del bloque. */
-.stickyHeader {
-  position: relative;
-  z-index: 5;
-  background: var(--bg);
-  padding-bottom: var(--space-4);
+@media (max-width: 1023px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
-/* ícono de "deslizá" debajo del subtítulo: pista visual de que la galería de abajo se arrastra.
-   El SectionHeader de arriba ya trae su propio margin-bottom — este solo se resta un poco para
-   que el ícono quede pegado al texto en vez de flotar a mitad de camino hacia la galería. */
-.swipeHint {
-  display: block;
-  /* posicionado absoluto para caer dentro del padding-top de la galeria (96px), pegado a las
-     cards y no al subtitulo — sin agrandar el header (que empujaria la galeria y no cerraria el
-     gap). Centrado con left+margin-left para dejar libre el transform para la animacion. */
-  position: absolute;
-  left: 50%;
-  margin-left: -16px;
-  bottom: 0;
-  color: var(--color-tinta);
-  transition: color var(--dur) var(--ease);
-  animation: swipeNudge 1.7s var(--ease) infinite;
-}
-
-.swipeHint:hover {
-  color: var(--color-violeta);
-}
-
-/* mismo lenguaje que el scroll hint: micro-movimiento en loop (aca horizontal, porque el carrusel
-   se arrastra de costado). */
-@keyframes swipeNudge {
-  0%, 100% { transform: translateX(0); }
-  50%      { transform: translateX(5px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .swipeHint { animation: none; }
-}
-
-/* ---- mobile: lista simple en vez de la galería pineada+drag (ver Proyectos.tsx) ---- */
-.mobileListWrap { display: none; }
-.mobileList { display: none; }
 
 @media (max-width: 720px) {
-  .desktopGallery,
-  .swipeHint {
-    display: none;
-  }
-  /* sin pin en mobile: el bloque (header + lista) es varias pantallas de alto, el sticky solo
-     sumaba un "enganche" raro al entrar a la sección. */
-  .pinned { position: static; }
-  .stickyHeader { padding-bottom: 0; }
-  .mobileListWrap { display: block; }
-  .mobileList {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-  }
+  .grid { grid-template-columns: minmax(0, 1fr); }
 }
 
-.mobileMore { display: flex; justify-content: center; margin-top: var(--space-8); }
-.mobileMoreBtn { width: 100%; justify-content: center; }
+/* sin aspect-ratio a propósito: con aspect-ratio un tile de texto largo crece solo y la fila
+   queda despareja. min-height da la proporción "casi cuadrada" del feed y el stretch normal del
+   grid empareja el alto de toda la fila al tile más alto. */
+.item { display: flex; }
 
-.mobileCard {
-  display: block;
+.tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 22rem;
+  padding: var(--space-6);
   border: var(--border-w-card) solid var(--color-tinta);
   border-radius: var(--radius-lg);
+  /* blanco / navy alternado por índice (.tileInvert, ver ProjectTile): sin fotos, esto + la
+     trama + el número grande son lo que distingue un tile del otro. */
   background: var(--color-blanco);
+  color: var(--color-tinta);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+/* tile navy: mismo lenguaje que .cardInvert de Pricing. --border es la variable que usa Tag
+   para su contorno — pisarla acá pasa los chips de tecnología a blanco sin tocar Tag. La
+   sombra del hover sigue navy: contra el crema de la sección se ve igual. */
+.tileInvert {
+  --border: var(--color-blanco);
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+}
+.tileInvert .tileDescription { color: color-mix(in srgb, var(--color-blanco) 75%, transparent); }
+.tileInvert .tileArrow {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--color-blanco) 60%, transparent);
+}
+.tileInvert:hover .tileArrow,
+.tileInvert:focus-visible .tileArrow {
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+}
+/* la trama hace de "foto" del tile: llena la parte de arriba y se desvanece antes del texto,
+   así nunca compite con la descripción. */
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: var(--tile-pattern);
+  /* solo cuenta para la trama de puntos (radial-gradient sin repeating-); las otras dos se
+     repiten solas — mismo detalle que en CircularGallery. */
+  background-size: 25px 25px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* sombra dura SOLO al hover (regla de cards del sitio) + la flecha se rellena */
+.tile:hover,
+.tile:focus-visible {
   box-shadow: var(--shadow-hard);
-  padding: var(--space-6);
+  transform: translate(-2px, -2px);
 }
-.mobileNumber {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: var(--ls-label);
-  font-weight: var(--fw-bold);
-  color: var(--color-violeta);
+
+.tileTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
 }
-.mobileTitle {
+
+.tileNumber {
   font-family: var(--font-display);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+
+.tileArrow {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 50%;
+  background: var(--color-blanco);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.tile:hover .tileArrow,
+.tile:focus-visible .tileArrow {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+}
+
+.tileTitle {
   font-size: var(--fs-h3);
+  margin-top: auto;
+}
+
+.tileDescription {
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+
+.tileTech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   margin-top: var(--space-2);
 }
-.mobileDescription { color: var(--fg-muted); margin-top: var(--space-2); }
-.mobileTech { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .tile { min-height: 20rem; }
+}
+
+/* ---- paginado: fila de "ficha técnica" — contador a la izquierda, páginas a la derecha ---- */
+.pagerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: var(--border-w-card) solid var(--color-tinta);
+}
+
+.pagerStatus {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+}
+
+.pagerTotal {
+  font-weight: var(--fw-regular);
+  color: var(--fg-muted);
+}
+
+.pager { display: flex; align-items: center; gap: var(--space-2); }
+.pagerList { display: flex; align-items: center; gap: var(--space-2); }
+
+/* 44px: área táctil mínima recomendada (WCAG 2.5.5) */
+.pagerBtn {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: 50%;
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease),
+    background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.pagerBtn:hover:not(:disabled):not(.pagerBtnActive) {
+  box-shadow: var(--shadow-hard-sm);
+  transform: translate(-2px, -2px);
+}
+
+.pagerBtn:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.pagerBtnActive {
+  background: var(--color-tinta);
+  color: var(--color-crema);
+  cursor: default;
+}
+
+.pagerBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .pagerRow { flex-direction: column-reverse; gap: var(--space-4); }
+}

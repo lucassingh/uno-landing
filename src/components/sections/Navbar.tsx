@@ -11,7 +11,7 @@ const NAV_ITEMS: CardNavItem[] = [
     textColor: "#FFFAE5", // --color-crema
     links: [
       { label: "Diseño web", href: "#servicios", ariaLabel: "Ir a Servicios" },
-      { label: "Sistema +uno", href: "#sistema", ariaLabel: "Ir a Sistema +uno" },
+      { label: "Apps a medida", href: "#apps", ariaLabel: "Ir a Apps a medida" },
     ],
   },
   {
@@ -19,7 +19,7 @@ const NAV_ITEMS: CardNavItem[] = [
     bgColor: "#3A10E5", // --color-violeta
     textColor: "#FFFFFF",
     links: [
-      { label: "Casos", href: "#proyectos", ariaLabel: "Ir a Proyectos" },
+      { label: "Casos de éxito", href: "#casos", ariaLabel: "Ir a Casos de éxito" },
       { label: "Precios", href: "#precios", ariaLabel: "Ir a Precios" },
     ],
   },

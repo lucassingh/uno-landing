@@ -4,9 +4,9 @@ import "./globals.css";
 import { fontVariables } from "@/lib/fonts";
 import { LoaderProvider } from "@/components/ui/Loader";
 
-const title = "más uno — diseño web + automatización, a medida";
+const title = "más uno — diseño web + apps, a medida";
 const description =
-  "Sitios a medida, IA que atiende tu WhatsApp las 24 horas y un mini-CRM para tus leads. Diseño web + automatización, sin plantillas ni relleno.";
+  "Webs que venden y apps a medida para ordenar tu negocio, con la infraestructura y el soporte incluidos. Sin plantillas ni relleno.";
 
 export const metadata: Metadata = {
   title,

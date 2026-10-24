@@ -2,7 +2,7 @@
   "name": "masuno-landing",
   "version": "0.1.0",
   "private": true,
-  "description": "Landing de +1 / más uno — diseño web + automatización, a medida",
+  "description": "Landing de +1 / más uno — diseño web + apps, a medida",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

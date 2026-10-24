@@ -83,45 +83,91 @@
 .cta { margin-top: var(--space-2); justify-content: center; }
 
 /* ============================================================
-   v3 — extensiones: separación entre bloques, card de horas de
-   desarrollo, bloques de cierre (asesoría + sistema) y add-on.
+   v3 — extensiones: separación entre bloques, acompañamiento,
+   bloques de cierre (horas + asesoría) y add-on.
    ============================================================ */
 
-/* separación entre el grid de tiers, la card de horas y los bloques de cierre */
+/* separación entre la tabla, el acompañamiento y los bloques de cierre */
 .blockGap { margin-top: var(--space-12); }
 
-/* ── Card de horas de desarrollo: bloque ancho, layout horizontal (texto | precio+CTA) ── */
-.plan.devCard {
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(var(--space-6), 4vw, var(--space-16));
-}
-.devText { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
-.devTitle { font-size: var(--fs-h2); }
-.devDesc {
-  color: color-mix(in srgb, var(--color-blanco) 72%, transparent);
-  font-size: var(--fs-body);
-  max-width: 60ch;
-}
-.devAside {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
-  flex-shrink: 0;
-}
-.devAside .cta { margin-top: 0; }
+/* wrapper del ScrollReveal de cada bloque de cierre: tiene que llenar el alto del Col (que el
+   grid ya estira) para que el height:100% del Card resuelva y las dos cards queden parejas. */
+.fill { height: 100%; }
 
-@media (max-width: 760px) {
-  .plan.devCard { flex-direction: column; align-items: flex-start; }
-  .devAside { align-items: stretch; width: 100%; }
-}
-
-/* ── Bloques de cierre (asesoría + sistema): misma familia visual que las cards de precio,
-   con la descripción tomando el alto sobrante para que el CTA quede siempre abajo. ── */
+/* ── Bloques de cierre (horas de desarrollo + asesoría): misma familia visual que las cards
+   de precio, con la descripción tomando el alto sobrante para que precio/CTA queden siempre
+   abajo, a la misma altura en las dos. ── */
 .closeTitle { font-size: var(--fs-h3); }
 .closeDesc { color: var(--fg-muted); font-size: var(--fs-small); flex: 1; }
+.cardInvert .closeDesc { color: color-mix(in srgb, var(--color-blanco) 72%, transparent); }
+
+/* ── Acompañamiento (amarillo, a lo ancho): texto + precio a la izquierda, lo que incluye a la
+   derecha como ficha técnica, y una línea de letra chica abajo de todo. Sobre amarillo el
+   --fg-muted no da contraste AA en texto chico (~4:1), así que los grises de este bloque son
+   navy al 80%. ── */
+.plan.careCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "main list"
+    "foot foot";
+  column-gap: clamp(var(--space-8), 5vw, var(--space-16));
+  row-gap: var(--space-8);
+  padding: clamp(var(--space-6), 4vw, var(--space-12));
+}
+.careCard .note,
+.careCard .priceLead { color: color-mix(in srgb, var(--color-tinta) 80%, transparent); }
+
+.careMain { grid-area: main; display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.careTitle { font-size: var(--fs-h2); }
+.careDesc { color: color-mix(in srgb, var(--color-tinta) 80%, transparent); max-width: 52ch; }
+.careMain .priceRow { margin-top: var(--space-2); }
+.careAnnual { font-family: var(--font-mono); font-size: var(--fs-small); }
+
+.careList {
+  grid-area: list;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  border-top: var(--border-w-card) solid var(--color-tinta);
+}
+.careItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-bottom: var(--border-w-card) solid var(--color-tinta);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+}
+.careCheck {
+  flex: 0 0 auto;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--color-tinta);
+  color: var(--color-amarillo);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.careFoot {
+  grid-area: foot;
+  padding-top: var(--space-6);
+  border-top: var(--border-w-card) dashed var(--color-tinta);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: color-mix(in srgb, var(--color-tinta) 80%, transparent);
+}
+
+@media (max-width: 860px) {
+  .plan.careCard {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "main" "list" "foot";
+  }
+}
 
 /* add-on branding: línea discreta y centrada al pie de la sección, en la letra técnica
    (mono) — no en mayúscula/tracking como los eyebrows, es una oración con puntuación real,

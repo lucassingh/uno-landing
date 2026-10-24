@@ -1,0 +1,332 @@
+.casos {
+}
+
+/* ============================================================
+   Casos de éxito — pestañas (la escala de cada solución) + un
+   panel por caso. Ver Casos.tsx.
+   ============================================================ */
+
+/* ---- pestañas: tres fichas parejas; la activa, navy con barra amarilla ---- */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  margin-bottom: var(--space-6);
+}
+
+.tab {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-6);
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  text-align: left;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.tab:hover:not(.tabActive) {
+  box-shadow: var(--shadow-hard-sm);
+  transform: translate(-2px, -2px);
+}
+.tabActive {
+  background: var(--color-tinta);
+  color: var(--color-blanco);
+}
+.tabActive::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--color-amarillo);
+}
+
+.tabMeta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.tabCliente {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  line-height: 1.15;
+}
+
+/* ---- panel del caso: encabezado a lo ancho; abajo, a la izquierda el antes → después con el
+   resultado y el link, a la derecha la cita y las listas. Sombra dura siempre visible (como los
+   bloques de Pricing): es un bloque de lectura, no una card interactiva. ---- */
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    "head head"
+    "visual text";
+  align-items: start;
+  column-gap: clamp(var(--space-8), 4vw, var(--space-16));
+  row-gap: var(--space-8);
+  padding: clamp(var(--space-6), 4vw, var(--space-12));
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  box-shadow: var(--shadow-hard);
+}
+
+/* desktop/tablet: un caso a la vez (el corte de mobile, más abajo, los muestra a todos) */
+@media (min-width: 861px) {
+  .panelInactive { display: none; }
+  .panelActive { animation: panelIn 0.45s var(--ease); }
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.text { grid-area: text; display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+
+/* encabezado: cliente a la izquierda, "ver el sitio" a la derecha alineado a la base del
+   nombre. flex-wrap: en pantallas angostas el link baja solo debajo del nombre. */
+.head {
+  grid-area: head;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: var(--border-w-card) dashed color-mix(in srgb, var(--color-tinta) 35%, transparent);
+}
+.headText { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-violeta);
+}
+.cliente { font-size: var(--fs-h3); }
+.rubro {
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-small);
+  letter-spacing: normal;
+  color: var(--fg-muted);
+}
+
+/* cita: misma comilla gigante y translúcida de Testimonios, detrás del texto */
+.quote { position: relative; }
+.quoteMark {
+  position: absolute;
+  top: -1.6rem;
+  left: -0.6rem;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(5rem, 8vw, 7rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-tinta) 12%, transparent);
+  pointer-events: none;
+}
+.quoteText {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.quoteAutor {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+/* lo que pasaba | lo que hicimos */
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: var(--border-w-card) dashed color-mix(in srgb, var(--color-tinta) 35%, transparent);
+}
+
+.label {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+.list { display: flex; flex-direction: column; gap: var(--space-3); }
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+
+/* dolor: rombo hueco (pendiente); solución: check relleno (resuelto) */
+.markPain {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin: 0.45em 0.3rem 0;
+  border: 1.5px solid var(--color-tinta);
+  transform: rotate(45deg);
+}
+.markFix {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--color-tinta);
+  color: var(--color-amarillo);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip {
+  padding: 0.45em 0.9em;
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-pill);
+  background: var(--color-amarillo);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.link {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-bottom: 2px;
+  border-bottom: var(--border-w-card) solid currentColor;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color var(--dur) var(--ease);
+}
+.link:hover { color: var(--color-violeta); }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.visual {
+  grid-area: visual;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+/* ---- antes → después de cada caso, en el lenguaje de plano de la sección Apps ---- */
+.board {
+  --line: color-mix(in srgb, var(--color-blanco) 8%, transparent);
+  padding: clamp(var(--space-6), 3vw, var(--space-8));
+  border: var(--border-w-card) solid var(--color-tinta);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-tinta);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--color-blanco);
+  box-shadow: var(--shadow-hard);
+}
+.boardBar {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
+  border-bottom: var(--border-w-card) dashed color-mix(in srgb, var(--color-blanco) 25%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-blanco) 65%, transparent);
+}
+.boardRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.1fr);
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-bottom: var(--border-w-card) dashed color-mix(in srgb, var(--color-blanco) 18%, transparent);
+}
+.boardRow:last-child { border-bottom: none; }
+.boardAntes {
+  font-size: var(--fs-small);
+  color: color-mix(in srgb, var(--color-blanco) 60%, transparent);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--color-blanco) 45%, transparent);
+}
+.boardArrow {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--color-amarillo);
+}
+.boardDespues {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+.boardRowBig .boardAntes { font-size: var(--fs-body); }
+.boardRowBig .boardDespues {
+  font-weight: var(--fw-black);
+  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  color: var(--color-amarillo);
+}
+
+/* ============================================================
+   Breakpoints
+   ============================================================ */
+
+/* tablet: dos columnas quedaban angostas — una sola, con el antes → después (+ resultado y
+   link) inmediatamente debajo del encabezado y la cita/listas al final */
+@media (max-width: 1023px) {
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "visual" "text";
+  }
+}
+
+/* mobile: sin pestañas, los tres casos apilados */
+@media (max-width: 860px) {
+  .tabs { display: none; }
+  .panels { display: flex; flex-direction: column; gap: var(--space-8); }
+  .compare { grid-template-columns: minmax(0, 1fr); }
+  .boardRow { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: var(--space-3); }
+}
