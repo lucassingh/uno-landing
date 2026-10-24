@@ -40,7 +40,7 @@ export function Hero() {
             <Logo variant="wordmark" />
           </motion.div>
           <motion.div variants={shouldReduceMotion ? undefined : item}>
-            <Eyebrow className={styles.tagline}>Diseño web + automatización, a medida</Eyebrow>
+            <Eyebrow className={styles.tagline}>Diseño web + apps, a medida</Eyebrow>
           </motion.div>
         </motion.div>
         <div className={styles.visual}>

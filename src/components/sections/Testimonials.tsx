@@ -20,7 +20,7 @@ const TESTIMONIOS: Testimonial[] = [
     name: "Marina Alsina",
     role: "Contadora, Estudio Almenar",
     quote:
-      "Dejamos de perder turnos por WhatsApp cruzado. La calculadora de honorarios sola nos ahorra media hora por consulta, y eso que discutimos cada coma del texto.",
+      "Dejamos de perder turnos entre la agenda de papel y los mensajes. La calculadora de honorarios sola nos ahorra media hora por consulta, y eso que discutimos cada coma del texto.",
   },
   {
     id: "trigo",
@@ -55,7 +55,7 @@ const TESTIMONIOS: Testimonial[] = [
     name: "Emiliano Roca",
     role: "Gerente, Distribuidora del Norte",
     quote:
-      "No existíamos en internet. Hoy nos encuentran clientes que ni sabíamos que estaban buscándonos, y el WhatsApp ya no se nos llena de curiosos.",
+      "No existíamos en internet. Hoy nos encuentran clientes que ni sabíamos que estaban buscándonos, y los pedidos ya no se nos pierden en una planilla.",
   },
 ];
 

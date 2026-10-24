@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Imagen de preview al compartir el link (WhatsApp, LinkedIn, X). Edge: el runtime de Node
 // de next/og rompe en Windows ("Invalid URL"), y en edge la imagen queda cacheada en el CDN.
 export const runtime = "edge";
-export const alt = "más uno — diseño web + automatización, a medida";
+export const alt = "más uno — diseño web + apps, a medida";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -11,7 +11,7 @@ const TINTA = "#031844";
 const CREMA = "#FFFAE5";
 const AMARILLO = "#FFD300";
 
-const HEADLINE = "Diseño web + automatización,";
+const HEADLINE = "Diseño web + apps,";
 const ACCENT = "a medida.";
 
 // Satori no lee woff2 (las fuentes locales del sitio), así que Montserrat se baja como TTF

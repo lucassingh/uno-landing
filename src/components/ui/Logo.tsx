@@ -27,7 +27,7 @@ export function Logo({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={SOURCES[variant]}
-      alt="más uno — diseño web + automatización, a medida"
+      alt="más uno — diseño web + apps, a medida"
       className={cn(styles.logo, className)}
       style={style}
     />

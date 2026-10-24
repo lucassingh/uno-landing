@@ -17,9 +17,10 @@ interface Plan {
 // PRICING v3 (ver docs/nuevo_plan_negocio/Plan-Comercial-+uno-v3-FINAL.md §6-7):
 // tres planes de web por complejidad de producto, en UNA tabla comparativa (no tres cards
 // sueltas) — así las tres columnas comparten exactamente el mismo alto por diseño, en vez de
-// perseguirlo con CSS. La asesoría (gancho gratis) y el Sistema +uno (que vive en /system)
-// van como bloques de cierre aparte. La card de horas de desarrollo es un bloque diferenciado
-// aparte. El destacado ("más elegido") vive en Sitio Pro, la mejor relación valor/precio.
+// perseguirlo con CSS. Debajo: el acompañamiento mensual (con la infra incluida) a lo ancho, y
+// cierran horas de desarrollo + asesoría (gancho gratis) lado a lado. El destacado ("más
+// elegido") vive en Sitio Pro, la mejor relación valor/precio.
+// 2026-10-24: sin la card del Sistema +uno (pospuesto) — su lugar lo toma el acompañamiento.
 const WEB_PLANS: [Plan, Plan, Plan] = [
     {
         id: "landing",
@@ -68,7 +69,7 @@ const FEATURE_ROWS: { label: string; values: [CellValue, CellValue, CellValue] }
         values: [{ state: "no" }, { state: "yes" }, { state: "partial", note: "según el proyecto" }],
     },
     {
-        label: "Hosting y dominio: te ayudo a dejarlo andando",
+        label: "Puesta en marcha: dominio, hosting y SSL",
         values: [{ state: "yes" }, { state: "yes" }, { state: "yes" }],
     },
     {
@@ -91,6 +92,25 @@ const FEATURE_ROWS: { label: string; values: [CellValue, CellValue, CellValue] }
         label: "Iteraciones incluidas",
         values: [{ state: "no" }, { state: "yes" }, { state: "partial", note: "según alcance" }],
     },
+    {
+        label: "Acompañamiento: infra + soporte",
+        values: [{ text: "USD 250/mes" }, { text: "USD 250/mes" }, { text: "a cotizar" }],
+    },
+];
+
+/** Lo que cubre el acompañamiento mensual (operaciones/01-infraestructura-por-cliente §04 +
+ * contrato, cláusula 7.2). Sin nombres de proveedores a propósito: el doc de infra lo plantea
+ * como "todo incluido, de nada te tenés que ocupar", no como un desglose de costos. El dominio
+ * NO va acá: se registra a nombre (y a cargo) del cliente — por eso dice "DNS", no "dominio". */
+const ACOMPANAMIENTO = [
+    "Hosting y servidor",
+    "Base de datos",
+    "DNS y certificado SSL",
+    "Backups semanales, fuera del servidor",
+    "Monitoreo de caídas y errores",
+    "Corrección de errores y parches de seguridad",
+    "Soporte por WhatsApp y email",
+    "Horas mensuales para mejoras",
 ];
 
 function CheckIcon() {
@@ -286,60 +306,83 @@ export function Pricing() {
                 <MobilePlanCards />
             </ScrollReveal>
 
-            {/* ── Card diferenciada: horas de desarrollo (otro modelo de compra, por horas) ── */}
+            {/* ── Acompañamiento: el mensual que se suma a cualquier plan, con la infra adentro.
+                A lo ancho y en amarillo (el acento que antes tenía la card del Sistema +uno):
+                es lo que más preguntas ahorra ("¿y el hosting? ¿y si se cae?"). ── */}
             <ScrollReveal className={styles.blockGap}>
-                <Card className={cn(styles.plan, styles.cardInvert, styles.devCard)}>
-                    <div className={styles.devText}>
-                        <Eyebrow>horas de desarrollo</Eyebrow>
-                        <h3 className={styles.devTitle}>¿tenés algo digital para construir?</h3>
-                        <p className={styles.devDesc}>
-                            Contratá horas de desarrollo full-stack y usalas para lo que necesites: sumar una feature,
-                            matar un bug que no te deja dormir, prototipar una idea o llevar tu producto de cero a algo
-                            que funcione. Vos traés el proyecto; yo pongo las horas.
+                <Card className={cn(styles.plan, styles.cardAccent, styles.careCard)}>
+                    <div className={styles.careMain}>
+                        <Eyebrow>acompañamiento · infra incluida</Eyebrow>
+                        <h3 className={styles.careTitle}>todo incluido, de nada te tenés que ocupar</h3>
+                        <p className={styles.careDesc}>
+                            El lanzamiento no es el final: ahí arrancamos. Tu web queda corriendo en nuestra
+                            infraestructura y la cuidamos nosotros — sin cuentas técnicas que crear ni servidores
+                            que pagar aparte.
+                        </p>
+                        <div className={styles.priceRow}>
+                            <span className={styles.priceMain}>USD 250</span>
+                            <span className={styles.note}>por mes · contrato de 12 meses</span>
+                        </div>
+                        <p className={styles.careAnnual}>
+                            o <strong>USD 2.550</strong> pagando el año por adelantado (−15%)
                         </p>
                     </div>
-                    <div className={styles.devAside}>
-                        <div className={styles.priceRow}>
-                            <span className={styles.priceLead}>desde</span>
-                            <span className={styles.priceMain}>USD 14</span>
-                            <span className={styles.note}>por hora</span>
-                        </div>
-                        <Button href="#contacto" variant="primary" className={styles.cta}>
-                            Reservar horas
-                        </Button>
-                    </div>
+
+                    <ul className={styles.careList} aria-label="Qué incluye el acompañamiento">
+                        {ACOMPANAMIENTO.map((item) => (
+                            <li key={item} className={styles.careItem}>
+                                <span className={styles.careCheck} aria-hidden="true">
+                                    <CheckIcon />
+                                </span>
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <p className={styles.careFoot}>
+                        Se suma a la Landing y al Sitio Pro; en web apps se cotiza según el proyecto. El dominio va
+                        a tu nombre y, si algún día te querés ir, te llevás todo: código, datos y usuarios.
+                    </p>
                 </Card>
             </ScrollReveal>
 
-            {/* ── Cierre: asesoría gratis (gancho) + Sistema +uno (redirige a /system) ── */}
+            {/* ── Cierre: horas de desarrollo (otro modelo de compra) + asesoría gratis (gancho).
+                .fill en cada reveal: sin eso el wrapper animado queda con el alto de su contenido
+                y las dos cards no se emparejan aunque el Col sí se estire. ── */}
             <Grid className={styles.blockGap}>
                 <Col span={12} md={6}>
-                    <ScrollReveal direction="left">
-                        <Card className={cn(styles.plan, styles.closeBlock)}>
-                            <Eyebrow>sin cargo</Eyebrow>
-                            <h3 className={styles.closeTitle}>¿no sabés cuál necesitás?</h3>
+                    <ScrollReveal direction="left" className={styles.fill}>
+                        <Card className={cn(styles.plan, styles.cardInvert, styles.closeBlock)}>
+                            <Eyebrow>horas de desarrollo</Eyebrow>
+                            <h3 className={styles.closeTitle}>¿tenés algo digital para construir?</h3>
                             <p className={styles.closeDesc}>
-                                Te hago un diagnóstico de tu web y tu flujo de leads. Aunque no trabajemos juntos,
-                                te llevás valor.
+                                Contratá horas de desarrollo full-stack y usalas para lo que necesites: sumar una
+                                feature, matar un bug que no te deja dormir, prototipar una idea o llevar tu producto
+                                de cero a algo que funcione. Vos traés el proyecto; yo pongo las horas.
                             </p>
-                            <Button href="#contacto" variant="outline" className={styles.cta}>
-                                Reservá tu charla
+                            <div className={styles.priceRow}>
+                                <span className={styles.priceLead}>desde</span>
+                                <span className={styles.priceMain}>USD 14</span>
+                                <span className={styles.note}>por hora</span>
+                            </div>
+                            <Button href="#contacto" variant="primary" className={styles.cta}>
+                                Reservar horas
                             </Button>
                         </Card>
                     </ScrollReveal>
                 </Col>
 
                 <Col span={12} md={6}>
-                    <ScrollReveal direction="right">
-                        <Card className={cn(styles.plan, styles.cardAccent, styles.closeBlock)}>
-                            <Eyebrow>el sistema +uno</Eyebrow>
-                            <h3 className={styles.closeTitle}>que no se te escape ni una venta</h3>
+                    <ScrollReveal direction="right" className={styles.fill}>
+                        <Card className={cn(styles.plan, styles.closeBlock)}>
+                            <Eyebrow>sin cargo</Eyebrow>
+                            <h3 className={styles.closeTitle}>¿no sabés cuál necesitás?</h3>
                             <p className={styles.closeDesc}>
-                                Automatizá la atención con IA y ordená tus leads en un panel simple.
-                                Setup a tu medida + soporte mensual, con todo el detalle.
+                                Te hago un diagnóstico de tu web o de tu idea de app. Aunque no trabajemos juntos,
+                                te llevás valor.
                             </p>
-                            <Button href="/system" variant="primary" className={styles.cta}>
-                                Ver el sistema
+                            <Button href="#contacto" variant="outline" className={styles.cta}>
+                                Reservá tu charla
                             </Button>
                         </Card>
                     </ScrollReveal>
